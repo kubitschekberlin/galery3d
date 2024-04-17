@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "babel": "^6.23.0",
+    "bootstrap": "^5.3.3",
+    "jquery": "^3.7.1",
+    "three": "^0.163.0",
+    "webpack": "^5.91.0"
+  }
+}
