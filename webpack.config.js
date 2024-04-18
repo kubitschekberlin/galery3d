@@ -5,7 +5,7 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 export default {
   mode: 'development',
   target: 'web',
-  entry: './public/three_noserver.js',
+  entry: './scripts/three_noserver.js',
   output: {
     path: path.resolve(__dirname, 'public/dist'),
     filename: 'bundle.js',
