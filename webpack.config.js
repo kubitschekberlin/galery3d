@@ -31,7 +31,7 @@ export default {
   plugins: [
     new CopyWebpackPlugin({
       patterns: [
-        { from: path.resolve(__dirname, 'public/resources') }
+        { from: path.resolve(__dirname, 'resources') }
       ],
     }),
   ],
