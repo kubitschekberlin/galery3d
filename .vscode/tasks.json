@@ -1,0 +1,20 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "run",
+			"type": "shell",
+			"command": "npx webpack && node three_noserver.js",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			  }
+		},
+		{
+			"type": "npm",
+			"script": "build", // Das npm-Skript, das ausgeführt werden soll
+			"label": "webpack", // Der Name der Aufgabe
+			"detail": "Ausführung von webpack build"
+		}
+	]
+}

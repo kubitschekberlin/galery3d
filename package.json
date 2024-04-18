@@ -1,9 +1,24 @@
 {
+  "type": "module",
   "dependencies": {
+    "@babel/preset-env": "^7.24.4",
     "babel": "^6.23.0",
+    "babel-loader": "^9.1.3",
+    "babel-preset-env": "^0.0.0",
     "bootstrap": "^5.3.3",
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^7.1.1",
     "jquery": "^3.7.1",
+    "style-loader": "^4.0.0",
     "three": "^0.163.0",
     "webpack": "^5.91.0"
+  },
+  "scripts": {
+    "start": "webpack serve --open",
+    "build": "webpack",
+    "debug": "node --inspect node_modules/webpack/bin/webpack.js serve"
+  },
+  "devDependencies": {
+    "webpack-cli": "^5.1.4"
   }
 }
