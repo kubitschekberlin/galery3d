@@ -4,7 +4,7 @@
 		{
 			"label": "run",
 			"type": "shell",
-			"command": "npx webpack && node three_noserver.js",
+			"command": "npx webpack",
 			"group": {
 				"kind": "build",
 				"isDefault": true
