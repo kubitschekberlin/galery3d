@@ -5,7 +5,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            //"program": "${workspaceFolder}/three_noserver.js",
+            "program": "${workspaceFolder}/index.js",
             "preLaunchTask": "webpack" // Name der Aufgabe, die vor dem Start ausgeführt werden soll
         }
     ]

@@ -8,25 +8,26 @@
 </head>
 
 <body>
-	<link rel="stylesheet" href="three_noserver.css" />
-	<script src="./dist/bundle.js"></script>
+	<link rel="stylesheet" href="galery_3d.css" />
+  <link rel="stylesheet" href="./css/bootstrap.css" />
 	<div class="container-fluid top-area">
-		<div class="row top-area">
+    <div class="row top-area">
 			<div class="col-auto">
-				<form class="mt-3">
-					<input class="form-control" type="file" id="formFile" accept=".stl, .obj, .ply">
+        <form class="mt-3">
+          <input class="form-control" type="file" id="formFile" accept=".stl, .obj, .ply">
 				</form>
 				<div class="form-check mt-3">
-					<input class="form-check-input" type="checkbox" value="" id="wireframe">
+          <input class="form-check-input" type="checkbox" value="" id="wireframe">
 					<label class="form-check-label" for="wireframe">
-						Wireframe
+            Wireframe
 					</label>
 				</div>
 			</div>
 			<div class="col" id="canvas_parent">
-			</div>
+      </div>
 		</div>
 	</div>
+  <script src="./dist/client.bundle.js"></script>
 </body>
 
 </html>
