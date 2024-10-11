@@ -1,14 +1,10 @@
 import path from 'path';
-import { __dirname } from './files.js'
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 export default [
-  //////////////////////////////////////////////////////////////////////////////////////
-  // server configuration
-  ///////////////////////////////////////////////////////////////////////////////////////
   {
     mode: 'development',
-    target: 'node', // Da wir einen Express-Server bauen
+    target: 'node',
     entry: './index.js',
     output: {
       filename: 'server.bundle.js',
@@ -16,15 +12,20 @@ export default [
     module: {
       rules: [
         {
-          test: /\.js$/, // Alle .js Dateien werden durch Babel transpiliert
-          exclude: /node_modules\/.*/,
+          test: /\.js$/,
+          exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
             options: {
               presets: ['@babel/preset-env'],
             },
-          },
-        }],
+          }
+        },
+        {
+          test: /\.handlebars$/,
+          use: ['html-loader', 'handlebars-loader']
+        }
+      ],
     },
     devServer: {
       static: path.join(__dirname, 'dist'),
@@ -34,9 +35,6 @@ export default [
       message: /Critical dependency/
     }],
   },
-  ///////////////////////////////////////////////////////////////////////////////////////
-  // client configuration
-  ///////////////////////////////////////////////////////////////////////////////////////
   {
     mode: 'development',
     target: 'web',
@@ -48,8 +46,8 @@ export default [
     module: {
       rules: [
         {
-          test: /\.js$/, // Alle .js Dateien werden durch Babel transpiliert
-          exclude: /node_modules\/.*/,
+          test: /\.js$/,
+          exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
             options: {
@@ -58,10 +56,18 @@ export default [
           },
         },
         {
-          test: /\.css$/, // Alle .css Dateien werden durch css-loader und style-loader verarbeitet
+          test: /\.css$/,
           use: ['style-loader', 'css-loader'],
         },
+        {
+          test: /\.handlebars$/,
+          use: ['html-loader', 'handlebars-loader']
+        }
       ],
+    },
+    resolve: {
+      extensions: ['.js', '.json', '.handlebars'],
+      mainFields: ['browser', 'module', 'main']
     },
     plugins: [
       new CopyWebpackPlugin({
@@ -73,5 +79,3 @@ export default [
     devtool: 'source-map'
   }
 ];
-
-
