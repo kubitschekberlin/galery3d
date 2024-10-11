@@ -1,5 +1,5 @@
 import express from 'express';
-import Handlebars from 'handlebars'
+import { Handlebars } from 'handlebars'
 import { create } from'express-handlebars';
 import path from 'path';
 import { __dirname } from './files.js';
