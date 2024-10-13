@@ -1,5 +1,6 @@
 import express from 'express';
-import { Handlebars } from 'handlebars'
+import pkg from 'handlebars'
+const { Handlebars } = pkg;
 import { create } from'express-handlebars';
 import path from 'path';
 import { __dirname } from './files.js';

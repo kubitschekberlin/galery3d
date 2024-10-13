@@ -1,10 +1,14 @@
 import path from 'path';
+import { __dirname } from './files.js'
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 export default [
+  //////////////////////////////////////////////////////////////////////////////////////
+  // server configuration
+  ///////////////////////////////////////////////////////////////////////////////////////
   {
     mode: 'development',
-    target: 'node',
+    target: 'node', // Da wir einen Express-Server bauen
     entry: './index.js',
     output: {
       filename: 'server.bundle.js',
@@ -12,20 +16,15 @@ export default [
     module: {
       rules: [
         {
-          test: /\.js$/,
-          exclude: /node_modules/,
+          test: /\.js$/, // Alle .js Dateien werden durch Babel transpiliert
+          exclude: /node_modules\/.*/,
           use: {
             loader: 'babel-loader',
             options: {
               presets: ['@babel/preset-env'],
             },
-          }
-        },
-        {
-          test: /\.handlebars$/,
-          use: ['html-loader', 'handlebars-loader']
-        }
-      ],
+          },
+        }],
     },
     devServer: {
       static: path.join(__dirname, 'dist'),
@@ -33,8 +32,14 @@ export default [
     },
     ignoreWarnings: [{
       message: /Critical dependency/
+    }, {
+      module: /node_modules\/handlebars\/lib\/index\.js/,
+      message: /require\.extensions is not supported by webpack/
     }],
   },
+  ///////////////////////////////////////////////////////////////////////////////////////
+  // client configuration
+  ///////////////////////////////////////////////////////////////////////////////////////
   {
     mode: 'development',
     target: 'web',
@@ -46,8 +51,8 @@ export default [
     module: {
       rules: [
         {
-          test: /\.js$/,
-          exclude: /node_modules/,
+          test: /\.js$/, // Alle .js Dateien werden durch Babel transpiliert
+          exclude: /node_modules\/.*/,
           use: {
             loader: 'babel-loader',
             options: {
@@ -56,18 +61,10 @@ export default [
           },
         },
         {
-          test: /\.css$/,
+          test: /\.css$/, // Alle .css Dateien werden durch css-loader und style-loader verarbeitet
           use: ['style-loader', 'css-loader'],
         },
-        {
-          test: /\.handlebars$/,
-          use: ['html-loader', 'handlebars-loader']
-        }
       ],
-    },
-    resolve: {
-      extensions: ['.js', '.json', '.handlebars'],
-      mainFields: ['browser', 'module', 'main']
     },
     plugins: [
       new CopyWebpackPlugin({
@@ -79,3 +76,5 @@ export default [
     devtool: 'source-map'
   }
 ];
+
+
