@@ -23,7 +23,7 @@ app.set('views', __dirname + '/views');
 
 app.get('/*', (req, res) => {
   //res.sendFile(path.join(__dirname, 'views/index.html'));
-  res.render('main', {});
+  res.render('main', {title: '3D Galery 1.0'});
 });
 
 app.listen(port, () => {

@@ -26,12 +26,7 @@
       <div class="col" id="canvas_parent"></div>
     </div>
   </div>
-  <script id="info_panel_template" type="text/x-handlebars-template">
-    <div>
-      <p>Rotation: {{rotation}}</p>
-      {{> info-panel this }}
-    </div>
-  </script>
+  {{> object-panel }}
   <script src="./dist/client.bundle.js"></script>
 </body>
 </html>
