@@ -9,5 +9,5 @@ $(function () {
   const scene = new RenderScene('#canvas_parent');
   new Events3D(scene.camera, scene.scene, scene.animate);
   new RenderHorizonSphere(scene.scene, './dist/dolomiten_panorama_1.jpg');
-  new ObjectSelector(scene);
+  new ObjectSelector(scene, $('canvas')[0]);
 });
