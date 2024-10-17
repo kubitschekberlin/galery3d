@@ -1,5 +1,5 @@
 import express from 'express';
-import pkg from 'handlebars'
+//import pkg from 'handlebars'
 import { create } from'express-handlebars';
 import path from 'path';
 import { __dirname } from './files.js';
@@ -12,7 +12,7 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 
 // Setze Handlebars als Template-Engine
 const hbs = create({
-  handlebars: pkg,
+ // handlebars: pkg,
   partialsDir: __dirname + '/views/partials',
   defaultLayout: false,
   compilerOptions: {}

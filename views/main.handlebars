@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="de">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>3D Viewer App</title>
-</head>
-
-<body>
+  <title>3D Galery</title>
   <link rel="stylesheet" href="galery_3d.css" />
   <link rel="stylesheet" href="./css/bootstrap.css" />
+</head>
+<body>
   <div class="container-fluid top-area">
     <div class="row top-area">
       <div class="col-auto">
@@ -23,21 +21,17 @@
             Wireframe
           </label>
         </div>
-        <div id="object_properties">       
-        </div>
+        <div id="object_properties"></div>
       </div>
-      <div class="col" id="canvas_parent">
-      </div>
+      <div class="col" id="canvas_parent"></div>
     </div>
   </div>
-
   <script id="info_panel_template" type="text/x-handlebars-template">
-  <div>
-    {{> info-panel this }}
-  </div>
+    <div>
+      <p>Rotation: {{rotation}}</p>
+      {{> info-panel this }}
+    </div>
   </script>
-
   <script src="./dist/client.bundle.js"></script>
 </body>
-
 </html>
