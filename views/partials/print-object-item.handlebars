@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col-6">
+  {{ key }}
+  </div>
+  <div class="col-6">
+  {{#isArray this}}
+    {{ this }}
+  {{else isType this 'object'}}
+    <pre>{{this}}</pre>  <!-- Formatierte Darstellung für Objekte -->
+  {{else}} 
+    {{ this }}
+  {{/isArray }}
+  </div>
+</div> 

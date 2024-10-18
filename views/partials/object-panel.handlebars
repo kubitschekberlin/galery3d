@@ -1,7 +1,8 @@
 <script id="info_panel_template" type="text/x-handlebars-template">
-  <div><b>Objekteigenschaften</b></div>
-  <div>Name: {# name #}</div>
-  <div>Position: {# position #}</div>
-  <div>Skalierung: {# scale #}</div>
-  <div>Rotation: {# rotation #}</div>
+  <b>Objekteigenschaften</b>
+  <div class="container">
+ {{#each object }}
+   {{> print-object-item key=@key }}
+ {{/each }}
+  </div>
 </script>

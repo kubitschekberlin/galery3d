@@ -3,6 +3,7 @@ import express from 'express';
 import { create } from'express-handlebars';
 import path from 'path';
 import { __dirname } from './files.js';
+import { HandlebarsHelper } from './library/handlebars_helper.js';
 
 const app = express();
 const port = 3001;
@@ -20,6 +21,8 @@ const hbs = create({
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', __dirname + '/views');
+
+new HandlebarsHelper;
 
 app.get('/*', (req, res) => {
   //res.sendFile(path.join(__dirname, 'views/index.html'));
