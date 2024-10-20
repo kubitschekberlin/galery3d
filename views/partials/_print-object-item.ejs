@@ -1,12 +1,13 @@
+<%# console.log("Item:", key, value) %>
 <div class="row">
   <div class="col-6">
     <%= key %>
   </div>
   <div class="col-6">
     <% if (Array.isArray(value)) { %>
-      <%= value %>
+      <%#= value %>
     <% } else if (typeof value === 'object') { %>
-      <pre><%= JSON.stringify(value, null, 2) %></pre>
+      <%#= JSON.stringify(value, null, 2) %>
     <% } else { %>
       <%= value %>
     <% } %>
