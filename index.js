@@ -1,32 +1,18 @@
 import express from 'express';
-//import pkg from 'handlebars'
-import { create } from'express-handlebars';
 import path from 'path';
 import { __dirname } from './files.js';
-import { HandlebarsHelper } from './library/handlebars_helper.js';
 
 const app = express();
 const port = 3001;
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+app.use('/css', express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist', 'css')));
 
-// Setze Handlebars als Template-Engine
-const hbs = create({
- // handlebars: pkg,
-  partialsDir: __dirname + '/views/partials',
-  defaultLayout: false,
-  compilerOptions: {}
-});
-app.engine('handlebars', hbs.engine);
-app.set('view engine', 'handlebars');
-app.set('views', __dirname + '/views');
-
-new HandlebarsHelper;
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 app.get('/*', (req, res) => {
-  //res.sendFile(path.join(__dirname, 'views/index.html'));
-  res.render('main', {title: '3D Galery 1.0'});
+  res.render('index', {title: '3D Galery 1.0'});
 });
 
 app.listen(port, () => {

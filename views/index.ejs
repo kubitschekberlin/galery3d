@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel="stylesheet" href="galery_3d.css">
+  <link rel="stylesheet" href="./css/bootstrap.css">
+</head>
+<body>
+  <div class="container-fluid top-area">
+    <div class="row top-area">
+      <div class="col-auto">
+        <h2><%= title %></h2>
+        <form class="mt-3">
+          <input class="form-control" type="file" id="formFile" accept=".stl, .obj, .ply">
+        </form>
+        <div id="object_properties"></div>
+      </div>
+      <div class="col" id="canvas_parent"></div>
+    </div>
+  </div>
+  <script src="./dist/client.bundle.js"></script>
+</body>
+</html>

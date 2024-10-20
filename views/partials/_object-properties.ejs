@@ -1,0 +1,10 @@
+<div class="container" id="object_properties_template">
+  <p>Objekteigenschaften</p>
+  <% if (data) { %>
+    <% Object.keys(data).forEach(function(key) { %>
+      <%= include('partials/_print-object-item', { key: key, value: data[key] }) %>
+    <% }); %>
+  <% } else { %>
+    <p>- kein Objekt selektiert -</p>
+  <% } %>
+</div>

@@ -1,6 +1,8 @@
 import path from 'path';
+import webpack from 'webpack';
 import { __dirname } from './files.js'
 import CopyWebpackPlugin from 'copy-webpack-plugin';
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 
 export default [
   //////////////////////////////////////////////////////////////////////////////////////
@@ -35,7 +37,7 @@ export default [
     }, {
       module: /node_modules\/handlebars\/lib\/index\.js/,
       message: /require\.extensions is not supported by webpack/
-    }],
+    }]
   },
   ///////////////////////////////////////////////////////////////////////////////////////
   // client configuration
@@ -64,7 +66,18 @@ export default [
           test: /\.css$/, // Alle .css Dateien werden durch css-loader und style-loader verarbeitet
           use: ['style-loader', 'css-loader'],
         },
+        {
+          test: /\.ejs$/, // EJS-Dateien: Können so mit import geladen werden.
+          use: 'raw-loader' // Raw-Loader verwenden, um den Dateiinhalt als String zu laden
+        },
       ],
+    },
+    resolve: {
+      fallback: {
+        'fs': false,
+        'assert': false,
+        'path': false
+      }
     },
     plugins: [
       new CopyWebpackPlugin({
@@ -72,6 +85,10 @@ export default [
           { from: path.resolve(__dirname, 'public/resources') }
         ],
       }),
+      new NodePolyfillPlugin(),
+      new webpack.ProvidePlugin({
+        process: 'process/browser'
+      })
     ],
     devtool: 'source-map'
   }
