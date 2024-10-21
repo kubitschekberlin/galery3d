@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import { RenderMesh } from '../library/render_object.js'
+import { RenderMesh } from './render_object.js'
 
 class Events3D {
   constructor(camera, scene, animate) {
