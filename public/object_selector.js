@@ -8,11 +8,11 @@ export class ObjectSelector {
   #scene;
   #canvas;
   
-  constructor(scene, canvas, template, itemTemplate) {
+  constructor(scene, canvas) {
     this.#scene = scene;
     this.#canvas = canvas;
     this.#raycaster = new THREE.Raycaster();
-    this.#object_properties = new ObjectProperties(template, itemTemplate);
+    this.#object_properties = new ObjectProperties();
     // Sicherstellen, dass der Kontext beibehalten wird
     $(canvas).parent().on('click', this.onMouseClick.bind(this));
   }
