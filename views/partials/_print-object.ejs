@@ -1,0 +1,16 @@
+<div id="<%= popoverID %>">
+  <form>
+    <div class="form-group">
+      <p><b>name</b></p>
+      <% if (data) { %>
+        <%# console.log("_print_object", data) %>
+        <% Object.keys(data).forEach(function(key) { %>
+          <%# console.log("Item", key) %>
+            <%- printItem(key, data[key], popoverID + '_' + key) %>
+          <% }); %>
+      <% } else { %>
+        <p>- kein Objekt selektiert -</p>
+      <% } %>
+    </div>
+  </form>
+</div>
