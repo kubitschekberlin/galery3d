@@ -5,7 +5,7 @@
   </div>
   <div class="col-6">
   <% if (typeof value === 'object') { %>
-    <button type="button" id="button-<%=popoverID%>" class="btn btn-secondary" 
+    <button type="button" id="button_<%=popoverID%>" class="btn btn-secondary" 
       data-bs-toggle="popover" data-bs-title="<%=key%>" data-bs-content="...",
       class="popover-object-button"> 
       <%=key%> 
@@ -17,10 +17,10 @@
 </div>
 
 <script>
-  $('#<%=popoverID%>').popover({
+  $('#button_<%=popoverID%>').popover({
     html: true
   });
-  $('#<%=popoverID%>').on('shown.bs.popover', function() {
-    const html = ejs.print(templates.objectTemplate, { key: key, value: value, popoverID: popoverID });
+  $('#<%=button_popoverID%>').on('shown.bs.popover', function() {
+    const html = printObject(key, value);
   });
 </script>

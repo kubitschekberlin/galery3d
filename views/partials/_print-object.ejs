@@ -1,15 +1,3 @@
-<script >
-  function printItem(key, value, popoverID) {
-    const html = ejs.print(templates.itemTemplate, {
-      key: key, 
-      value: value, 
-      popoverID: popoverID,
-      ejs: ejs,
-      templates: templates
-    });
-  }
-</script>
-
 <div id="<%=popoverID%>">
   <form>
     <div class="form-group">

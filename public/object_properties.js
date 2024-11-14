@@ -18,18 +18,23 @@ export class ObjectProperties {
       return 'popover_' + this.#popoverNumber;
     };
 
-    const templates = {
-      itemTemplate: itemTemplate,
-      objectTemplate: objectTemplate
-    };
+    function printItem(key, value, popoverID) {
+      parameter = {
+        key: key,
+        value: value,
+        popoverID: popoverID,
+        printObject: printObject
+      };
+      const html = ejs.print(itemTemplate, parameter);
+      return html;
+    }
 
-    const printObject = (name, data) => {
+    function printObject(name, data) {
       const html = ejs.print(objectTemplate, {
-        ejs: ejs,
-        templates: templates,
         name: name,
         data: data,
-        popoverID: popoverID()
+        popoverID: popoverID(),
+        printItem: printItem
       });
       this.#popoverNumber += 1;
       return html;
