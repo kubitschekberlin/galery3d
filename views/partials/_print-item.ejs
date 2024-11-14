@@ -1,17 +1,17 @@
 <%# console.log("Item:", key, value) %>
 <div class="row">
-  <% if (typeof value === 'object') { %>
-    <button type="button" id="<%= popoverID %>" class="btn btn-secondary" 
-      data-toggle="popover" title="<%= key%>" data-content="...",
-      class="popover-object-button"> 
-      <%= key%> 
-    </button>  
-  <% } else { %>
   <div class="col-6">
     <%= key %>
   </div>
   <div class="col-6">
-    <%= value %>
+  <% if (typeof value === 'object') { %>
+    <button type="button" id="button-<%=popoverID%>" class="btn btn-secondary" 
+      data-bs-toggle="popover" data-bs-title="<%=key%>" data-bs-content="...",
+      class="popover-object-button"> 
+      <%=key%> 
+    </button>  
+  <% } else { %>
+    <%=value%>
   </div>
   <% } %>
 </div>
@@ -20,7 +20,7 @@
   $('#<%=popoverID%>').popover({
     html: true
   });
-  $('#<%= popoverID %>').on('shown.bs.popover', function() {
-    <% printObject() %>;
+  $('#<%=popoverID%>').on('shown.bs.popover', function() {
+    const html = ejs.print(templates.objectTemplate, { key: key, value: value, popoverID: popoverID });
   });
 </script>

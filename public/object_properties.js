@@ -1,6 +1,11 @@
 import $ from 'jquery';
 import ejs from 'ejs';
+
+// itemTemplate: Erzeugt Zeile mit key-value Paar. Ist value ein Objekt, wird es als Schaltfläche zum Öffnen eines
+// weiteren Objekts dargestellt durch einen rekursiven Call von printObject.import itemTemplate from '../views/partials/_print-item.ejs';
 import itemTemplate from '../views/partials/_print-item.ejs';
+
+// objectTemplate: popup mit den Daten eines Objekts
 import objectTemplate from '../views/partials/_print-object.ejs';
 
 export class ObjectProperties {
@@ -12,32 +17,25 @@ export class ObjectProperties {
     const popoverID = () => {
       return 'popover_' + this.#popoverNumber;
     };
-    
-    // printObject: Erzeugt popup mit den Daten eines Objekts
-    // printItem: Erzeugt Zeile mit key-value Paar. Ist value ein Objekt, wird es als Schaltfläche zum rekursiven Öffnen eines
-    //             weiteren Objekts dargestellt.
-    const printObject = (name, data, print) => { 
+
+    const templates = {
+      itemTemplate: itemTemplate,
+      objectTemplate: objectTemplate
+    };
+
+    const printObject = (name, data) => {
       const html = ejs.print(objectTemplate, {
-        name: name, 
-        data: data, 
-        printItem: print,
+        ejs: ejs,
+        templates: templates,
+        name: name,
+        data: data,
         popoverID: popoverID()
       });
       this.#popoverNumber += 1;
       return html;
     };
 
-    const printItem = (key, value, id) => { 
-      const html = ejs.print(itemTemplate, {
-        key: key, 
-        value: value, 
-        printObject: printObject,
-        popoverID: id
-      });
-      return html;
-    };
-
-    const html = printObject(name, object, printItem);
+    const html = printObject(name, object);
     console.log(html);
     $('#object_properties').html(html);
   }

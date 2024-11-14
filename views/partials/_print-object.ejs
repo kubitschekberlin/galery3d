@@ -1,4 +1,16 @@
-<div id="<%= popoverID %>">
+<script >
+  function printItem(key, value, popoverID) {
+    const html = ejs.print(templates.itemTemplate, {
+      key: key, 
+      value: value, 
+      popoverID: popoverID,
+      ejs: ejs,
+      templates: templates
+    });
+  }
+</script>
+
+<div id="<%=popoverID%>">
   <form>
     <div class="form-group">
       <p><b>name</b></p>
@@ -6,8 +18,8 @@
         <%# console.log("_print_object", data) %>
         <% Object.keys(data).forEach(function(key) { %>
           <%# console.log("Item", key) %>
-            <%- printItem(key, data[key], popoverID + '_' + key) %>
-          <% }); %>
+          <%- printItem(key, data[key], popoverID + '_' + key) %>
+        <% }); %>
       <% } else { %>
         <p>- kein Objekt selektiert -</p>
       <% } %>
