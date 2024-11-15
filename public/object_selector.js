@@ -53,7 +53,7 @@ export class ObjectSelector {
 
     // Eigenschaften anzeigen, wenn ein Objekt ausgewählt wurde
     if (selectedObject) {
-      this.#object_properties.show(selectedObject);
+      this.#object_properties.show(selectedObject.name, selectedObject);
     }
   }
 }

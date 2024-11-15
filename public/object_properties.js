@@ -18,19 +18,19 @@ export class ObjectProperties {
       return 'popover_' + this.#popoverNumber;
     };
 
-    function printItem(key, value, popoverID) {
-      parameter = {
+    const printItem = (key, value, popoverID) => {
+      let parameter = {
         key: key,
         value: value,
         popoverID: popoverID,
         printObject: printObject
       };
-      const html = ejs.print(itemTemplate, parameter);
+      const html = ejs.render(itemTemplate, parameter);
       return html;
     }
 
-    function printObject(name, data) {
-      const html = ejs.print(objectTemplate, {
+    const printObject = (name, data) => {
+      const html = ejs.render(objectTemplate, {
         name: name,
         data: data,
         popoverID: popoverID(),
