@@ -90,7 +90,8 @@ export default [
         process: 'process/browser',
         jQuery: 'jquery',
         $: 'jquery',
-        Popper: ['popper.js', 'default']
+        Popper: ['popper.js', 'default'],
+        Popper: 'popper.js' 
       })
     ],
     devtool: 'source-map'
