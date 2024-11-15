@@ -5,24 +5,13 @@
   </div>
   <div class="col-6">
   <% if (typeof value === 'object') { %>
-    <button type="button" id="button_<%=popoverID%>" class="btn btn-secondary" 
+    <button type="button" id="button_<%=popoverID%>" class="btn btn-secondary popover-object-button" 
       data-bs-toggle="popover" data-bs-title="<%=key%>" data-bs-content="..."
-      class="popover-object-button"> 
-      <%=key%> 
+      data-key="<%=key%>", data-object="<%=value%>"> 
+      Show
     </button>  
   <% } else { %>
     <%=value%>
     <% } %>
   </div>
 </div>
-
-<% if (typeof value === 'object') { %>
-<script>
-  $('#button_<%=popoverID%>').popover({
-    html: true
-  });
-  $('#button_<%=popoverID%>').on('shown.bs.popover', function() {
-    const html = printObject(key, value);
-  });
-</script>
-<% } %>

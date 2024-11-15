@@ -87,7 +87,10 @@ export default [
       }),
       new NodePolyfillPlugin(),
       new webpack.ProvidePlugin({
-        process: 'process/browser'
+        process: 'process/browser',
+        jQuery: 'jquery',
+        $: 'jquery',
+        Popper: ['popper.js', 'default']
       })
     ],
     devtool: 'source-map'
