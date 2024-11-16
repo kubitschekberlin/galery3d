@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import ejs from 'ejs';
-import 'bootstrap';
+import 'jquery-ui-dist/jquery-ui.css'; 
+import 'jquery-ui-dist/jquery-ui.js'
 
 // itemTemplate: Erzeugt Zeile mit key-value Paar. Ist value ein Objekt, wird es als Schaltfläche zum Öffnen eines
 // weiteren Objekts dargestellt durch einen rekursiven Call von printObject.import itemTemplate from '../views/partials/_print-item.ejs';
@@ -22,11 +23,16 @@ export class ObjectProperties {
       return 'popover_' + this.#popoverNumber;
     };
 
+    const storeObject = (selector, object) => {
+      $(selector).data('object', object);
+    }
+
     const printItem = (key, value, popoverID) => {
       let parameter = {
         key: key,
         value: value,
         popoverID: popoverID,
+        storeObject: storeObject
       };
       const html = ejs.render(itemTemplate, parameter);
       return html;
@@ -52,14 +58,13 @@ export class ObjectProperties {
     
     if(!ObjectProperties.initialized) {
       ObjectProperties.initialized = true;
-      $('#object_properties').on('click', '.popover-object-button', function(button) {
-        let key = $(button).data('key'),
-        object = $(button).data('object');
-        $(button).popover({
-          title: key, 
-          content: printObject(key, object),
-          html: true
-        });
+      $('#object_properties').on('click', '.popover-object-button', function(event) {
+        let button = event.target,
+          key = $(button).data('key'),
+          object = $(button).data('object');
+        $(button).dialog({autoOpen: false})
+          .html(printObject(key, object))
+          .dialog('open');
       });
     }
   }
