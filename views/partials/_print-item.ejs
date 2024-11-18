@@ -5,14 +5,12 @@
   </div>
   <div class="col-6">
   <% if (typeof value === 'object') { %>
-    <button type="button" id="button_<%=popoverID%>" 
+    <button type="button" id="button_<%= popoverID %>" 
       class="btn btn-secondary popover-object-button" 
-      data-key="<%=key%>">Show</button>  
+      data-popover-id="_<%= popoverID %>"
+      data-key="<%= key %>">Show</button>  
   <% } else { %>
-    <%=value%>
+    <%= value %>
     <% } %>
   </div>
 </div>
-<script>
-  <% storeObject('#button_' + popoverID, value); %>
-</script>

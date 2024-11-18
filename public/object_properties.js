@@ -13,6 +13,7 @@ import objectTemplate from '../views/partials/_print-object.ejs';
 
 export class ObjectProperties {
   #popoverNumber = 0;
+  #objects = {};
   static initialized;
 
   show = (name, object) => {
@@ -23,17 +24,20 @@ export class ObjectProperties {
       return 'popover_' + this.#popoverNumber;
     };
 
-    const storeObject = (selector, object) => {
-      $(selector).data('object', object);
+    
+    const getObject = (id) => {
+      return this.#objects[id];
     }
 
     const printItem = (key, value, popoverID) => {
       let parameter = {
         key: key,
         value: value,
-        popoverID: popoverID,
-        storeObject: storeObject
+        popoverID: popoverID
       };
+      if(typeof value === 'object'){
+        this.#objects[popoverID] = value;
+      }
       const html = ejs.render(itemTemplate, parameter);
       return html;
     }
@@ -56,16 +60,19 @@ export class ObjectProperties {
     console.log(html);
     $('#object_properties').html(html);
     
+    const onClick = (event) => {
+      let button = event.target,
+      key = $(button).data('key'),
+      id = $(button).data('popover-id'),
+      object = getObject(id);
+      $(button).dialog({autoOpen: false})
+      .html(printObject(key, object))
+      .dialog('open');
+    };
+
     if(!ObjectProperties.initialized) {
       ObjectProperties.initialized = true;
-      $('#object_properties').on('click', '.popover-object-button', function(event) {
-        let button = event.target,
-          key = $(button).data('key'),
-          object = $(button).data('object');
-        $(button).dialog({autoOpen: false})
-          .html(printObject(key, object))
-          .dialog('open');
-      });
+      $('#object_properties').on('click', '.popover-object-button', onClick.bind(this));
     }
   }
 }
