@@ -25,7 +25,6 @@ export class ObjectProperties {
       return 'popover_' + this.#popoverNumber;
     };
 
-
     const getObject = (id) => {
       return this.objects[id];
     }
@@ -74,7 +73,7 @@ export class ObjectProperties {
 
     if (!ObjectProperties.initialized) {
       ObjectProperties.initialized = true;
-      $('#object_properties').on('click', '.popover-object-button', onClick.bind(this));
+      $(document).on('click', '.popover-object-button', onClick.bind(this));
     }
   }
 }
