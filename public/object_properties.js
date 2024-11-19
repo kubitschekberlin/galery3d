@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import ejs from 'ejs';
-import 'jquery-ui-dist/jquery-ui.css'; 
+import 'jquery-ui-dist/jquery-ui.css';
 import 'jquery-ui-dist/jquery-ui.js'
 
 // itemTemplate: Erzeugt Zeile mit key-value Paar. Ist value ein Objekt, wird es als Schaltfläche zum Öffnen eines
@@ -13,9 +13,10 @@ import objectTemplate from '../views/partials/_print-object.ejs';
 
 export class ObjectProperties {
   #popoverNumber = 0;
-  #objects = {};
   static initialized;
-
+  constructor() {
+    this.objects = [];
+  }
   show = (name, object) => {
     console.log(object);
     $('#object_properties').empty();
@@ -24,9 +25,9 @@ export class ObjectProperties {
       return 'popover_' + this.#popoverNumber;
     };
 
-    
+
     const getObject = (id) => {
-      return this.#objects[id];
+      return this.objects[id];
     }
 
     const printItem = (key, value, popoverID) => {
@@ -35,8 +36,8 @@ export class ObjectProperties {
         value: value,
         popoverID: popoverID
       };
-      if(typeof value === 'object'){
-        this.#objects[popoverID] = value;
+      if (typeof value === 'object') {
+        this.objects[popoverID] = value;
       }
       const html = ejs.render(itemTemplate, parameter);
       return html;
@@ -55,22 +56,23 @@ export class ObjectProperties {
 
       return html;
     };
-    
+
     const html = printObject(name, object);
     console.log(html);
     $('#object_properties').html(html);
-    
+
     const onClick = (event) => {
       let button = event.target,
-      key = $(button).data('key'),
-      id = $(button).data('popover-id'),
-      object = getObject(id);
-      $(button).dialog({autoOpen: false})
-      .html(printObject(key, object))
-      .dialog('open');
+        key = $(button).data('key'),
+        id = $(button).data('popover-id'),
+        object = getObject.call(this, id);
+      $('#' + id).dialog({
+        autoOpen: false,
+      }).html(printObject(key, object))
+        .dialog('open');
     };
 
-    if(!ObjectProperties.initialized) {
+    if (!ObjectProperties.initialized) {
       ObjectProperties.initialized = true;
       $('#object_properties').on('click', '.popover-object-button', onClick.bind(this));
     }

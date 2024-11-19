@@ -1,14 +1,16 @@
 <%# console.log("Item:", key, value) %>
+<% if(typeof value === 'function') { return; } %>
 <div class="row">
   <div class="col-6">
     <%= key %>
   </div>
   <div class="col-6">
   <% if (typeof value === 'object') { %>
-    <button type="button" id="button_<%= popoverID %>" 
+    <button type="button" 
       class="btn btn-secondary popover-object-button" 
-      data-popover-id="_<%= popoverID %>"
+      data-popover-id="<%= popoverID %>"
       data-key="<%= key %>">Show</button>  
+    <div id="<%= popoverID %>" title="<%= key %>"></div>
   <% } else { %>
     <%= value %>
     <% } %>
