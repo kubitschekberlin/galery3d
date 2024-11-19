@@ -4,7 +4,7 @@
       <% if (data) { %>
         <%# console.log("_print_object", data) %>
         <% Object.keys(data).forEach(function(key) { %>
-          <%# console.log("Item", key) %>
+          <% console.log("Item", key) %>
           <%- printItem(key, data[key], popoverID + '_' + key) %>
         <% }); %>
       <% } else { %>

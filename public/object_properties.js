@@ -56,24 +56,38 @@ export class ObjectProperties {
       return html;
     };
 
-    const html = printObject(name, object);
-    console.log(html);
-    $('#object_properties').html(html);
+    // Funktion, um Dialoggröße anzupassen 
+    const resizeDialog = ($dialog) => {
+      var maxHeight = $(window).height() * 0.9; // 90% der Fensterhöhe 
+      var maxWidth = $(window).width() * 0.9; // 90% der Fensterbreite 
+      $dialog.dialog("option", "maxHeight", maxHeight); 
+      $dialog.dialog("option", "maxWidth", maxWidth); 
+    }
+
+    const openDialog = (id, key, object) => {
+      id = '#' + id;
+      let ret = $(id).dialog({
+        autoOpen: false,
+      }).html(printObject(key, object))
+      .dialog('open');
+      resizeDialog($(id));
+      return ret;
+    }
 
     const onClick = (event) => {
       let button = event.target,
-        key = $(button).data('key'),
-        id = $(button).data('popover-id'),
-        object = getObject.call(this, id);
-      $('#' + id).dialog({
-        autoOpen: false,
-      }).html(printObject(key, object))
-        .dialog('open');
+      key = $(button).data('key'),
+      id = $(button).data('popover-id'),
+      object = getObject.call(this, id);
+      openDialog(id, key, object);
     };
-
+    
     if (!ObjectProperties.initialized) {
       ObjectProperties.initialized = true;
       $(document).on('click', '.popover-object-button', onClick.bind(this));
     }
+    
+    // Dialog zeigen
+    openDialog('object_properties', name, object).dialog('option', 'title', name + 'bla');
   }
 }
