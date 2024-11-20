@@ -1,10 +1,12 @@
 import $ from 'jquery'
 import { RenderMesh } from './render_object.js'
+import { ObjectProperties } from './object_properties.js';
 
 class Events3D {
   constructor(camera, scene, animate) {
     this.camera = camera;
     this.scene = scene;
+    this.objectProperties = new ObjectProperties;
 
     $('#wireframe').on('click', function () {
       camera.wireframe = !camera.wireframe;
@@ -22,6 +24,19 @@ class Events3D {
         new RenderMesh(this.scene, extension, reader.result, animate); 
       };
     });
+
+    $('#object_properties_button').on('click', function(event) {
+      const $boxes = $('.object-properties');
+      const fn = this.objectProperties;
+      if($boxes.length > 0) {
+        fn.removeAll();
+      } else {
+        fn.show('Camera', camera);
+        fn.show('Scene', scene);
+      }
+      $(event.target).attr('checked', $boxes.length);
+    }.bind(this));
   }
+
 }
 export { Events3D };

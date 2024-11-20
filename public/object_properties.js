@@ -16,10 +16,10 @@ export class ObjectProperties {
   static initialized;
   constructor() {
     this.objects = [];
+    this.dialogs = [];
   }
   show = (name, object) => {
     console.log(object);
-    $('#object_properties').empty();
 
     const popoverID = () => {
       return 'popover_' + this.#popoverNumber;
@@ -64,9 +64,11 @@ export class ObjectProperties {
       $dialog.dialog("option", "maxWidth", maxWidth); 
     }
 
-    const openDialog = (id, key, object) => {
-      id = '#' + id;
-      let ret = $(id).dialog({
+    const openDialog = (key, object) => {
+      let id = 'object_properties_' + this.#popoverNumber;
+      this.dialogs.push(id);
+      $('#object_properties').append('<div id="' + id + '"></div>');
+      let ret = $('#' + id).dialog({
         autoOpen: false,
       }).html(printObject(key, object))
       .dialog('open');
@@ -79,7 +81,7 @@ export class ObjectProperties {
       key = $(button).data('key'),
       id = $(button).data('popover-id'),
       object = getObject.call(this, id);
-      openDialog(id, key, object);
+      openDialog(key, object);
     };
     
     if (!ObjectProperties.initialized) {
@@ -88,6 +90,13 @@ export class ObjectProperties {
     }
     
     // Dialog zeigen
-    openDialog('object_properties', name, object).dialog('option', 'title', name + 'bla');
+    openDialog(name, object).dialog('option', 'title', name);
+  };
+
+  removeAll = () => {
+    this.dialogs.forEach(function (dlg) {
+      $('#' + dlg).dialog('destroy');
+    });
+    this.dialogs  = [];
   }
 }

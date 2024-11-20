@@ -1,10 +1,10 @@
-<div id="<%=popoverID%>">
+<div id="<%=popoverID%>" class="object-properties">
   <form>
     <div class="form-group">
       <% if (data) { %>
         <%# console.log("_print_object", data) %>
         <% Object.keys(data).forEach(function(key) { %>
-          <% console.log("Item", key) %>
+          <%# console.log("Item", key) %>
           <%- printItem(key, data[key], popoverID + '_' + key) %>
         <% }); %>
       <% } else { %>

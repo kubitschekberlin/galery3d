@@ -1,10 +1,8 @@
 import $ from 'jquery';
 import * as THREE from 'three';
-import { ObjectProperties } from './object_properties.js';
 
 export class ObjectSelector {
   #raycaster;
-  #object_properties;
   #scene;
   #canvas;
   
@@ -12,7 +10,6 @@ export class ObjectSelector {
     this.#scene = scene;
     this.#canvas = canvas;
     this.#raycaster = new THREE.Raycaster();
-    this.#object_properties = new ObjectProperties();
     // Sicherstellen, dass der Kontext beibehalten wird
     $(canvas).parent().on('click', this.onMouseClick.bind(this));
   }
@@ -51,9 +48,5 @@ export class ObjectSelector {
       console.log('Kein Objekt getroffen');
     }
 
-    // Eigenschaften anzeigen, wenn ein Objekt ausgewählt wurde
-    if (selectedObject) {
-      this.#object_properties.show(selectedObject.name, selectedObject);
-    }
   }
 }
