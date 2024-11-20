@@ -70,6 +70,9 @@ export class ObjectProperties {
       $('#object_properties').append('<div id="' + id + '"></div>');
       let ret = $('#' + id).dialog({
         autoOpen: false,
+        close: function() {
+          $(this).dialog("destroy").remove();
+        }
       }).html(printObject(key, object))
       .dialog('open');
       resizeDialog($(id));
@@ -95,7 +98,7 @@ export class ObjectProperties {
 
   removeAll = () => {
     this.dialogs.forEach(function (dlg) {
-      $('#' + dlg).dialog('destroy');
+      $('#' + dlg).dialog('close');
     });
     this.dialogs  = [];
   }
