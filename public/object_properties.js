@@ -68,15 +68,15 @@ export class ObjectProperties {
       let id = 'object_properties_' + this.#popoverNumber;
       this.dialogs.push(id);
       $('#object_properties').append('<div id="' + id + '"></div>');
-      let ret = $('#' + id).dialog({
+      $('#' + id).dialog({
         autoOpen: false,
         close: function() {
           $(this).dialog("destroy").remove();
-        }
+        },
+        title: key
       }).html(printObject(key, object))
       .dialog('open');
       resizeDialog($(id));
-      return ret;
     }
 
     const onClick = (event) => {
@@ -93,7 +93,7 @@ export class ObjectProperties {
     }
     
     // Dialog zeigen
-    openDialog(name, object).dialog('option', 'title', name);
+    openDialog(name, object);
   };
 
   removeAll = () => {
