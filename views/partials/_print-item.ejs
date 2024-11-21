@@ -1,5 +1,4 @@
 <%# console.log("Item:", key, value) %>
-<% if(typeof value === 'function' || value == null) { return; } %>
 <div class="row">
   <div class="col first-col">
     <%= key %>
@@ -11,8 +10,10 @@
       data-popover-id="<%= popoverID %>"
       data-key="<%= key %>">Show</button>  
     <div id="<%= popoverID %>" title="<%= key %>"></div>
+  <% } else if(typeof value === 'boolean') { %>
+    <input type="checkbox" class="form-check-input value-boolean" <% if(value) { %> checked <% } %>" /> 
   <% } else { %>
-    <input type="text" value="<%= value %>" class="object-property-value" /> 
+    <input type="text" value="<%= value %>" class="value-text" /> 
   <% } %>
   </div>
 </div>

@@ -28,6 +28,19 @@ export class ObjectProperties {
     const getObject = (id) => {
       return this.objects[id];
     }
+  
+    const isEmpty = (value) => { 
+      if (Array.isArray(value)) { 
+        return value.length === 0; 
+      } else if ($.isPlainObject(value)) { 
+        return Object.keys(value).length === 0; 
+      }
+      return false;
+    };
+    
+    const isPresent = (object) => {
+      return typeof value !== 'function' && object && !isEmpty(object);
+    }
 
     const printItem = (key, value, popoverID) => {
       let parameter = {
@@ -47,7 +60,8 @@ export class ObjectProperties {
         name: name,
         data: data,
         popoverID: popoverID(),
-        printItem: printItem
+        printItem: printItem,
+        isPresent: isPresent
       });
 
       // Nächste popup ID
