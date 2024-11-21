@@ -131,8 +131,9 @@ export class ObjectProperties {
 
     if (!ObjectProperties.initialized) {
       ObjectProperties.initialized = true;
+      let selector = '.object-values-container input, .object-values-container a';
       $(document).on('click', '.object-property-button', onClick.bind(this))
-        .on('change', '.properties_value', onChange.bind(this))
+        .on('change', selector, onChange.bind(this))
     }
 
     // Dialog zeigen
