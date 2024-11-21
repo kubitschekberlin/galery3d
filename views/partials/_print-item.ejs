@@ -10,10 +10,10 @@
       data-popover-id="<%= popoverID %>" data-key="<%= key %>" />  
     <div id="<%= popoverID %>" title="<%= key %>"></div>
   <% } else if(typeof value === 'boolean') { %>
-    <input type="checkbox" class="form-check-input value-boolean" data-key="<%= key %>
+    <input type="checkbox" class="form-check-input properties_value value-boolean" data-key="<%= key %>
     data-popover-id="<%= popoverID %>" <% if(value) { %> checked <% } %>" /> 
   <% } else { %>
-    <input type="text" value="<%= value %>" class="value-text" data-key="<%= key %>"
+    <input type="text" value="<%= value %>" class="properties_value value-text" data-key="<%= key %>"
     data-popover-id="<%= popoverID %>" <%= readOnly(key) %>/> 
   <% } %>
   </div>

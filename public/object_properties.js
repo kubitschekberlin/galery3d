@@ -25,11 +25,11 @@ export class ObjectProperties {
       return 'popover_' + this.#popoverNumber;
     };
 
-    const isEmpty = (value) => { 
-      if (Array.isArray(value)) { 
-        return value.length === 0; 
-      } else if ($.isPlainObject(value)) { 
-        return Object.keys(value).length === 0; 
+    const isEmpty = (value) => {
+      if (Array.isArray(value)) {
+        return value.length === 0;
+      } else if ($.isPlainObject(value)) {
+        return Object.keys(value).length === 0;
       }
       return false;
     };
@@ -58,15 +58,15 @@ export class ObjectProperties {
 
     const onDialogOpen = (event, ui) => {
       var $dialog = $(event.target);
-      $dialog.find('.value-text').each(function(_index, text) {
+      $dialog.find('.value-text').each(function (_index, text) {
         let $text = $(text);
-        if(!$text.is('readonly')) {
+        if (!$text.is('readonly')) {
           let $parent = $text.closest('.object-item-properties'),
             id = $parent.attr('id'),
             key = $text.data('key'),
             object = ObjectProperties.objects[id],
             value = object[key];
-          if(typeof value === 'number') {
+          if (typeof value === 'number') {
             $text.spinner({});
             $text.addClass('value-number');
           }
@@ -95,30 +95,46 @@ export class ObjectProperties {
       $('#object_properties').append('<div id="' + id + '" class="object-properties"></div>');
       $('#' + id).dialog({
         autoOpen: false,
-        close: function() {
+        close: function () {
           $(this).dialog("destroy").remove();
         },
         title: key,
         maxHeight: $(window).height() * 0.9, // geht nicht mit CSS!
         maxWidth: $(window).width() * 0.9,
-        open: onDialogOpen.bind(this)     
+        open: onDialogOpen.bind(this)
       }).html(printObject(key, object))
-      .dialog('open');
+        .dialog('open');
     }
 
     const onClick = (event) => {
       let button = event.target,
-      key = $(button).data('key'),
-      id = $(button).data('popover-id'),
-      object = ObjectProperties.objects[id];
+        key = $(button).data('key'),
+        id = $(button).data('popover-id'),
+        object = ObjectProperties.objects[id];
       openDialog(key, object);
     };
-    
+
+    const onChange = (event) => {
+      let $text = $(event.target),
+        $parent = $text.closest('.object-item-properties'),
+        id = $parent.attr('id'),
+        key = $text.data('key'),
+        object = ObjectProperties.objects[id];
+      if ($text.attr('type') == 'checkbox') {
+        object[key] = $text.is(':checked');
+      } else {
+        object[key] = $text.val();
+      }
+      const scene = $('#top_area').data('scene');
+      scene.animate();
+    }
+
     if (!ObjectProperties.initialized) {
       ObjectProperties.initialized = true;
-      $(document).on('click', '.object-property-button', onClick.bind(this));
+      $(document).on('click', '.object-property-button', onClick.bind(this))
+        .on('change', '.properties_value', onChange.bind(this))
     }
-    
+
     // Dialog zeigen
     openDialog(name, object);
   };
@@ -127,7 +143,7 @@ export class ObjectProperties {
     ObjectProperties.dialogs.forEach(function (dlg) {
       $('#' + dlg).dialog('close');
     });
-    ObjectProperties.dialogs  = [];
+    ObjectProperties.dialogs = [];
     ObjectProperties.objects = {};
   }
 }

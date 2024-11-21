@@ -33,7 +33,7 @@ export default class RenderScene {
     camera.position.z = 5;
     camera.wireframe = true;
 
-    function animate() {
+    const animate = () => {
       requestAnimationFrame(animate);
       //pickHelper.pick(pickPosition, scene, camera);
       renderer.setSize($parent.innerWidth(), $parent.innerHeight());
