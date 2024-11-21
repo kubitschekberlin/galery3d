@@ -11,6 +11,9 @@ html, body{
     overflow: hidden;
     height: 100%;
 }
-.object-properties{
+.object-property-value, .object-property-button{
+  width: 10ex;
+}
+.first-col{
   overflow: hidden;
 }

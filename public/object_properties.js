@@ -56,27 +56,20 @@ export class ObjectProperties {
       return html;
     };
 
-    // Funktion, um Dialoggröße anzupassen 
-    const resizeDialog = ($dialog) => {
-      var maxHeight = $(window).height() * 0.9; // 90% der Fensterhöhe 
-      var maxWidth = $(window).width() * 0.9; // 90% der Fensterbreite 
-      $dialog.dialog("option", "maxHeight", maxHeight); 
-      $dialog.dialog("option", "maxWidth", maxWidth); 
-    }
-
     const openDialog = (key, object) => {
       let id = 'object_properties_' + this.#popoverNumber;
       this.dialogs.push(id);
-      $('#object_properties').append('<div id="' + id + '"></div>');
+      $('#object_properties').append('<div id="' + id + '" class="object-properties"></div>');
       $('#' + id).dialog({
         autoOpen: false,
         close: function() {
           $(this).dialog("destroy").remove();
         },
-        title: key
+        title: key,
+        maxHeight: $(window).height() * 0.9, // geht nicht mit CSS!
+        maxWidth: $(window).width() * 0.9      
       }).html(printObject(key, object))
       .dialog('open');
-      resizeDialog($(id));
     }
 
     const onClick = (event) => {
@@ -89,7 +82,7 @@ export class ObjectProperties {
     
     if (!ObjectProperties.initialized) {
       ObjectProperties.initialized = true;
-      $(document).on('click', '.popover-object-button', onClick.bind(this));
+      $(document).on('click', '.object-property-button', onClick.bind(this));
     }
     
     // Dialog zeigen

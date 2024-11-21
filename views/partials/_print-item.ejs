@@ -1,18 +1,18 @@
 <%# console.log("Item:", key, value) %>
 <% if(typeof value === 'function' || value == null) { return; } %>
 <div class="row">
-  <div class="col-6">
+  <div class="col first-col">
     <%= key %>
   </div>
-  <div class="col-6">
+  <div class="col-auto ml-1 mt-1">
   <% if (typeof value === 'object') { %>
     <button type="button" 
-      class="btn btn-secondary popover-object-button" 
+      class="btn btn-secondary btn-sm object-property-button" 
       data-popover-id="<%= popoverID %>"
       data-key="<%= key %>">Show</button>  
     <div id="<%= popoverID %>" title="<%= key %>"></div>
   <% } else { %>
-    <%= value %>
-    <% } %>
+    <input type="text" value="<%= value %>" class="object-property-value" /> 
+  <% } %>
   </div>
 </div>
