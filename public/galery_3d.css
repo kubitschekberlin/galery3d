@@ -13,7 +13,10 @@ html, body{
 }
 .value-text, .object-property-button{
   width: 10ex;
+  padding-block-start: 0px !important;
+  padding-block-end: 0px !important;
 }
 .first-col{
   overflow: hidden;
 }
+

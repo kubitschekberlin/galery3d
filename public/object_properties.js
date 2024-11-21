@@ -37,7 +37,11 @@ export class ObjectProperties {
       }
       return false;
     };
-    
+
+    const readOnly = (key) => {
+      return key == 'uuid' || key == 'type' ? 'readonly' : '';
+    }
+
     const isPresent = (object) => {
       return typeof value !== 'function' && object && !isEmpty(object);
     }
@@ -46,7 +50,8 @@ export class ObjectProperties {
       let parameter = {
         key: key,
         value: value,
-        popoverID: popoverID
+        popoverID: popoverID,
+        readOnly: readOnly
       };
       if (typeof value === 'object') {
         this.objects[popoverID] = value;

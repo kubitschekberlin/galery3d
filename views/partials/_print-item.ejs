@@ -3,17 +3,17 @@
   <div class="col first-col">
     <%= key %>
   </div>
-  <div class="col-auto ml-1 mt-1">
+  <div class="col-auto ml-1 mt-1 object-values-container">
   <% if (typeof value === 'object') { %>
-    <button type="button" 
+    <input type="button" value="Show"
       class="btn btn-secondary btn-sm object-property-button" 
       data-popover-id="<%= popoverID %>"
-      data-key="<%= key %>">Show</button>  
+      data-key="<%= key %>" />  
     <div id="<%= popoverID %>" title="<%= key %>"></div>
   <% } else if(typeof value === 'boolean') { %>
     <input type="checkbox" class="form-check-input value-boolean" <% if(value) { %> checked <% } %>" /> 
   <% } else { %>
-    <input type="text" value="<%= value %>" class="value-text" /> 
+    <input type="text" value="<%= value %>" class="value-text" <%= readOnly(key) %>/> 
   <% } %>
   </div>
 </div>
