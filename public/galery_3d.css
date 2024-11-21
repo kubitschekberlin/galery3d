@@ -11,12 +11,12 @@ html, body{
     overflow: hidden;
     height: 100%;
 }
-.value-text, .object-property-button{
+.value-text:not(.value-number), .object-property-button{
   width: 10ex;
   padding-block-start: 0px !important;
   padding-block-end: 0px !important;
 }
-.value-text{
+.value-text.value-number {
   width: 5.2ex;
 }
 .value-text, .ui-spinner-button{

@@ -14,9 +14,9 @@ import objectTemplate from '../views/partials/_print-object.ejs';
 export class ObjectProperties {
   #popoverNumber = 0;
   static initialized;
+  static objects = {};
+  static dialogs = [];
   constructor() {
-    this.objects = [];
-    this.dialogs = [];
   }
   show = (name, object) => {
     console.log(object);
@@ -25,10 +25,6 @@ export class ObjectProperties {
       return 'popover_' + this.#popoverNumber;
     };
 
-    const getObject = (id) => {
-      return this.objects[id];
-    }
-  
     const isEmpty = (value) => { 
       if (Array.isArray(value)) { 
         return value.length === 0; 
@@ -54,7 +50,7 @@ export class ObjectProperties {
         readOnly: readOnly
       };
       if (typeof value === 'object') {
-        this.objects[popoverID] = value;
+        ObjectProperties.objects[popoverID] = value;
       }
       const html = ejs.render(itemTemplate, parameter);
       return html;
@@ -63,7 +59,18 @@ export class ObjectProperties {
     const onDialogOpen = (event, ui) => {
       var $dialog = $(event.target);
       $dialog.find('.value-text').each(function(_index, text) {
-        $(text).spinner({});
+        let $text = $(text);
+        if(!$text.is('readonly')) {
+          let $parent = $text.closest('.object-item-properties'),
+            id = $parent.attr('id'),
+            key = $text.data('key'),
+            object = ObjectProperties.objects[id],
+            value = object[key];
+          if(typeof value === 'number') {
+            $text.spinner({});
+            $text.addClass('value-number');
+          }
+        }
       });
     }
     const printObject = (name, data) => {
@@ -82,8 +89,9 @@ export class ObjectProperties {
     };
 
     const openDialog = (key, object) => {
-      let id = 'object_properties_' + this.#popoverNumber;
-      this.dialogs.push(id);
+      let id = popoverID();
+      ObjectProperties.dialogs.push(id);
+      ObjectProperties.objects[id] = object;
       $('#object_properties').append('<div id="' + id + '" class="object-properties"></div>');
       $('#' + id).dialog({
         autoOpen: false,
@@ -93,7 +101,7 @@ export class ObjectProperties {
         title: key,
         maxHeight: $(window).height() * 0.9, // geht nicht mit CSS!
         maxWidth: $(window).width() * 0.9,
-        open: onDialogOpen      
+        open: onDialogOpen.bind(this)     
       }).html(printObject(key, object))
       .dialog('open');
     }
@@ -102,7 +110,7 @@ export class ObjectProperties {
       let button = event.target,
       key = $(button).data('key'),
       id = $(button).data('popover-id'),
-      object = getObject.call(this, id);
+      object = ObjectProperties.objects[id];
       openDialog(key, object);
     };
     
@@ -116,9 +124,10 @@ export class ObjectProperties {
   };
 
   removeAll = () => {
-    this.dialogs.forEach(function (dlg) {
+    ObjectProperties.dialogs.forEach(function (dlg) {
       $('#' + dlg).dialog('close');
     });
-    this.dialogs  = [];
+    ObjectProperties.dialogs  = [];
+    ObjectProperties.objects = {};
   }
 }

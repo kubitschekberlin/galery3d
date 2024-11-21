@@ -7,13 +7,14 @@
   <% if (typeof value === 'object') { %>
     <input type="button" value="Show"
       class="btn btn-secondary btn-sm object-property-button" 
-      data-popover-id="<%= popoverID %>"
-      data-key="<%= key %>" />  
+      data-popover-id="<%= popoverID %>" data-key="<%= key %>" />  
     <div id="<%= popoverID %>" title="<%= key %>"></div>
   <% } else if(typeof value === 'boolean') { %>
-    <input type="checkbox" class="form-check-input value-boolean" <% if(value) { %> checked <% } %>" /> 
+    <input type="checkbox" class="form-check-input value-boolean" data-key="<%= key %>
+    data-popover-id="<%= popoverID %>" <% if(value) { %> checked <% } %>" /> 
   <% } else { %>
-    <input type="text" value="<%= value %>" class="value-text" <%= readOnly(key) %>/> 
+    <input type="text" value="<%= value %>" class="value-text" data-key="<%= key %>"
+    data-popover-id="<%= popoverID %>" <%= readOnly(key) %>/> 
   <% } %>
   </div>
 </div>
