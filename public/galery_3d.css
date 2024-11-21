@@ -19,11 +19,17 @@ html, body{
 .value-text{
   width: 5.2ex;
 }
+.value-text, .ui-spinner-button{
+  height: 20px;
+}
+.ui-spinner-button {
+  width: 16px !important;
+}
 .object-property-button{
   width: 10ex;
 }
 .first-col{
   overflow: hidden;
-  padding-top: 3px;
+  padding-top: 4px;
 }
 
