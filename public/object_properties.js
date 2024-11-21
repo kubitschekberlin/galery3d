@@ -60,6 +60,12 @@ export class ObjectProperties {
       return html;
     }
 
+    const onDialogOpen = (event, ui) => {
+      var $dialog = $(event.target);
+      $dialog.find('.value-text').each(function(_index, text) {
+        $(text).spinner({});
+      });
+    }
     const printObject = (name, data) => {
       const html = ejs.render(objectTemplate, {
         name: name,
@@ -86,7 +92,8 @@ export class ObjectProperties {
         },
         title: key,
         maxHeight: $(window).height() * 0.9, // geht nicht mit CSS!
-        maxWidth: $(window).width() * 0.9      
+        maxWidth: $(window).width() * 0.9,
+        open: onDialogOpen      
       }).html(printObject(key, object))
       .dialog('open');
     }

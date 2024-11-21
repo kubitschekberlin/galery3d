@@ -16,7 +16,14 @@ html, body{
   padding-block-start: 0px !important;
   padding-block-end: 0px !important;
 }
+.value-text{
+  width: 5.2ex;
+}
+.object-property-button{
+  width: 10ex;
+}
 .first-col{
   overflow: hidden;
+  padding-top: 3px;
 }
 
