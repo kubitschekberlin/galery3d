@@ -4,10 +4,10 @@ import 'jquery-ui-dist/jquery-ui.css';
 import 'jquery-ui-dist/jquery-ui.js'
 
 // itemTemplate: Erzeugt Zeile mit key-value Paar. Ist value ein Objekt, wird es als Schaltfläche zum Öffnen eines
-// weiteren Objekts dargestellt durch einen rekursiven Call von printObject.import itemTemplate from '../views/partials/_print-item.ejs';
+// weiteren Objekts dargestellt durch einen erneuten Call von printObject
 import itemTemplate from '../views/partials/_print-item.ejs';
 
-// objectTemplate: popup mit den Daten eines Objekts
+// objectTemplate: jQuery-UI dislog mit den Daten eines Objekts
 import objectTemplate from '../views/partials/_print-object.ejs';
 
 
@@ -67,7 +67,10 @@ export class ObjectProperties {
             object = ObjectProperties.objects[id],
             value = object[key];
           if (typeof value === 'number') {
-            $text.spinner({});
+            $text.spinner({
+              step: 0.1,
+              spin: onChange.bind(this)
+            });
             $text.addClass('value-number');
           }
         }
@@ -131,7 +134,7 @@ export class ObjectProperties {
 
     if (!ObjectProperties.initialized) {
       ObjectProperties.initialized = true;
-      let selector = '.object-values-container input, .object-values-container a';
+      let selector = '.object-values-container input';
       $(document).on('click', '.object-property-button', onClick.bind(this))
         .on('change', selector, onChange.bind(this))
     }
