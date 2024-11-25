@@ -141,6 +141,28 @@ export class ObjectProperties {
 
     // Dialog zeigen
     openDialog(name, object);
+  }
+
+  updateDialogs = () => {
+    $('.object-item-properties').each(function (_index, dialog) {
+      let id = $(dialog).data('id'),
+        object = ObjectProperties.objects[id];
+      updateObjectDialog(dialog, object);
+    });
+
+  }
+
+  updateObjectDialog = (dialog, object) => {
+    $(dialog).find('.object-values-container input').each(function (_index, input) {
+      let $input = $(input),
+        key = $input.data('key'),
+        value = object[key];
+      if ($input.attr('type') == 'checkbox') {
+        $input.attr('checked', value);
+      } else {
+        $input.val(value);
+      }
+    });
   };
 
   removeAll = () => {
