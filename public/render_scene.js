@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from '../node_modules/three/examples/jsm/controls/OrbitControls.js';
+import './object_properties.js';
 //import { PickHelper, pickPosition } from './picking.js';
 import $ from 'jquery'
 
@@ -40,6 +41,10 @@ export default class RenderScene {
       camera.aspect = canvas.clientWidth / canvas.clientHeight;
       camera.updateProjectionMatrix();
       renderer.render(scene, camera);
+      let dialogs = this.objectProps;
+      // if(dialogs){
+      //   dialogs.updateDialogs();
+      // }
     }
     
     //console.log('ID', canvas.getAttribute('id'));
@@ -51,8 +56,13 @@ export default class RenderScene {
     this.scene = scene;
     this.camera = camera;
     this.animate = animate;
-    
+    this.objectProps = null;
+
     animate();
   }
 
+  objectProperties = (op) => {
+    this.objectProps = op;
+  }
 }
+

@@ -1,12 +1,11 @@
 import $ from 'jquery'
 import { RenderMesh } from './render_object.js'
-import { ObjectProperties } from './object_properties.js';
 
 class Events3D {
-  constructor(camera, scene, animate) {
+  constructor(camera, scene, animate, objectProperties) {
     this.camera = camera;
     this.scene = scene;
-    this.objectProperties = new ObjectProperties;
+    this.objectProperties = objectProperties;
 
     $('#wireframe').on('click', function () {
       camera.wireframe = !camera.wireframe;
