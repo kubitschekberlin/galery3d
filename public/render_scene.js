@@ -42,9 +42,9 @@ export default class RenderScene {
       camera.updateProjectionMatrix();
       renderer.render(scene, camera);
       let dialogs = this.objectProps;
-      // if(dialogs){
-      //   dialogs.updateDialogs();
-      // }
+      if(dialogs){
+        dialogs.updateDialogs();
+      }
     }
     
     //console.log('ID', canvas.getAttribute('id'));

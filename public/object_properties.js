@@ -143,28 +143,29 @@ export class ObjectProperties {
     openDialog(name, object);
   }
 
-  updateDialogs = () => {
-    $('.object-item-properties').each(function (_index, dialog) {
-      let id = $(dialog).data('id'),
-        object = ObjectProperties.objects[id];
-      updateObjectDialog(dialog, object);
-    });
-
-  }
-
   updateObjectDialog = (dialog, object) => {
     $(dialog).find('.object-values-container input').each(function (_index, input) {
       let $input = $(input),
         key = $input.data('key'),
         value = object[key];
       if ($input.attr('type') == 'checkbox') {
-        $input.attr('checked', value);
+        $input.prop('checked', value);
       } else {
+        console.log(key, value);
         $input.val(value);
       }
     });
   };
 
+  updateDialogs = () => {
+    $('.object-item-properties').each((_index, dialog) => {
+      let id = $(dialog).attr('id'),
+        object = ObjectProperties.objects[id];
+      if (object) {
+        this.updateObjectDialog(dialog, object);
+      }
+    });
+  }
   removeAll = () => {
     ObjectProperties.dialogs.forEach(function (dlg) {
       $('#' + dlg).dialog('close');
