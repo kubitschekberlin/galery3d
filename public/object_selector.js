@@ -89,13 +89,14 @@ export class ObjectSelector {
     renderer.dragControls.addEventListener('drag', function (event) {
       // gibts nicht: event.preventDefault();
       // Standard-Drag-Handling verhindern 
-      if(event.object.previousPosition) {
-        const deltaX = event.object.position.x - event.object.previousPosition.x;
-        const deltaY = event.object.position.y - event.object.previousPosition.y;
+      if(event.object.userData.previousPosition) {
+        const deltaX = event.object.position.x - event.object.userData.previousPosition.x;
+        const deltaY = event.object.position.y - event.object.userData.previousPosition.y;
+        event.object.position.copy(event.object.userData.previousPosition);
         if (renderer.isShiftDown) {
           let pos = event.object.position.clone();
+          event.object.rotation.x -= deltaY * 0.01;
           event.object.rotation.y += deltaX * 0.01;
-          event.object.rotation.x += deltaY * 0.01;
           event.object.position.x = pos.x;
           event.object.position.y = pos.y;
           event.object.position.z = pos.z;
@@ -107,12 +108,12 @@ export class ObjectSelector {
         }
       }
         // Position speichern, um Delta zu berechnen 
-      event.object.previousPosition.copy(event.object.position);
+      event.object.userData.previousPosition.copy(event.object.position);
     });
 
     // Position speichern, um Delta zu berechnen 
     renderer.dragControls.addEventListener('hoveron', function (event) {
-      event.object.previousPosition = event.object.position.clone();
+      event.object.userData.previousPosition = event.object.position.clone();
     });
   }
 
