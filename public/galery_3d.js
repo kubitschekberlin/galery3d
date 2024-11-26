@@ -16,5 +16,5 @@ $(function () {
   new Events3D(renderer.camera, renderer.scene, renderer.animate, objectProperties);
   new renderObject.RenderCube(renderer.scene, renderer, './dist/zebra.jpg');
   //new RenderHorizonSphere(renderer.scene, './dist/zebra.jpg');
-  new ObjectSelector(renderer.scene, $('canvas')[0]);
+  new ObjectSelector(renderer);
 });
