@@ -1,7 +1,8 @@
 import * as THREE from 'three';
-import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js'
-import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js'
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js'
+import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
+import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
 
 export class RenderObject {
   constructor(parent) {
@@ -87,7 +88,8 @@ export class RenderHorizonSphere extends RenderObject {
 }
 
 export class RenderCube extends RenderObject {
-  constructor(parent, image) {// Textur laden 
+  constructor(parent, renderer, image) {// Textur laden 
+    super(parent);
     const textureLoader = new THREE.TextureLoader();
     const texture = textureLoader.load(image);
     // Geometrie und Material mit Textur erstellen 
@@ -96,6 +98,15 @@ export class RenderCube extends RenderObject {
     const cube = new THREE.Mesh(geometry, material);
     cube.name = 'Zebra';
     parent.add(cube);
+
+    // DragControls hinzufügen 
+    const dragControls = new DragControls([cube], renderer.camera, renderer.domElement); 
+    dragControls.addEventListener('dragstart', function (event) { 
+      renderer.controls.enabled = false; 
+    }); 
+    dragControls.addEventListener('dragend', function (event) { 
+      renderer.controls.enabled = true; 
+    });
   }
 }
 

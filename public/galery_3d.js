@@ -9,12 +9,12 @@ import './extend_js.js';
 import { ObjectProperties } from './object_properties.js';
 
 $(function () {
-  const scene = new RenderScene('#canvas_parent');
-  $('#top_area').data('scene', scene);
+  const renderer = new RenderScene('#canvas_parent');
+  $('#top_area').data('scene', renderer);
   let objectProperties = new ObjectProperties();
-  scene.objectProperties(objectProperties);
-  new Events3D(scene.camera, scene.scene, scene.animate, objectProperties);
-  new renderObject.RenderCube(scene.scene, './dist/zebra.jpg');
-  //new RenderHorizonSphere(scene.scene, './dist/zebra.jpg');
-  new ObjectSelector(scene, $('canvas')[0]);
+  renderer.objectProperties(objectProperties);
+  new Events3D(renderer.camera, renderer.scene, renderer.animate, objectProperties);
+  new renderObject.RenderCube(renderer.scene, renderer, './dist/zebra.jpg');
+  //new RenderHorizonSphere(renderer.scene, './dist/zebra.jpg');
+  new ObjectSelector(renderer.scene, $('canvas')[0]);
 });

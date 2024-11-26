@@ -58,6 +58,8 @@ export default class RenderScene {
     this.scene = scene;
     this.camera = camera;
     this.animate = animate;
+    this.controls = controls;
+    this.domElement = $parent[0];
     this.objectProps = null;
 
     animate();
