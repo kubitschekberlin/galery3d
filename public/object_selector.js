@@ -89,24 +89,24 @@ export class ObjectSelector {
     renderer.dragControls.addEventListener('drag', function (event) {
       // gibts nicht: event.preventDefault();
       // Standard-Drag-Handling verhindern 
-      const deltaX = event.object.position.x - event.object.previousPosition.x;
-      const deltaY = event.object.position.y - event.object.previousPosition.y;
-      if (renderer.isShiftDown) {
-        let x = event.object.position.x;
-        let y = event.object.position.y;
-        let z = event.object.position.z;
-        event.object.rotation.y += deltaX * 0.01;
-        event.object.rotation.x += deltaY * 0.01;
-        event.object.position.x = x;
-        event.object.position.y = y;
-        event.object.position.z = z;
-        console.log(x, y, z);
-      } else {
-        // Translation bei losgelassener Shift-Taste 
-        event.object.position.x += deltaX;
-        event.object.position.y += deltaY;
+      if(event.object.previousPosition) {
+        const deltaX = event.object.position.x - event.object.previousPosition.x;
+        const deltaY = event.object.position.y - event.object.previousPosition.y;
+        if (renderer.isShiftDown) {
+          let pos = event.object.position.clone();
+          event.object.rotation.y += deltaX * 0.01;
+          event.object.rotation.x += deltaY * 0.01;
+          event.object.position.x = pos.x;
+          event.object.position.y = pos.y;
+          event.object.position.z = pos.z;
+          console.log(pos);
+        } else {
+          // Translation bei losgelassener Shift-Taste 
+          event.object.position.x += deltaX;
+          event.object.position.y += deltaY;
+        }
       }
-      // Position speichern, um Delta zu berechnen 
+        // Position speichern, um Delta zu berechnen 
       event.object.previousPosition.copy(event.object.position);
     });
 
