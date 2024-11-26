@@ -3,10 +3,25 @@ import * as THREE from 'three';
 import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
 
 export class ObjectSelector {
+  #isShiftDown;
+
   constructor(renderer) {
     let raycaster = new THREE.Raycaster();
- 
-    
+
+    // Event-Listener für Maus-Taste drücken und loslassen 
+    window.addEventListener('keydown', function (event) {
+      if (event.key === 'Shift') {
+        console.log('Shift', 'down');
+        renderer.isShiftDown = true;
+      }
+    });
+    window.addEventListener('keyup', function (event) {
+      if (event.key === 'Shift') {
+        console.log('Shift', 'up');
+        renderer.isShiftDown = false;
+      }
+    });
+
     const onMouseClick = (event) => {
       // Umrechnen der Mausposition in normalisierte Gerätekoordinaten (NDC)
       const rect = renderer.domElement.getBoundingClientRect();
@@ -14,17 +29,17 @@ export class ObjectSelector {
         x: ((event.clientX - rect.left) / rect.width) * 2 - 1,
         y: -((event.clientY - rect.top) / rect.height) * 2 + 1
       };
-      
+
       // Vergewissere dich, dass die Kamera korrekt ist
       let camera = renderer.camera;
       if (!camera) {
         console.error('Kamera ist nicht definiert');
         return;
       }
-      
+
       // Aktualisieren des Raycasters mit der Kameraposition und der Mausrichtung
       raycaster.setFromCamera(mouse, camera);
-      
+
       // Berechnen der Objekte, die vom Raycaster getroffen werden
       let children = renderer.scene.children;
       if (!children) {
@@ -37,25 +52,28 @@ export class ObjectSelector {
         // Das erste getroffene Objekt auswählen
         selectedObject = intersects[0].object;
         console.log('Ausgewähltes Objekt: ' + selectedObject.name);
-        this.onSelectObject(selectedObject, renderer);
+        this.onSelectObject(renderer, selectedObject);
       } else {
         console.log('Kein Objekt getroffen');
       }
-      
     }
-    
-    // Sicherstellen, dass der Kontext beibehalten wird
+
+    // Events registrierern
     $(renderer.domElement).parent().on('click', onMouseClick.bind(this));
   }
-  
-  onSelectObject = (selectedObject, renderer) => {
-    let controls = renderer.cameraControls;
+
+  onSelectObject = (renderer, selectedObject) => {
 
     // Alte DragControls entfernen 
     if (renderer.dragControls) {
       renderer.dragControls.dispose();
     }
     // Neue DragControls mit dem neu ausgewählten Objekt erstellen 
+    this.addDragControl(renderer, selectedObject);
+  }
+
+  addDragControl = (renderer, selectedObject) => {
+    let controls = renderer.cameraControls;
     renderer.dragControls = new DragControls([selectedObject], renderer.camera, renderer.domElement);
     renderer.dragControls.addEventListener('dragstart', function (event) {
       controls.enabled = false;
@@ -63,6 +81,41 @@ export class ObjectSelector {
     renderer.dragControls.addEventListener('dragend', function (event) {
       controls.enabled = true;
     });
+    this.registerDragListener(renderer);
   }
+
+  registerDragListener = (renderer) => {
+    // Drag-Event anpassen basierend auf dem Zustand der Shift-Taste 
+    renderer.dragControls.addEventListener('drag', function (event) {
+      // gibts nicht: event.preventDefault();
+      // Standard-Drag-Handling verhindern 
+      const deltaX = event.object.position.x - event.object.previousPosition.x;
+      const deltaY = event.object.position.y - event.object.previousPosition.y;
+      if (renderer.isShiftDown) {
+        let x = event.object.position.x;
+        let y = event.object.position.y;
+        let z = event.object.position.z;
+        event.object.rotation.y += deltaX * 0.01;
+        event.object.rotation.x += deltaY * 0.01;
+        event.object.position.x = x;
+        event.object.position.y = y;
+        event.object.position.z = z;
+        console.log(x, y, z);
+      } else {
+        // Translation bei losgelassener Shift-Taste 
+        event.object.position.x += deltaX;
+        event.object.position.y += deltaY;
+      }
+      // Position speichern, um Delta zu berechnen 
+      event.object.previousPosition.copy(event.object.position);
+    });
+
+    // Position speichern, um Delta zu berechnen 
+    renderer.dragControls.addEventListener('hoveron', function (event) {
+      event.object.previousPosition = event.object.position.clone();
+    });
+  }
+
 }
+
 
