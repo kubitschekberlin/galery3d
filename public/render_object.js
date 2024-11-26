@@ -76,6 +76,7 @@ export class RenderHorizonSphere extends RenderObject {
     this.texture = loader.load(image);
     const geometry = new THREE.SphereGeometry(10, 10, 10);
     const sphere = new THREE.Mesh(geometry, this.material);  
+    this.name = image;
     parent.add(sphere);
   }
 

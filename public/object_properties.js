@@ -101,7 +101,7 @@ export class ObjectProperties {
         close: function () {
           $(this).dialog("destroy").remove();
         },
-        title: key,
+        title: key + (object.name ? object.name : ''),
         maxHeight: $(window).height() * 0.9, // geht nicht mit CSS!
         maxWidth: $(window).width() * 0.9,
         open: onDialogOpen.bind(this)
@@ -150,8 +150,7 @@ export class ObjectProperties {
         value = object[key];
       if ($input.attr('type') == 'checkbox') {
         $input.prop('checked', value);
-      } else {
-        console.log(key, value);
+      } else if($input.attr('type') == 'text') {
         $input.val(value);
       }
     });
@@ -168,7 +167,7 @@ export class ObjectProperties {
   }
   removeAll = () => {
     ObjectProperties.dialogs.forEach(function (dlg) {
-      $('#' + dlg).dialog('close');
+      $(`#${dlg}`).dialog('close');
     });
     ObjectProperties.dialogs = [];
     ObjectProperties.objects = {};
