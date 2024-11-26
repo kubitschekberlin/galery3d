@@ -49,8 +49,8 @@ export class RenderMesh extends RenderObject {
       geometry.scale(0.01, 0.01, 0.01);
       mesh = new THREE.Mesh(geometry, this.material);
       parent.add(mesh);
-      if(success){
-       success();
+      if (success) {
+        success();
       }
     }
     const onProgress = () => console.log('Lade', file);
@@ -58,12 +58,12 @@ export class RenderMesh extends RenderObject {
 
     var mesh;
     try {
-      if (typeof(file) === 'string') {
+      if (typeof (file) === 'string') {
         loader.load(file, onLoad, onProgress, onError);
       } else {
         onLoad(loader.parse(file));
       }
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   }
@@ -75,13 +75,25 @@ export class RenderHorizonSphere extends RenderObject {
     const loader = new THREE.TextureLoader();
     this.texture = loader.load(image);
     const geometry = new THREE.SphereGeometry(10, 10, 10);
-    const sphere = new THREE.Mesh(geometry, this.material);  
+    const sphere = new THREE.Mesh(geometry, this.material);
     this.name = image;
     parent.add(sphere);
   }
 
   create_material = () => {
     return new THREE.MeshLambertMaterial({ map: this.texture });
+  }
+}
+
+export class RenderCube extends RenderObject {
+  constructor(parent, image) {// Textur laden 
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load(image);
+    // Geometrie und Material mit Textur erstellen 
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshBasicMaterial({ map: texture });
+    const cube = new THREE.Mesh(geometry, material);
+    parent.add(cube);
   }
 }
 
