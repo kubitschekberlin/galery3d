@@ -69,7 +69,7 @@ export default class RenderScene {
     this.scene = scene;
     this.camera = camera;
     this.animate = animate;
-    this.controls = controls;
+    this.cameraControls = controls;
     this.domElement = renderer.domElement;
     this.objectProps = null;
     this.dragControls = dragControls;

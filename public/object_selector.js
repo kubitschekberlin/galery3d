@@ -49,7 +49,7 @@ export class ObjectSelector {
   }
   
   onSelectObject = (selectedObject, renderer) => {
-    let controls = renderer.controls;
+    let controls = renderer.cameraControls;
 
     // Alte DragControls entfernen 
     if (renderer.dragControls) {
