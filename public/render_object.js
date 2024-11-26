@@ -76,7 +76,8 @@ export class RenderHorizonSphere extends RenderObject {
     this.texture = loader.load(image);
     const geometry = new THREE.SphereGeometry(10, 10, 10);
     const sphere = new THREE.Mesh(geometry, this.material);
-    this.name = image;
+    sphere.name = image;
+    sphere.name = 'Sphere';
     parent.add(sphere);
   }
 
@@ -93,6 +94,7 @@ export class RenderCube extends RenderObject {
     const geometry = new THREE.BoxGeometry();
     const material = new THREE.MeshBasicMaterial({ map: texture });
     const cube = new THREE.Mesh(geometry, material);
+    cube.name = 'Zebra';
     parent.add(cube);
   }
 }

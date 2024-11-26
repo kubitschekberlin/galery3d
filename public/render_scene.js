@@ -22,6 +22,7 @@ export default class RenderScene {
     // put the camera on a pole (parent it to an object)
     // so we can spin the pole to move the camera around the scene
     const cameraPole = new THREE.Object3D();
+    cameraPole.name = 'Camera Pole';
     scene.add(cameraPole);
     cameraPole.add(camera);
 
@@ -29,6 +30,7 @@ export default class RenderScene {
     camera.add(light);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.name = 'Directional Light';
     scene.add(directionalLight);
 
     camera.position.z = 5;

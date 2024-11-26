@@ -44,6 +44,7 @@ export class ObjectProperties {
 
     const printItem = (key, value, popoverID) => {
       let parameter = {
+        title: objectTitle(key, value), 
         key: key,
         value: value,
         popoverID: popoverID,
@@ -76,10 +77,10 @@ export class ObjectProperties {
         }
       });
     }
-    const printObject = (name, data) => {
+    const printObject = (key, object) => {
       const html = ejs.render(objectTemplate, {
-        name: name,
-        data: data,
+        key: key,
+        object: object,
         popoverID: popoverID(),
         printItem: printItem,
         isPresent: isPresent
@@ -91,6 +92,13 @@ export class ObjectProperties {
       return html;
     };
 
+    const objectTitle = (key, object) => {
+      if(!object){
+        return key;
+      }
+      return `${key}${object.name ? (': ' + object.name) : ''}`;
+    }
+
     const openDialog = (key, object) => {
       let id = popoverID();
       ObjectProperties.dialogs.push(id);
@@ -101,7 +109,7 @@ export class ObjectProperties {
         close: function () {
           $(this).dialog("destroy").remove();
         },
-        title: key + (object.name ? object.name : ''),
+        title: objectTitle(key, object),
         maxHeight: $(window).height() * 0.9, // geht nicht mit CSS!
         maxWidth: $(window).width() * 0.9,
         open: onDialogOpen.bind(this)
