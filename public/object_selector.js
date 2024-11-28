@@ -51,7 +51,11 @@ export class ObjectSelector {
       if (intersects.length > 0) {
         // Das erste getroffene Objekt auswählen
         selectedObject = intersects[0].object;
-        console.log('Ausgewähltes Objekt: ' + selectedObject.name);
+        if(selectedObject.selectOnClick) {
+          selectedObject = selectedObject.selectOnClick;
+        }
+        console.log(intersects.length , 'Selected:', 
+          `${selectedObject.name ? selectedObject.name : selectedObject.type}`);
         this.onSelectObject(renderer, selectedObject);
       } else {
         console.log('Kein Objekt getroffen');

@@ -106,59 +106,69 @@ class DragControlsX extends EventDispatcher {
       };
     }
 
-    function applyRotation(_selected, camera, diff) {
+    function verticalRotationAxis(camDir){
       const abs = Math.abs;
-      let camDir = getCameraDirections(camera);
-      let x = new Vector3(1, 0, 0).dot(camDir.x);
-      let y = new Vector3(0, 1, 0).dot(camDir.y);
-      let z = new Vector3(0, 0, 1).dot(camDir.z);
-      let vertical = abs(diff.y) > abs(diff.x);
-      let angle = vertical ? diff.y : diff.x;
-      let axis = new Vector3;
-
-      if (z >= x && z >= y) {
-        if (x >= y) {
-          if (vertical) {
-            axis.set(1, 0, 0);
-          } else {
-            axis.set(0, 1, 0);
-          }
+      const x = new Vector3(1, 0, 0),
+        xx = abs(x.dot(camDir.x)),
+        xy = abs(x.dot(camDir.y)),
+        xz = abs(x.dot(camDir.z));
+      let axis = null;
+      if(xx > xy)
+      {
+        if(xx > xz){
+          axis = new Vector3(1, 0, 0); 
         } else {
-          if (vertical) {
-            axis.set(1, 0, 0);
-          } else {
-            axis.set(0, 1, 0);
-          }
-        }
-      } else if (y >= z && y >= x) {
-        if (z >= x) {
-          if (vertical) {
-            axis.set(1, 0, 0);
-          } else {
-            axis.set(0, 1, 0);
-          }
-        } else {
-          if (vertical) {
-            axis.set(1, 0, 0);
-          } else {
-            axis.set(0, 1, 0);
-          }
-        }
-      } else
-      if (z > y) {
-        if (vertical) {
-          axis.set(1, 0, 0);
-        } else {
-          axis.set(0, 0, 1);
+          axis = new Vector3(0, 0, 1); 
         }
       } else {
-        if (vertical) {
-          axis.set(1, 0, 0);
+        if(xy > xz){
+          axis = new Vector3(0, 1, 0); 
         } else {
-          axis.set(0, 0, 1);
+          axis = new Vector3(0, 0, 1); 
         }
       }
-      console.log('x:', x, 'y:', y, 'z:', z, 'angle:', angle, 'vertical:', vertical, 'axis:', axis);
+      return axis;
+    }
+
+    function horizontalRotationAxis(camDir){
+      const abs = Math.abs;
+      const y = new Vector3(1, 0, 0),
+        yy = abs(y.dot(camDir.y)),
+        yx = abs(y.dot(camDir.x)),
+        yz = abs(y.dot(camDir.z));
+      let axis = null;
+      if(yy > yx)
+      {
+        if(yy > yz){
+          axis = new Vector3(0, 1, 0); 
+        } else {
+          axis = new Vector3(0, 0, 1); 
+        }
+      } else {
+        if(yy > yz){
+          axis = new Vector3(0, 1, 0); 
+        } else {
+          axis = new Vector3(0, 0, 1); 
+        }
+      }
+      return axis;
+    }
+    
+    function applyRotation(_selected, camera, diff) {
+      const abs = Math.abs;
+      const camDir = getCameraDirections(camera);
+      let vertical = abs(diff.y) > abs(diff.x);
+      let angle = vertical ? diff.y : diff.x;
+      let axis = null;
+
+      if(vertical) {
+        axis = verticalRotationAxis(camDir);
+      }
+      else{
+        axis = horizontalRotationAxis(camDir);
+      }
+
+      console.log('angle:', angle, 'vertical:', vertical, 'axis:', axis);
       _selected.rotateOnAxis(axis, angle * 10); // * Math.PI / 180);
     }
   

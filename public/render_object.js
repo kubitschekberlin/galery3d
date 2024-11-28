@@ -25,16 +25,23 @@ class CoordinateArrows {
       { dir: new Vector3(0, 0, 1), color: 0x0000FF }
     ];
     const origin = new Vector3(0, 0, 0);
-
+    
     directions.forEach((dir, index) => {
       this.arrows[index] = new ArrowHelper(dir.dir, origin, 1.5, dir.color, 0.05, 0.05);
-      this.arrows[index].name = `Arrow ${index}`;
     });
   }
-
+ 
   add = (parent) => {
+    const initArrow = (arrow, parent) => {
+      const a = [arrow, ...arrow.children];
+      a.forEach((object, index) => {
+        object.name = `Arrow ${index}`;
+        object.selectOnClick = parent;
+      });
+    }
     this.arrows.forEach((arrow) => {
       parent.add(arrow);
+      initArrow(arrow, parent);
     });
   }
 
@@ -53,8 +60,8 @@ export class RenderObject {
     this._arrows = new CoordinateArrows(this);
   }
 
-  getArrows() { 
-    return this._arrows; 
+  getArrows() {
+    return this._arrows;
   }
 
   remove(object) {
@@ -73,7 +80,7 @@ export class RenderObject {
     this.parent.remove(object);
   };
 
-  create_material () {
+  create_material() {
     return new MeshLambertMaterial({ color: 0xffffff/*, wireframe: true*/ });
   }
 }
