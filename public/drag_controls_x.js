@@ -1,10 +1,10 @@
 import {
   EventDispatcher,
-  Matrix4,
   Plane,
   Raycaster,
   Vector2,
-  Vector3
+  Vector3,
+  Matrix4
 } from 'three';
 
 const _plane = new Plane();
@@ -85,93 +85,86 @@ class DragControlsX extends EventDispatcher {
 
     }
 
-    function getCameraDirections(camera) {
-      // Z-Richtung (Blickrichtung) 
-      let lookAtVector = new Vector3();
-      camera.getWorldDirection(lookAtVector);
-      //console.log('Blickrichtung (Z-Vektor):', lookAtVector);
-      // Y-Richtung (Look-up) 
-      let lookUpVector = new Vector3();
-      camera.up.applyQuaternion(camera.quaternion);
-      lookUpVector.copy(camera.up).normalize();
-      //console.log('Look-Up (Y-Vektor):', lookUpVector);
-      // X-Richtung (Look-right) 
-      let lookRightVector = new Vector3();
-      lookRightVector.crossVectors(lookAtVector, lookUpVector).normalize();
-      //console.log('Look-Right (X-Vektor):', lookRightVector);
-      return {
-        x: lookRightVector,
-        y: lookUpVector,
-        z: lookAtVector
-      };
+    // Projektion der Objectachsen auf den View  
+    function globalProjections(camera, object) {
+      // View-Matrix (inverse Weltmatrix der Kamera)
+      const viewMatrix = new Matrix4();
+      viewMatrix.copy(camera.matrixWorldInverse);
+
+      // Projektionsmatrix der Kamera
+      const projectionMatrix = camera.projectionMatrix;
+
+      // Kombinierte Transformationsmatrix
+      const viewProjectionMatrix = new Matrix4();
+      viewProjectionMatrix.multiplyMatrices(projectionMatrix, viewMatrix);
+
+      // Weltmatrix des Objekts
+      const worldMatrix = object.matrixWorld;
+
+      // Kombinierte Matrix
+      const finalMatrix = new Matrix4();
+      finalMatrix.multiplyMatrices(viewProjectionMatrix, worldMatrix);
+
+      const x = new Vector3,
+        y = new Vector3,
+        z = new Vector3;
+      finalMatrix.extractBasis(x, y, z);
+
+      return { x: x, y: y, z: z };
     }
 
-    function verticalRotationAxis(camDir){
+    function verticalRotationAxis(dir) {
       const abs = Math.abs;
       const x = new Vector3(1, 0, 0),
-        xx = abs(x.dot(camDir.x)),
-        xy = abs(x.dot(camDir.y)),
-        xz = abs(x.dot(camDir.z));
+        xx = abs(x.dot(dir.x)),
+        xy = abs(x.dot(dir.y)),
+        xz = abs(x.dot(dir.z));
       let axis = null;
-      if(xx > xy)
-      {
-        if(xx > xz){
-          axis = new Vector3(1, 0, 0); 
-        } else {
-          axis = new Vector3(0, 0, 1); 
-        }
+      if (xx > xy && xx > xz) {
+        axis = new Vector3(-1, 0, 0);
+      } else if (xy > xx && xy > xz) {
+        axis = new Vector3(0, -1, 0);
       } else {
-        if(xy > xz){
-          axis = new Vector3(0, 1, 0); 
-        } else {
-          axis = new Vector3(0, 0, 1); 
-        }
+        axis = new Vector3(0, 0, -1);
       }
       return axis;
     }
 
-    function horizontalRotationAxis(camDir){
+    function horizontalRotationAxis(dir) {
       const abs = Math.abs;
-      const y = new Vector3(1, 0, 0),
-        yy = abs(y.dot(camDir.y)),
-        yx = abs(y.dot(camDir.x)),
-        yz = abs(y.dot(camDir.z));
+      const y = new Vector3(0, 1, 0),
+        yy = abs(y.dot(dir.y)),
+        yx = abs(y.dot(dir.x)),
+        yz = abs(y.dot(dir.z));
       let axis = null;
-      if(yy > yx)
-      {
-        if(yy > yz){
-          axis = new Vector3(0, 1, 0); 
-        } else {
-          axis = new Vector3(0, 0, 1); 
-        }
+      if (yy > yz && yy > yx) {
+        axis = new Vector3(0, 1, 0);
+      } else if (yx > yy && yx > yz) {
+        axis = new Vector3(1, 0, 0);
       } else {
-        if(yy > yz){
-          axis = new Vector3(0, 1, 0); 
-        } else {
-          axis = new Vector3(0, 0, 1); 
-        }
+        axis = new Vector3(0, 0, 1);
       }
       return axis;
     }
-    
-    function applyRotation(_selected, camera, diff) {
+
+    function applyRotation(selected, camera, diff) {
       const abs = Math.abs;
-      const camDir = getCameraDirections(camera);
+      const dir = globalProjections(camera, selected);
       let vertical = abs(diff.y) > abs(diff.x);
       let angle = vertical ? diff.y : diff.x;
       let axis = null;
 
-      if(vertical) {
-        axis = verticalRotationAxis(camDir);
+      if (vertical) {
+        axis = verticalRotationAxis(dir);
       }
-      else{
-        axis = horizontalRotationAxis(camDir);
+      else {
+        axis = horizontalRotationAxis(dir);
       }
 
       console.log('angle:', angle, 'vertical:', vertical, 'axis:', axis);
-      _selected.rotateOnAxis(axis, angle * 10); // * Math.PI / 180);
+      selected.rotateOnAxis(axis, angle * 10); // * Math.PI / 180);
     }
-  
+
     function onPointerMove(event) {
 
       if (scope.enabled === false) return;
