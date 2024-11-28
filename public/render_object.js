@@ -1,17 +1,62 @@
-import * as THREE from 'three';
+import {
+  Vector3,
+  ArrowHelper,
+  Object3D,
+  MeshLambertMaterial,
+  MeshBasicMaterial,
+  Mesh,
+  BoxGeometry,
+  TextureLoader,
+  SphereGeometry
+
+} from 'three';
+
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+
+class CoordinateArrows {
+  constructor() {
+    this.arrows = [];
+
+    const directions = [
+      { dir: new Vector3(1, 0, 0), color: 0xFF0000 },
+      { dir: new Vector3(0, 1, 0), color: 0x00FF00 },
+      { dir: new Vector3(0, 0, 1), color: 0x0000FF }
+    ];
+    const origin = new Vector3(0, 0, 0);
+
+    directions.forEach((dir, index) => {
+      this.arrows[index] = new ArrowHelper(dir.dir, origin, 20, dir.color);
+      this.arrows[index].name = `Arrow ${index}`;
+    });
+  }
+
+  add = (parent) => {
+    this.arrows.forEach((arrow) => {
+      parent.add(arrow);
+    });
+  }
+
+  remove = () => {
+    this.arrows.forEach((arrow) => {
+      arrow.dispose();
+    });
+  }
+}
 
 export class RenderObject {
   constructor(parent) {
     this.texture = undefined;
     this.parent = parent;
     this.material = this.create_material();
+    this._arrows = new CoordinateArrows(this);
   }
 
+  arrows = () => { return _arrows; }
+
   remove = (object) => {
-    if (!(object instanceof THREE.Object3D)) return false;
+    if (!(object instanceof Object3D)) return false;
     if (object.geometry) {
       object.geometry.dispose();
     }
@@ -22,11 +67,12 @@ export class RenderObject {
         object.material.dispose();
       }
     }
-    parent.remove(object);
+    this._arrows.remove();
+    this.parent.remove(object);
   };
 
   create_material = () => {
-    return new THREE.MeshLambertMaterial({ color: 0xffffff/*, wireframe: true*/ });
+    return new MeshLambertMaterial({ color: 0xffffff/*, wireframe: true*/ });
   }
 }
 
@@ -47,7 +93,7 @@ export class RenderMesh extends RenderObject {
 
     const onLoad = (geometry) => {
       geometry.scale(0.01, 0.01, 0.01);
-      mesh = new THREE.Mesh(geometry, this.material);
+      mesh = new Mesh(geometry, this.material);
       parent.add(mesh);
       if (success) {
         success();
@@ -66,37 +112,40 @@ export class RenderMesh extends RenderObject {
     } catch (error) {
       console.log(error);
     }
+    super.arrows().add(mesh);
   }
 }
 
 export class RenderHorizonSphere extends RenderObject {
   constructor(parent, image) {
     super(parent);
-    const loader = new THREE.TextureLoader();
+    const loader = new TextureLoader();
     this.texture = loader.load(image);
-    const geometry = new THREE.SphereGeometry(10, 10, 10);
-    const sphere = new THREE.Mesh(geometry, this.material);
+    const geometry = new SphereGeometry(10, 10, 10);
+    const sphere = new Mesh(geometry, this.material);
     sphere.name = image;
     sphere.name = 'Sphere';
     parent.add(sphere);
+    super.arrows().add(sphere);
   }
 
   create_material = () => {
-    return new THREE.MeshLambertMaterial({ map: this.texture });
+    return new MeshLambertMaterial({ map: this.texture });
   }
 }
 
 export class RenderCube extends RenderObject {
   constructor(parent, renderer, image) {// Textur laden 
     super(parent);
-    const textureLoader = new THREE.TextureLoader();
+    const textureLoader = new TextureLoader();
     const texture = textureLoader.load(image);
     // Geometrie und Material mit Textur erstellen 
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({ map: texture });
-    const cube = new THREE.Mesh(geometry, material);
+    const geometry = new BoxGeometry();
+    const material = new MeshBasicMaterial({ map: texture });
+    const cube = new Mesh(geometry, material);
     cube.name = 'Zebra';
     parent.add(cube);
+    super.arrows().add(cube);
   }
 }
 
