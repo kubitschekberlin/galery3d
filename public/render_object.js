@@ -27,7 +27,7 @@ class CoordinateArrows {
     const origin = new Vector3(0, 0, 0);
 
     directions.forEach((dir, index) => {
-      this.arrows[index] = new ArrowHelper(dir.dir, origin, 20, dir.color);
+      this.arrows[index] = new ArrowHelper(dir.dir, origin, 1.5, dir.color, 0.05, 0.05);
       this.arrows[index].name = `Arrow ${index}`;
     });
   }
@@ -53,9 +53,11 @@ export class RenderObject {
     this._arrows = new CoordinateArrows(this);
   }
 
-  arrows = () => { return _arrows; }
+  getArrows() { 
+    return this._arrows; 
+  }
 
-  remove = (object) => {
+  remove(object) {
     if (!(object instanceof Object3D)) return false;
     if (object.geometry) {
       object.geometry.dispose();
@@ -71,7 +73,7 @@ export class RenderObject {
     this.parent.remove(object);
   };
 
-  create_material = () => {
+  create_material () {
     return new MeshLambertMaterial({ color: 0xffffff/*, wireframe: true*/ });
   }
 }
@@ -112,7 +114,7 @@ export class RenderMesh extends RenderObject {
     } catch (error) {
       console.log(error);
     }
-    super.arrows().add(mesh);
+    super.getArrows().add(mesh);
   }
 }
 
@@ -126,7 +128,7 @@ export class RenderHorizonSphere extends RenderObject {
     sphere.name = image;
     sphere.name = 'Sphere';
     parent.add(sphere);
-    super.arrows().add(sphere);
+    super.getArrows().add(sphere);
   }
 
   create_material = () => {
@@ -145,7 +147,7 @@ export class RenderCube extends RenderObject {
     const cube = new Mesh(geometry, material);
     cube.name = 'Zebra';
     parent.add(cube);
-    super.arrows().add(cube);
+    super.getArrows().add(cube);
   }
 }
 
