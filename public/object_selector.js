@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import * as THREE from 'three';
-import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
+import { DragControlsX } from './drag_controls_x.js';
 
 export class ObjectSelector {
   #isShiftDown;
@@ -12,13 +12,13 @@ export class ObjectSelector {
     window.addEventListener('keydown', function (event) {
       if (event.key === 'Shift') {
         console.log('Shift', 'down');
-        renderer.isShiftDown = true;
+        renderer.dragControls.mode = 'rotate';
       }
     });
     window.addEventListener('keyup', function (event) {
       if (event.key === 'Shift') {
         console.log('Shift', 'up');
-        renderer.isShiftDown = false;
+        renderer.dragControls.mode = 'translate';
       }
     });
 
@@ -65,16 +65,19 @@ export class ObjectSelector {
   onSelectObject = (renderer, selectedObject) => {
 
     // Alte DragControls entfernen 
+    let mode = renderer.dragControls.mode;
+    console.log('mode = ', mode);
     if (renderer.dragControls) {
       renderer.dragControls.dispose();
     }
     // Neue DragControls mit dem neu ausgewählten Objekt erstellen 
-    this.addDragControl(renderer, selectedObject);
+    console.log('mode = ', mode);
+    this.addDragControl(renderer, selectedObject, mode);
   }
 
-  addDragControl = (renderer, selectedObject) => {
+  addDragControl = (renderer, selectedObject, mode) => {
     let controls = renderer.cameraControls;
-    renderer.dragControls = new DragControls([selectedObject], renderer.camera, renderer.domElement);
+    renderer.dragControls = new DragControlsX([selectedObject], renderer.camera, renderer.domElement, mode);
     renderer.dragControls.addEventListener('dragstart', function (event) {
       controls.enabled = false;
     });
@@ -82,32 +85,12 @@ export class ObjectSelector {
       controls.enabled = true;
     });
     this.registerDragListener(renderer);
+    return renderer.dragControls;
   }
 
   registerDragListener = (renderer) => {
     // Drag-Event anpassen basierend auf dem Zustand der Shift-Taste 
     renderer.dragControls.addEventListener('drag', function (event) {
-      // gibts nicht: event.preventDefault();
-      // Standard-Drag-Handling verhindern 
-      if(event.object.userData.previousPosition) {
-        const deltaX = event.object.position.x - event.object.userData.previousPosition.x;
-        const deltaY = event.object.position.y - event.object.userData.previousPosition.y;
-        event.object.position.copy(event.object.userData.previousPosition);
-        if (renderer.isShiftDown) {
-          let pos = event.object.position.clone();
-          event.object.rotation.x -= deltaY * 0.01;
-          event.object.rotation.y += deltaX * 0.01;
-          event.object.position.x = pos.x;
-          event.object.position.y = pos.y;
-          event.object.position.z = pos.z;
-          console.log(pos);
-        } else {
-          // Translation bei losgelassener Shift-Taste 
-          event.object.position.x += deltaX;
-          event.object.position.y += deltaY;
-        }
-      }
-        // Position speichern, um Delta zu berechnen 
       event.object.userData.previousPosition.copy(event.object.position);
     });
 
