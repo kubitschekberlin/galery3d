@@ -89,16 +89,16 @@ class DragControlsX extends EventDispatcher {
       // Z-Richtung (Blickrichtung) 
       let lookAtVector = new Vector3();
       camera.getWorldDirection(lookAtVector);
-      console.log('Blickrichtung (Z-Vektor):', lookAtVector);
+      //console.log('Blickrichtung (Z-Vektor):', lookAtVector);
       // Y-Richtung (Look-up) 
       let lookUpVector = new Vector3();
       camera.up.applyQuaternion(camera.quaternion);
       lookUpVector.copy(camera.up).normalize();
-      console.log('Look-Up (Y-Vektor):', lookUpVector);
+      //console.log('Look-Up (Y-Vektor):', lookUpVector);
       // X-Richtung (Look-right) 
       let lookRightVector = new Vector3();
       lookRightVector.crossVectors(lookAtVector, lookUpVector).normalize();
-      console.log('Look-Right (X-Vektor):', lookRightVector);
+      //console.log('Look-Right (X-Vektor):', lookRightVector);
       return {
         x: lookRightVector,
         y: lookUpVector,
@@ -115,6 +115,7 @@ class DragControlsX extends EventDispatcher {
       let vertical = abs(diff.y) > abs(diff.x);
       let angle = vertical ? diff.y : diff.x;
       let axis = new Vector3;
+
       if (z >= x && z >= y) {
         if (x >= y) {
           if (vertical) {
@@ -143,24 +144,24 @@ class DragControlsX extends EventDispatcher {
             axis.set(0, 1, 0);
           }
         }
-      } else if (x >= z && x >= y) {
-        if (z > y) {
-          if (vertical) {
-            axis.set(1, 0, 0);
-          } else {
-            axis.set(0, 0, 1);
-          }
+      } else
+      if (z > y) {
+        if (vertical) {
+          axis.set(1, 0, 0);
         } else {
-          if (vertical) {
-            axis.set(1, 0, 0);
-          } else {
-            axis.set(0, 0, 1);
-          }
+          axis.set(0, 0, 1);
+        }
+      } else {
+        if (vertical) {
+          axis.set(1, 0, 0);
+        } else {
+          axis.set(0, 0, 1);
         }
       }
+      console.log('x:', x, 'y:', y, 'z:', z, 'angle:', angle, 'vertical:', vertical, 'axis:', axis);
       _selected.rotateOnAxis(axis, angle * 10); // * Math.PI / 180);
     }
-
+  
     function onPointerMove(event) {
 
       if (scope.enabled === false) return;
