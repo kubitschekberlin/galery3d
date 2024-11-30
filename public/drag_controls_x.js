@@ -113,36 +113,42 @@ class DragControlsX extends EventDispatcher {
       return { x: x, y: y, z: z };
     }
 
+    function directionProjections(axis, dir){
+      return { x: axis.dot(dir.x), y: axis.dot(dir.y), z: axis.dot(dir.z) };
+    }
+
     function verticalRotationAxis(dir) {
       const abs = Math.abs;
-      const x = new Vector3(1, 0, 0),
-        xx = abs(x.dot(dir.x)),
-        xy = abs(x.dot(dir.y)),
-        xz = abs(x.dot(dir.z));
+      const a = directionProjections(new Vector3(1, 0, 0), dir),
+        xx = abs(a.x), xy = abs(a.y), xz = abs(a.z);
       let axis = null;
       if (xx > xy && xx > xz) {
-        axis = new Vector3(-1, 0, 0);
+        const signed = a.x >= 0 ? -1 : 1;
+        axis = new Vector3(signed, 0, 0);
       } else if (xy > xx && xy > xz) {
-        axis = new Vector3(0, -1, 0);
+        const signed = a.y >= 0 ? -1 : 1;
+        axis = new Vector3(0, signed, 0);
       } else {
-        axis = new Vector3(0, 0, -1);
+        const signed = a.z >= 0 ? -1 : 1;
+        axis = new Vector3(0, 0, signed);
       }
       return axis;
     }
 
     function horizontalRotationAxis(dir) {
       const abs = Math.abs;
-      const y = new Vector3(0, 1, 0),
-        yy = abs(y.dot(dir.y)),
-        yx = abs(y.dot(dir.x)),
-        yz = abs(y.dot(dir.z));
+      const a = directionProjections(new Vector3(0, 1, 0), dir),
+        yx = abs(a.x), yy = abs(a.y), yz = abs(a.z);
       let axis = null;
       if (yy > yz && yy > yx) {
-        axis = new Vector3(0, 1, 0);
+        const signed = a.y >= 0 ? 1 : -1;
+        axis = new Vector3(0, signed, 0);
       } else if (yx > yy && yx > yz) {
-        axis = new Vector3(1, 0, 0);
+        const signed = a.x >= 0 ? 1 : -1;
+        axis = new Vector3(signed, 0, 0);
       } else {
-        axis = new Vector3(0, 0, 1);
+        const signed = a.z >= 0 ? 1 : -1;
+        axis = new Vector3(0, 0, signed);
       }
       return axis;
     }
