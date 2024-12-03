@@ -167,7 +167,7 @@ class DragControlsX extends EventDispatcher {
         axis = horizontalRotationAxis(dir);
       }
 
-      console.log('angle:', angle, 'vertical:', vertical, 'axis:', axis);
+      //console.log('angle:', angle, 'vertical:', vertical, 'axis:', axis);
       selected.rotateOnAxis(axis, angle * 10); // * Math.PI / 180);
     }
 

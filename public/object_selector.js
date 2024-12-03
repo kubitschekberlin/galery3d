@@ -48,15 +48,18 @@ export class ObjectSelector {
       }
       let intersects = raycaster.intersectObjects(children);
       let found = 'none'; 
+      let enabled = false;
       intersects.some(element => {
         let object = element.object;
         if(object.canSelect){
           found = `${object.type}: ${object.name}`;
+          enabled = true;
           this.onSelectObject(renderer, object);
           return true;
         }
         return false;
       });
+      renderer.dragControls.enabled = enabled;
       console.log('Selected:', found);
     }
 
@@ -68,22 +71,24 @@ export class ObjectSelector {
 
     // Alte DragControls entfernen 
     let mode = renderer.dragControls.mode;
-    console.log('mode = ', mode);
+    console.log('mode:', mode);
     if (renderer.dragControls) {
       renderer.dragControls.dispose();
     }
     // Neue DragControls mit dem neu ausgewählten Objekt erstellen 
-    console.log('mode = ', mode);
-    this.addDragControl(renderer, selectedObject, mode);
+    console.log('mode:', mode);
+    this.addDragControl(renderer, selectedObject, mode ? mode : 'translate');
   }
 
   addDragControl = (renderer, selectedObject, mode) => {
     let controls = renderer.cameraControls;
     renderer.dragControls = new DragControlsX([selectedObject], renderer.camera, renderer.domElement, mode);
     renderer.dragControls.addEventListener('dragstart', function (event) {
+      console.log('Disable camera navigation');
       controls.enabled = false;
     });
     renderer.dragControls.addEventListener('dragend', function (event) {
+      console.log('Enable camera navigation');
       controls.enabled = true;
     });
     this.registerDragListener(renderer);

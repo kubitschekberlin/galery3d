@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControlsX } from './orbit_controls_x.js';
+import { DragControlsX } from './drag_controls_x.js';
 import './object_properties.js';
-import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
 //import { PickHelper, pickPosition } from './picking.js';
 import $ from 'jquery'
 
@@ -51,28 +51,19 @@ export default class RenderScene {
     }
 
     //console.log('ID', canvas.getAttribute('id'));
-    const controls = new OrbitControlsX(camera, canvas);
+    const cameraControls = new OrbitControlsX(camera, canvas);
 
-    controls.target.set(0, 0, 0); // Set the target point (usually the scene origin);
-    scene.addEventListener(controls);
-
-    // DragControls ohne Objekte hinzufügen 
-    const dragControls = new DragControls([], camera, renderer.domElement);
-    dragControls.addEventListener('dragstart', function (event) {
-      controls.enabled = false;
-    });
-    dragControls.addEventListener('dragend', function (event) {
-      controls.enabled = true;
-    });
+    cameraControls.target.set(0, 0, 0); // Set the target point (usually the scene origin);
+    scene.addEventListener(cameraControls);
 
     //  Objektzugriffe
     this.scene = scene;
     this.camera = camera;
     this.animate = animate;
-    this.cameraControls = controls;
+    this.cameraControls = cameraControls;
     this.domElement = renderer.domElement;
     this.objectProps = null;
-    this.dragControls = dragControls;
+    this.dragControls = new DragControlsX([], camera, renderer.domElement);
 
     // rendern
     animate();
