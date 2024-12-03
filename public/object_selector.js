@@ -59,7 +59,7 @@ export class ObjectSelector {
         }
         return false;
       });
-      scope.selectedObject = object ? object : camera;
+      scope.selectedObject = object ? object : camera.parent;
       renderer.dragControls.enabled = object !== null;
       console.log('Selected:', found);
     }
@@ -105,7 +105,7 @@ export class ObjectSelector {
       });
     }
     
-    onSelectObject(renderer, camera);
+    onSelectObject(renderer, camera.parent);
   }
 
 }

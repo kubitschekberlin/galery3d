@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { DragControlsX } from './drag_controls_x.js';
 import { ObjectSelector } from './object_selector.js';
+import { CoordinateArrows} from './render_object.js'
 import './object_properties.js';
 import $ from 'jquery'
 
@@ -12,7 +12,8 @@ export default class RenderScene {
     const scene = new THREE.Scene();
     let ratio = $parent.innerWidth() / $parent.innerHeight();
     let camera = new THREE.PerspectiveCamera(75, ratio, 0.1, 1000);
-
+    camera.name = 'Camera';
+    
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize($parent.innerWidth(), $parent.innerHeight());
     const canvas = $parent.append(renderer.domElement)[0];
@@ -25,6 +26,7 @@ export default class RenderScene {
     cameraPole.name = 'Camera Pole';
     scene.add(cameraPole);
     cameraPole.add(camera);
+    new CoordinateArrows(cameraPole);
 
     const light = new THREE.AmbientLight(0xaaaaaa, 1); // soft white light
     camera.add(light);

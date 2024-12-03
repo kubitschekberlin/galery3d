@@ -15,8 +15,8 @@ import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 
-class CoordinateArrows {
-  constructor() {
+export class CoordinateArrows {
+  constructor(parent, position) {
     this.arrows = [];
 
     const directions = [
@@ -24,13 +24,16 @@ class CoordinateArrows {
       { dir: new Vector3(0, 1, 0), color: 0x00FF00 },
       { dir: new Vector3(0, 0, 1), color: 0x0000FF }
     ];
-    const origin = new Vector3(0, 0, 0);
-    
+    const origin = position ? position.negate() : new Vector3(0, 0, 0);
     directions.forEach((dir, index) => {
       this.arrows[index] = new ArrowHelper(dir.dir, origin, 1.5, dir.color, 0.05, 0.05);
     });
+
+    if (parent) {
+      this.add(parent);
+    }
   }
- 
+
   add = (parent) => {
     const initArrow = (arrow, parent) => {
       const a = [arrow, ...arrow.children];
@@ -56,7 +59,6 @@ export class RenderObject {
     this.texture = undefined;
     this.parent = parent;
     this.material = this.create_material();
-    this._arrows = new CoordinateArrows(this);
   }
 
   getArrows() {
@@ -81,6 +83,10 @@ export class RenderObject {
 
   create_material() {
     return new MeshLambertMaterial({ color: 0xffffff/*, wireframe: true*/ });
+  }
+
+  createArrows(object) {
+    new CoordinateArrows(object);
   }
 }
 
@@ -120,7 +126,8 @@ export class RenderMesh extends RenderObject {
     } catch (error) {
       console.log(error);
     }
-    super.getArrows().add(mesh);
+    super.createArrows(mesh);
+    mesh.canSelect = true;
   }
 }
 
@@ -134,7 +141,7 @@ export class RenderHorizonSphere extends RenderObject {
     sphere.name = image;
     sphere.name = 'Sphere';
     parent.add(sphere);
-    super.getArrows().add(sphere);
+    super.createArrows(sphere);
     sphere.canSelect = true;
   }
 
@@ -154,7 +161,7 @@ export class RenderCube extends RenderObject {
     const cube = new Mesh(geometry, material);
     cube.name = 'Zebra';
     parent.add(cube);
-    super.getArrows().add(cube);
+    super.createArrows(cube);
     cube.canSelect = true;
   }
 }
