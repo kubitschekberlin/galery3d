@@ -11,7 +11,7 @@ import {
 	MathUtils
 } from 'three';
 
-// OrbitControls performs orbiting, dollying (zooming), and panning.
+// orbit_controls_x performs orbiting, dollying (zooming), and panning.
 // Unlike TrackballControls, it maintains the "up" direction object.up (+Y by default).
 //
 //    Orbit - left mouse / touch: one-finger move
@@ -25,7 +25,7 @@ const _ray = new Ray();
 const _plane = new Plane();
 const TILT_LIMIT = Math.cos( 70 * MathUtils.DEG2RAD );
 
-class OrbitControls extends EventDispatcher {
+class OrbitControlsX extends EventDispatcher {
 
 	constructor( object, domElement ) {
 
@@ -339,7 +339,7 @@ class OrbitControls extends EventDispatcher {
 
 					} else {
 
-						console.warn( 'WARNING: OrbitControls.js encountered an unknown camera type - zoom to cursor disabled.' );
+						console.warn( 'WARNING: orbit_controls_x.js encountered an unknown camera type - zoom to cursor disabled.' );
 						scope.zoomToCursor = false;
 
 					}
@@ -600,7 +600,7 @@ class OrbitControls extends EventDispatcher {
 				} else {
 
 					// camera neither orthographic nor perspective
-					console.warn( 'WARNING: OrbitControls.js encountered an unknown camera type - pan disabled.' );
+					console.warn( 'WARNING: orbit_controls_x.js encountered an unknown camera type - pan disabled.' );
 					scope.enablePan = false;
 
 				}
@@ -617,7 +617,7 @@ class OrbitControls extends EventDispatcher {
 
 			} else {
 
-				console.warn( 'WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled.' );
+				console.warn( 'WARNING: orbit_controls_x.js encountered an unknown camera type - dolly/zoom disabled.' );
 				scope.enableZoom = false;
 
 			}
@@ -632,7 +632,7 @@ class OrbitControls extends EventDispatcher {
 
 			} else {
 
-				console.warn( 'WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled.' );
+				console.warn( 'WARNING: orbit_controls_x.js encountered an unknown camera type - dolly/zoom disabled.' );
 				scope.enableZoom = false;
 
 			}
@@ -1529,4 +1529,4 @@ class OrbitControls extends EventDispatcher {
 
 }
 
-export { OrbitControls };
+export { OrbitControlsX };

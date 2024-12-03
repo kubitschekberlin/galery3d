@@ -47,19 +47,17 @@ export class ObjectSelector {
         return;
       }
       let intersects = raycaster.intersectObjects(children);
-      let selectedObject = null;
-      if (intersects.length > 0) {
-        // Das erste getroffene Objekt auswählen
-        selectedObject = intersects[0].object;
-        if(selectedObject.selectOnClick) {
-          selectedObject = selectedObject.selectOnClick;
+      let found = 'none'; 
+      intersects.some(element => {
+        let object = element.object;
+        if(object.canSelect){
+          found = `${object.type}: ${object.name}`;
+          this.onSelectObject(renderer, object);
+          return true;
         }
-        console.log(intersects.length , 'Selected:', 
-          `${selectedObject.name ? selectedObject.name : selectedObject.type}`);
-        this.onSelectObject(renderer, selectedObject);
-      } else {
-        console.log('Kein Objekt getroffen');
-      }
+        return false;
+      });
+      console.log('Selected:', found);
     }
 
     // Events registrierern

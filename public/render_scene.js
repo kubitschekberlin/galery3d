@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { OrbitControls } from '../node_modules/three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControlsX } from './orbit_controls_x.js';
 import './object_properties.js';
 import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
 //import { PickHelper, pickPosition } from './picking.js';
@@ -51,7 +51,7 @@ export default class RenderScene {
     }
 
     //console.log('ID', canvas.getAttribute('id'));
-    const controls = new OrbitControls(camera, canvas);
+    const controls = new OrbitControlsX(camera, canvas);
 
     controls.target.set(0, 0, 0); // Set the target point (usually the scene origin);
     scene.addEventListener(controls);

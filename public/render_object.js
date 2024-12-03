@@ -36,7 +36,6 @@ class CoordinateArrows {
       const a = [arrow, ...arrow.children];
       a.forEach((object, index) => {
         object.name = `Arrow ${index}`;
-        object.selectOnClick = parent;
       });
     }
     this.arrows.forEach((arrow) => {
@@ -136,6 +135,7 @@ export class RenderHorizonSphere extends RenderObject {
     sphere.name = 'Sphere';
     parent.add(sphere);
     super.getArrows().add(sphere);
+    sphere.canSelect = true;
   }
 
   create_material = () => {
@@ -155,6 +155,7 @@ export class RenderCube extends RenderObject {
     cube.name = 'Zebra';
     parent.add(cube);
     super.getArrows().add(cube);
+    cube.canSelect = true;
   }
 }
 
