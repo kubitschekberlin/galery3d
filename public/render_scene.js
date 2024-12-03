@@ -1,8 +1,7 @@
 import * as THREE from 'three';
-import { OrbitControlsX } from './orbit_controls_x.js';
 import { DragControlsX } from './drag_controls_x.js';
+import { ObjectSelector } from './object_selector.js';
 import './object_properties.js';
-//import { PickHelper, pickPosition } from './picking.js';
 import $ from 'jquery'
 
 export default class RenderScene {
@@ -50,20 +49,14 @@ export default class RenderScene {
       }
     }
 
-    //console.log('ID', canvas.getAttribute('id'));
-    const cameraControls = new OrbitControlsX(camera, canvas);
-
-    cameraControls.target.set(0, 0, 0); // Set the target point (usually the scene origin);
-    scene.addEventListener(cameraControls);
-
     //  Objektzugriffe
     this.scene = scene;
     this.camera = camera;
     this.animate = animate;
-    this.cameraControls = cameraControls;
     this.domElement = renderer.domElement;
     this.objectProps = null;
-    this.dragControls = new DragControlsX([], camera, renderer.domElement);
+    
+    new ObjectSelector(renderer, scene, camera);
 
     // rendern
     animate();

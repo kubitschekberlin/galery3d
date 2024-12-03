@@ -8,8 +8,6 @@ import {
 } from 'three';
 
 const _plane = new Plane();
-const _raycaster = new Raycaster();
-
 const _pointer = new Vector2();
 const _offset = new Vector3();
 const _diff = new Vector2();
@@ -23,9 +21,13 @@ const _right = new Vector3();
 
 class DragControlsX extends EventDispatcher {
 
-  constructor(_objects, _camera, _domElement, mode) {
+  constructor(_objects, _camera, _domElement, mode, raycaster) {
 
     super();
+    
+    const scope = this;
+
+    const _raycaster = raycaster;
 
     _domElement.style.touchAction = 'none'; // disable touch scroll
 
@@ -36,10 +38,6 @@ class DragControlsX extends EventDispatcher {
     this.mode = mode;
 
     this.rotateSpeed = 1;
-
-    //
-
-    const scope = this;
 
     function activate() {
 
@@ -64,24 +62,6 @@ class DragControlsX extends EventDispatcher {
     function dispose() {
 
       deactivate();
-
-    }
-
-    function getObjects() {
-
-      return _objects;
-
-    }
-
-    function setObjects(objects) {
-
-      _objects = objects;
-
-    }
-
-    function getRaycaster() {
-
-      return _raycaster;
 
     }
 
@@ -261,23 +241,13 @@ class DragControlsX extends EventDispatcher {
 
       updatePointer(event);
 
-      _intersections.length = 0;
-
-      _raycaster.setFromCamera(_pointer, _camera);
-      _raycaster.intersectObjects(_objects, scope.recursive, _intersections);
-
-      if (_intersections.length > 0) {
+       if (_intersections.length > 0) {
 
         if (scope.transformGroup === true) {
-
-          // look for the outermost group in the object's upper hierarchy
-
-          _selected = findGroup(_intersections[0].object);
+          _selected = _objects;
 
         } else {
-
-          _selected = _intersections[0].object;
-
+          _selected = _objects[0];
         }
 
         _plane.setFromNormalAndCoplanarPoint(_camera.getWorldDirection(_plane.normal), _worldPosition.setFromMatrixPosition(_selected.matrixWorld));
@@ -355,10 +325,6 @@ class DragControlsX extends EventDispatcher {
     this.activate = activate;
     this.deactivate = deactivate;
     this.dispose = dispose;
-    this.getObjects = getObjects;
-    this.getRaycaster = getRaycaster;
-    this.setObjects = setObjects;
-
   }
 
 }
