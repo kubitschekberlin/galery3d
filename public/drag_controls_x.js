@@ -16,7 +16,7 @@ class DragControlsX extends EventDispatcher {
     const scope = this;
     const objectNavigator = new ObjectNavigator();
     _domElement.style.touchAction = 'none'; // disable touch scroll
-    let selectedObjects = [], 
+    let selectedObjects = [],
       rotateSpeed = 1;
 
     function setSelectedObjects(objects) {
@@ -50,21 +50,20 @@ class DragControlsX extends EventDispatcher {
       if (scope.enabled === false) return;
 
       updatePointer(event);
-      const selected = selectedObjects[0]; 
+      const selected = selectedObjects[0];
       if (selected) {
         _diff.subVectors(_pointer, _previousPointer).multiplyScalar(rotateSpeed);
-        if(selected.navigate){
-          selected.navigate(selected, _camera, _diff, event);
+        if (selected.navigator) {
+          selected.navigator.navigate(selected, _camera, _diff, event);
         } else {
           objectNavigator.navigate(selected, _camera, _diff, event);
         }
-      } 
+      }
       _previousPointer.copy(_pointer);
     }
 
     function onPointerDown(event) {
-      
-      dispatchEvent('pointerdown', event);
+      scope.dispatchEvent({ type: 'ds-down', event: event });
 
       if (scope.enabled === false) return;
 

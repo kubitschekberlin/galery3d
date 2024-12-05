@@ -10,25 +10,25 @@ export class ObjectSelector {
     const _scene = scene;
     const scope = this;
     const controls = new DragControlsX(camera, renderer.domElement);
-    controls.addEventListener('pointerdown', onPointerDown);
-
-    const onPointerDown = (event) => {
+    
+    const onPointerDown = (dc_event) => {
       // Umrechnen der Mausposition in normalisierte Gerätekoordinaten (NDC)
       const rect = renderer.domElement.getBoundingClientRect();
+      const event = dc_event.event;
       let mouse = {
         x: ((event.clientX - rect.left) / rect.width) * 2 - 1,
         y: -((event.clientY - rect.top) / rect.height) * 2 + 1
       };
-
+      
       // Vergewissere dich, dass die Kamera korrekt ist
       if (!camera) {
         console.error('Kamera ist nicht definiert');
         return;
       }
-
+      
       // Aktualisieren des Raycasters mit der Kameraposition und der Mausrichtung
       _raycaster.setFromCamera(mouse, camera);
-
+      
       // Berechnen der Objekte, die vom Raycaster getroffen werden
       let children = _scene.children;
       if (!children) {
@@ -55,9 +55,10 @@ export class ObjectSelector {
       controls.setSelectedObjects([selectedObject]);
     };
     
+    controls.addEventListener('ds-down', onPointerDown);
     onSelectObject(camera);
   }
-
+  
 }
 
 

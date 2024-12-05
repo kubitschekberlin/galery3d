@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { ObjectSelector } from './object_selector.js';
+import { CameraNavigator } from './camera_navigator.js'
 import { CoordinateArrows} from './render_object.js'
 import './object_properties.js';
 import $ from 'jquery'
@@ -13,6 +14,7 @@ export default class RenderScene {
     let ratio = $parent.innerWidth() / $parent.innerHeight();
     let camera = new THREE.PerspectiveCamera(75, ratio, 0.1, 1000);
     camera.name = 'Camera';
+    camera.navigator = new CameraNavigator();
     
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize($parent.innerWidth(), $parent.innerHeight());
