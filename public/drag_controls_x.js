@@ -47,7 +47,7 @@ class DragControlsX extends EventDispatcher {
 
     function onPointerMove(event) {
 
-      if (scope.enabled === false) return;
+      if (!scope.enabled) return;
 
       updatePointer(event);
       const selected = selectedObjects[0];
@@ -64,19 +64,14 @@ class DragControlsX extends EventDispatcher {
 
     function onPointerDown(event) {
       scope.dispatchEvent({ type: 'ds-down', event: event });
-
-      if (scope.enabled === false) return;
-
+      scope.enabled = true;
       updatePointer(event);
-
       _previousPointer.copy(_pointer);
-
+      
     }
-
+    
     function onPointerCancel() {
-
-      if (scope.enabled === false) return;
-
+      scope.enabled = false;
     }
 
     function updatePointer(event) {
