@@ -43,24 +43,36 @@ export class ObjectNavigator {
       const abs = Math.abs;
       const a = directionProjections(new Vector3(1, 0, 0), dir),
         xx = abs(a.x), xy = abs(a.y), xz = abs(a.z);
-      let axis = null;
+      let axis = 2;
       if (xx > xy && xx > xz) {
-        return 0;
+        axis = 0;
       } else if (xy > xx && xy > xz) {
-        return 1;
+        axis = 1;
       } 
-      return 2;
+      return { axis: axis, projections: a };
     }
 
-    function verticalRotationAxis(dir) {
+    function horizontalMainAxis(dir) {
       const abs = Math.abs;
-      const a = directionProjections(new Vector3(1, 0, 0), dir),
-        xx = abs(a.x), xy = abs(a.y), xz = abs(a.z);
-      let axis = null, main = verticalMainAxis();
-      if (main === 0) {
+      const a = directionProjections(new Vector3(0, 1, 0), dir),
+        yx = abs(a.x), yy = abs(a.y), yz = abs(a.z);
+      let axis = 2;
+      if (yy > yz && yy > yx) {
+        axis = y;
+      } else if (yx > yy && yx > yz) {
+        axis = 0;
+      } 
+      return { axis: axis, projections: a };
+    }
+    
+    function verticalRotationAxis(dir) {
+      const d = verticalMainAxis(dir),
+        a = d.projections;
+      let axis = null;
+      if (d.axis === 0) {
         const signed = a.x >= 0 ? -1 : 1;
         axis = new Vector3(signed, 0, 0);
-      } else if (main === 2) {
+      } else if (d.axis === 2) {
         const signed = a.y >= 0 ? -1 : 1;
         axis = new Vector3(0, signed, 0);
       } else {
@@ -71,14 +83,13 @@ export class ObjectNavigator {
     }
 
     function horizontalRotationAxis(dir) {
-      const abs = Math.abs;
-      const a = directionProjections(new Vector3(0, 1, 0), dir),
-        yx = abs(a.x), yy = abs(a.y), yz = abs(a.z);
+      const d = horizontalMainAxis(dir),
+        a = d.projections;
       let axis = null;
-      if (yy > yz && yy > yx) {
+      if (a.axis === 0) {
         const signed = a.y >= 0 ? 1 : -1;
         axis = new Vector3(0, signed, 0);
-      } else if (yx > yy && yx > yz) {
+      } else if (axis == 1) {
         const signed = a.x >= 0 ? 1 : -1;
         axis = new Vector3(signed, 0, 0);
       } else {
@@ -87,6 +98,42 @@ export class ObjectNavigator {
       }
       return axis;
     }
+
+        
+    function verticalTranslationAxis(dir) {
+      const d = verticalMainAxis(dir),
+        a = d.projections;
+      let axis = null;
+      if (d.axis === 0) {
+        const signed = a.x >= 0 ? -1 : 1;
+        axis = new Vector3(signed, 0, 0);
+      } else if (d.axis === 2) {
+        const signed = a.y >= 0 ? -1 : 1;
+        axis = new Vector3(0, signed, 0);
+      } else {
+        const signed = a.z >= 0 ? -1 : 1;
+        axis = new Vector3(0, 0, signed);
+      }
+      return axis;
+    }
+
+    function horizontalTranslationAxis(dir) {
+      const d = horizontalMainAxis(dir),
+        a = d.projections;
+      let axis = null;
+      if (a.axis === 0) {
+        const signed = a.y >= 0 ? 1 : -1;
+        axis = new Vector3(0, signed, 0);
+      } else if (axis == 1) {
+        const signed = a.x >= 0 ? 1 : -1;
+        axis = new Vector3(signed, 0, 0);
+      } else {
+        const signed = a.z >= 0 ? 1 : -1;
+        axis = new Vector3(0, 0, signed);
+      }
+      return axis;
+    }
+
 
     function applyRotation(selected, camera, diff) {
       const abs = Math.abs;
@@ -114,7 +161,7 @@ export class ObjectNavigator {
       let axis = null;
 
       if (vertical) {
-        axis = verticalTransdlationAxis(dir);
+        axis = verticalTranslationAxis(dir);
       }
       else {
         axis = horizontalTranslationAxis(dir);
