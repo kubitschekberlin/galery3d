@@ -39,15 +39,28 @@ export class ObjectNavigator {
       return { x: axis.dot(dir.x), y: axis.dot(dir.y), z: axis.dot(dir.z) };
     }
 
-    function verticalRotationAxis(dir) {
+    function verticalMainAxis(dir) {
       const abs = Math.abs;
       const a = directionProjections(new Vector3(1, 0, 0), dir),
         xx = abs(a.x), xy = abs(a.y), xz = abs(a.z);
       let axis = null;
       if (xx > xy && xx > xz) {
+        return 0;
+      } else if (xy > xx && xy > xz) {
+        return 1;
+      } 
+      return 2;
+    }
+
+    function verticalRotationAxis(dir) {
+      const abs = Math.abs;
+      const a = directionProjections(new Vector3(1, 0, 0), dir),
+        xx = abs(a.x), xy = abs(a.y), xz = abs(a.z);
+      let axis = null, main = verticalMainAxis();
+      if (main === 0) {
         const signed = a.x >= 0 ? -1 : 1;
         axis = new Vector3(signed, 0, 0);
-      } else if (xy > xx && xy > xz) {
+      } else if (main === 2) {
         const signed = a.y >= 0 ? -1 : 1;
         axis = new Vector3(0, signed, 0);
       } else {
@@ -101,10 +114,10 @@ export class ObjectNavigator {
       let axis = null;
 
       if (vertical) {
-        axis = verticalRotationAxis(dir);
+        axis = verticalTransdlationAxis(dir);
       }
       else {
-        axis = horizontalRotationAxis(dir);
+        axis = horizontalTranslationAxis(dir);
       }
 
       //console.log('angle:', angle, 'vertical:', vertical, 'axis:', axis);
