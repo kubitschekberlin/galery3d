@@ -9,22 +9,10 @@ export class ObjectSelector {
     const _raycaster = new THREE.Raycaster();
     const _scene = scene;
     const scope = this;
+    const controls = new DragControlsX(camera, renderer.domElement);
+    controls.addEventListener('pointerdown', onPointerDown);
 
-    // Event-Listener für Maus-Taste drücken und loslassen 
-    window.addEventListener('keydown', function (event) {
-      if (event.key === 'Shift') {
-        console.log('Shift', 'down');
-        renderer.dragControls.mode = 'rotate';
-      }
-    });
-    window.addEventListener('keyup', function (event) {
-      if (event.key === 'Shift') {
-        console.log('Shift', 'up');
-        renderer.dragControls.mode = 'translate';
-      }
-    });
-
-    const onMouseClick = (event) => {
+    const onPointerDown = (event) => {
       // Umrechnen der Mausposition in normalisierte Gerätekoordinaten (NDC)
       const rect = renderer.domElement.getBoundingClientRect();
       let mouse = {
@@ -54,58 +42,20 @@ export class ObjectSelector {
         object = element.object;
         if (object.canSelect) {
           found = `${object.type}: ${object.name}`;
-          onSelectObject(renderer, object);
+          onSelectObject(object);
           return true;
         }
         return false;
       });
-      scope.selectedObject = object ? object : camera.parent;
-      renderer.dragControls.enabled = object !== null;
+      scope.selectedObject = object ? object : camera;
       console.log('Selected:', found);
     }
-
-    // Events registrierern
-    $(renderer.domElement).parent().on('click', onMouseClick.bind(this));
-
     
-    const onSelectObject = (renderer, selectedObject) => {
-      let mode = 'translate';
-      
-      // Alte DragControls entfernen 
-      if (renderer.dragControls) {
-        mode = renderer.dragControls.mode;
-        renderer.dragControls.dispose();
-      }
-      console.log('mode:', mode);
-      
-      // Neue DragControls mit dem neu ausgewählten Objekt erstellen 
-      console.log('mode:', mode);
-      addDragControl(renderer, selectedObject, mode);
+    const onSelectObject = (selectedObject) => {
+      controls.setSelectedObjects([selectedObject]);
     };
     
-    const addDragControl = (renderer, selectedObject, mode) => {
-      renderer.dragControls = new DragControlsX([selectedObject], camera, renderer.domElement, mode, _raycaster);
-      renderer.dragControls.addEventListener('dragstart', function (event) {
-      });
-      renderer.dragControls.addEventListener('dragend', function (event) {
-      });
-      registerDragListener(renderer);
-      return renderer.dragControls;
-    };
-    
-    const registerDragListener = (renderer) => {
-      // Drag-Event anpassen basierend auf dem Zustand der Shift-Taste 
-      renderer.dragControls.addEventListener('drag', function (event) {
-        event.object.userData.previousPosition.copy(event.object.position);
-      });
-      
-      // Position speichern, um Delta zu berechnen 
-      renderer.dragControls.addEventListener('hoveron', function (event) {
-        event.object.userData.previousPosition = event.object.position.clone();
-      });
-    }
-    
-    onSelectObject(renderer, camera.parent);
+    onSelectObject(camera);
   }
 
 }

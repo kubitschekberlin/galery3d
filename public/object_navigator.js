@@ -5,8 +5,10 @@ import {
 
 export class ObjectNavigator {
 
+  navigate = (selected, camera, diff, event) => {
+
     // Projektion der Objectachsen auf den View  
-    globalProjections = (camera, object) => {
+    function globalProjections(camera, object) {
       // View-Matrix (inverse Weltmatrix der Kamera)
       const viewMatrix = new Matrix4();
       viewMatrix.copy(camera.matrixWorldInverse);
@@ -31,13 +33,13 @@ export class ObjectNavigator {
       finalMatrix.extractBasis(x, y, z);
 
       return { x: x, y: y, z: z };
-    };
+    }
 
-    directionProjections = (axis, dir) => {
+    function directionProjections(axis, dir) {
       return { x: axis.dot(dir.x), y: axis.dot(dir.y), z: axis.dot(dir.z) };
-    };
+    }
 
-    verticalRotationAxis = (dir) => {
+    function verticalRotationAxis(dir) {
       const abs = Math.abs;
       const a = directionProjections(new Vector3(1, 0, 0), dir),
         xx = abs(a.x), xy = abs(a.y), xz = abs(a.z);
@@ -55,7 +57,7 @@ export class ObjectNavigator {
       return axis;
     }
 
-    horizontalRotationAxis = (dir) => {
+    function horizontalRotationAxis(dir) {
       const abs = Math.abs;
       const a = directionProjections(new Vector3(0, 1, 0), dir),
         yx = abs(a.x), yy = abs(a.y), yz = abs(a.z);
@@ -73,7 +75,7 @@ export class ObjectNavigator {
       return axis;
     }
 
-    applyRotation = (selected, camera, diff) => {
+    function applyRotation(selected, camera, diff) {
       const abs = Math.abs;
       const dir = globalProjections(camera, selected);
       let vertical = abs(diff.y) > abs(diff.x);
@@ -91,4 +93,29 @@ export class ObjectNavigator {
       selected.rotateOnAxis(axis, angle * 10); // * Math.PI / 180);
     }
 
+    function applyTranslation(selected, camera, diff) {
+      const abs = Math.abs;
+      const dir = globalProjections(camera, selected);
+      let vertical = abs(diff.y) > abs(diff.x);
+      let angle = vertical ? diff.y : diff.x;
+      let axis = null;
+
+      if (vertical) {
+        axis = verticalRotationAxis(dir);
+      }
+      else {
+        axis = horizontalRotationAxis(dir);
+      }
+
+      //console.log('angle:', angle, 'vertical:', vertical, 'axis:', axis);
+      selected.rotateOnAxis(axis, angle * 10); // * Math.PI / 180);      
+    }
+
+    if (event.shiftKey) {
+      applyRotation(selected, camera, diff);
+    } else {
+      applyTranslation(selected, camera, diff);
+    }
   }
+
+}
