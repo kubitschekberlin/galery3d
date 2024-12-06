@@ -196,7 +196,7 @@ export class ObjectNavigator {
       selected.position.add(trans); 
     }
 
-    // das passert in dieser Klasse:
+    // das passiert in dieser Funktion:
     if (event.shiftKey) {
       applyRotation(selected, camera, diff);
     } else {
