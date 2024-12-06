@@ -1,9 +1,22 @@
 import {
   Vector3,
-  Matrix4
+  Matrix4,
+  Matrix3
 } from 'three';
 
 export class ObjectNavigator {
+
+  constructor() {
+
+    // Wir merken uns die Bewegungsrichtungen während der Navigation. Hier setzten wir sie 
+    // initial zurück:
+    const onPointerUp = (_event) => {
+      this._translation = null;
+      this._rotation = null;
+      //console.log('Objet Navigator Neustart')
+    }
+    window.addEventListener('pointerup', onPointerUp);
+  }
 
   navigate = (selected, camera, diff, event) => {
 
@@ -39,32 +52,36 @@ export class ObjectNavigator {
       return { x: axis.dot(dir.x), y: axis.dot(dir.y), z: axis.dot(dir.z) };
     }
 
-    function verticalMainAxis(dir) {
+    function verticalMainAxis(dir, forTranslation) {
       const abs = Math.abs;
-      const a = directionProjections(new Vector3(1, 0, 0), dir),
+      const v = forTranslation ? new Vector3(0, 1, 0) : new Vector3(1, 0, 0);
+      const a = directionProjections(v, dir),
         xx = abs(a.x), xy = abs(a.y), xz = abs(a.z);
       let axis = 2;
-      if (xx > xy && xx > xz) {
+      if (xx >= xy && xx >= xz) {
         axis = 0;
-      } else if (xy > xx && xy > xz) {
+      } else if (xy >= xx && xy >= xz) {
         axis = 1;
-      } 
-      return { axis: axis, projections: a };
-    }
-
-    function horizontalMainAxis(dir) {
-      const abs = Math.abs;
-      const a = directionProjections(new Vector3(0, 1, 0), dir),
-        yx = abs(a.x), yy = abs(a.y), yz = abs(a.z);
-      let axis = 2;
-      if (yy > yz && yy > yx) {
-        axis = y;
-      } else if (yx > yy && yx > yz) {
-        axis = 0;
-      } 
+      }
+      console.log('Vertical', axis, a);
       return { axis: axis, projections: a };
     }
     
+    function horizontalMainAxis(dir, forTranslation) {
+      const abs = Math.abs;
+      const v = forTranslation ? new Vector3(1, 0, 0) : new Vector3(0, 1, 0);
+      const a = directionProjections(v, dir),
+      yx = abs(a.x), yy = abs(a.y), yz = abs(a.z);
+      let axis = 2;
+      if (yy >= yz && yy >= yx) {
+        axis = 1;
+      } else if (yx >= yy && yx >= yz) {
+        axis = 0;
+      }
+      console.log('Horizontal', axis, a);
+      return { axis: axis, projections: a };
+    }
+
     function verticalRotationAxis(dir) {
       const d = verticalMainAxis(dir),
         a = d.projections;
@@ -72,7 +89,7 @@ export class ObjectNavigator {
       if (d.axis === 0) {
         const signed = a.x >= 0 ? -1 : 1;
         axis = new Vector3(signed, 0, 0);
-      } else if (d.axis === 2) {
+      } else if (d.axis === 1) {
         const signed = a.y >= 0 ? -1 : 1;
         axis = new Vector3(0, signed, 0);
       } else {
@@ -86,10 +103,10 @@ export class ObjectNavigator {
       const d = horizontalMainAxis(dir),
         a = d.projections;
       let axis = null;
-      if (a.axis === 0) {
+      if (d.axis === 1) {
         const signed = a.y >= 0 ? 1 : -1;
         axis = new Vector3(0, signed, 0);
-      } else if (axis == 1) {
+      } else if (d.axis == 0) {
         const signed = a.x >= 0 ? 1 : -1;
         axis = new Vector3(signed, 0, 0);
       } else {
@@ -99,16 +116,16 @@ export class ObjectNavigator {
       return axis;
     }
 
-        
+
     function verticalTranslationAxis(dir) {
-      const d = verticalMainAxis(dir),
+      const d = verticalMainAxis(dir, true),
         a = d.projections;
       let axis = null;
       if (d.axis === 0) {
         const signed = a.x >= 0 ? -1 : 1;
         axis = new Vector3(signed, 0, 0);
-      } else if (d.axis === 2) {
-        const signed = a.y >= 0 ? -1 : 1;
+      } else if (d.axis === 1) {
+        const signed = a.y >= 0 ? 1 : -1;
         axis = new Vector3(0, signed, 0);
       } else {
         const signed = a.z >= 0 ? -1 : 1;
@@ -118,15 +135,15 @@ export class ObjectNavigator {
     }
 
     function horizontalTranslationAxis(dir) {
-      const d = horizontalMainAxis(dir),
+      const d = horizontalMainAxis(dir, true),
         a = d.projections;
       let axis = null;
-      if (a.axis === 0) {
+      if (d.axis === 0) {
         const signed = a.y >= 0 ? 1 : -1;
-        axis = new Vector3(0, signed, 0);
-      } else if (axis == 1) {
-        const signed = a.x >= 0 ? 1 : -1;
         axis = new Vector3(signed, 0, 0);
+      } else if (d.axis == 1) {
+        const signed = a.x >= 0 ? 1 : -1;
+        axis = new Vector3(0, signed, 0);
       } else {
         const signed = a.z >= 0 ? 1 : -1;
         axis = new Vector3(0, 0, signed);
@@ -134,43 +151,52 @@ export class ObjectNavigator {
       return axis;
     }
 
+    const applyRotation = (selected, camera, diff) => {
+      if (!this._rotation) {
+        const abs = Math.abs;
+        const dir = globalProjections(camera, selected);
+        let vertical = abs(diff.y) > abs(diff.x);
+        let axis = null;
 
-    function applyRotation(selected, camera, diff) {
-      const abs = Math.abs;
-      const dir = globalProjections(camera, selected);
-      let vertical = abs(diff.y) > abs(diff.x);
-      let angle = vertical ? diff.y : diff.x;
-      let axis = null;
-
-      if (vertical) {
-        axis = verticalRotationAxis(dir);
+        if (vertical) {
+          axis = verticalRotationAxis(dir);
+        }
+        else {
+          axis = horizontalRotationAxis(dir);
+        }
+        this._rotation = { axis: axis, vertical: vertical};
       }
-      else {
-        axis = horizontalRotationAxis(dir);
-      }
+      let angle = this._rotation.vertical ? diff.y : diff.x;
 
-      //console.log('angle:', angle, 'vertical:', vertical, 'axis:', axis);
-      selected.rotateOnAxis(axis, angle * 10); // * Math.PI / 180);
+      //console.log('Rotation', angle, this._rotatio.axis, 'Vertical:', this._rotation.vertical);
+      selected.rotateOnAxis(this._rotation.axis, angle * 10); // * Math.PI / 180);
     }
 
-    function applyTranslation(selected, camera, diff) {
-      const abs = Math.abs;
-      const dir = globalProjections(camera, selected);
-      let vertical = abs(diff.y) > abs(diff.x);
-      let angle = vertical ? diff.y : diff.x;
-      let axis = null;
+    const applyTranslation = (selected, camera, diff) => {
+      if (!this._translation) {
+        const abs = Math.abs;
+        const dir = globalProjections(camera, selected);
+        let vertical = abs(diff.y) > abs(diff.x);
+        let axis = null;
 
-      if (vertical) {
-        axis = verticalTranslationAxis(dir);
+        if (vertical) {
+          axis = verticalTranslationAxis(dir);
+        }
+        else {
+          axis = horizontalTranslationAxis(dir);
+        }
+        this._translation = { axis: axis, vertical: vertical };
       }
-      else {
-        axis = horizontalTranslationAxis(dir);
-      }
+      const dist = this._translation.vertical ? diff.y : diff.x;
 
-      //console.log('angle:', angle, 'vertical:', vertical, 'axis:', axis);
-      selected.rotateOnAxis(axis, angle * 10); // * Math.PI / 180);      
+      //console.log('Translation', dist, this._translation.axis, 'Vertical:', this._translation.vertical );
+      const mat = new Matrix3().setFromMatrix4(selected.matrixWorld);
+      let trans = this._translation.axis.clone().multiplyScalar(dist);
+      trans.applyMatrix3(mat);
+      selected.position.add(trans); 
     }
 
+    // das passert in dieser Klasse:
     if (event.shiftKey) {
       applyRotation(selected, camera, diff);
     } else {
