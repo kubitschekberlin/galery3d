@@ -23,7 +23,6 @@ export class ObjectNavigator {
   }
 
   navigate = (selected, camera, diff, event) => {
-    console.log("Navigation");
     const scope = this;
     // Cursor steuern.
     let domElement = event.target;
@@ -182,6 +181,7 @@ export class ObjectNavigator {
 
   applyRotation = (selected, camera, diff) => {
     if (!this._rotation) {
+      console.log('Object Rotation');
       const abs = Math.abs;
       const dir = this.globalProjections(camera, selected);
       let vertical = abs(diff.y) > abs(diff.x);
@@ -203,6 +203,7 @@ export class ObjectNavigator {
 
   applyTranslation = (selected, camera, diff) => {
     if (!this._translation) {
+      console.log('Object Translation');
       const abs = Math.abs;
       const dir = this.globalProjections(camera, selected);
       let vertical = abs(diff.y) > abs(diff.x);

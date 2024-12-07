@@ -15,6 +15,7 @@ export default class RenderScene {
     let camera = new THREE.PerspectiveCamera(75, ratio, 0.1, 1000);
     camera.name = 'Camera';
     camera.navigator = new CameraNavigator();
+    new CoordinateArrows(scene);
     
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize($parent.innerWidth(), $parent.innerHeight());
@@ -28,7 +29,6 @@ export default class RenderScene {
     cameraPole.name = 'Camera Pole';
     scene.add(cameraPole);
     cameraPole.add(camera);
-    new CoordinateArrows(cameraPole);
 
     const light = new THREE.AmbientLight(0xaaaaaa, 1); // soft white light
     camera.add(light);

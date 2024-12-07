@@ -25,12 +25,19 @@ export class CameraNavigator extends ObjectNavigator {
 
     const angle = this._rotation.vertical ? diff.y : diff.x;
     const object = camera.parent;
-    const position = new Vector3();
+    const position = new Vector3(), 
+      lookAt = new Vector3();
+    object.getWorldDirection(lookAt);
     object.getWorldPosition(position);
     const quaternion = new Quaternion();
+    const length = position.length();
+    lookAt.multiplyScalar(length);
     quaternion.setFromAxisAngle(this._rotation.axis, angle);
     position.applyQuaternion(quaternion);
+    lookAt.applyQuaternion(quaternion);
+    object.lookAt(lookAt);
     object.position.copy(position);
+    object._rotation
   }
 
   applyTranslation = (selected, camera, diff) => {

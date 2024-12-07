@@ -27,11 +27,11 @@ export class CoordinateArrows {
     const origin = position ? position.negate() : new Vector3(0, 0, 0);
     directions.forEach((dir, index) => {
       this.arrows[index] = new ArrowHelper(dir.dir, origin, 1.5, dir.color, 0.05, 0.05);
+      if (parent) {
+        parent.add(this.arrows[index]);
+      }
     });
 
-    if (parent) {
-      this.add(parent);
-    }
   }
 
   add = (parent) => {
