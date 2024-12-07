@@ -39,12 +39,12 @@ export class ObjectProperties {
     }
 
     const isPresent = (object) => {
-      return typeof value !== 'function' && object && !isEmpty(object);
+      return typeof object !== 'function' && object != null && !isEmpty(object);
     }
 
     const printItem = (key, value, popoverID) => {
       let parameter = {
-        title: objectTitle(key, value), 
+        title: objectTitle(key, value),
         key: key,
         value: value,
         popoverID: popoverID,
@@ -93,7 +93,7 @@ export class ObjectProperties {
     };
 
     const objectTitle = (key, object) => {
-      if(!object){
+      if (!object) {
         return key;
       }
       return `${key}${object.name ? (': ' + object.name) : ''}`;
@@ -158,8 +158,9 @@ export class ObjectProperties {
         value = object[key];
       if ($input.attr('type') == 'checkbox') {
         $input.prop('checked', value);
-      } else if($input.attr('type') == 'text') {
+      } else if ($input.attr('type') == 'text') {
         $input.val(value);
+        //console.log(object, key, value);
       }
     });
   };

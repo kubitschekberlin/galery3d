@@ -30,7 +30,6 @@ class Events3D {
       if($boxes.length > 0) {
         fn.removeAll();
       } else {
-        fn.show('Camera', camera);
         fn.show('Scene', scene);
       }
       $(event.target).attr('checked', $boxes.length);
