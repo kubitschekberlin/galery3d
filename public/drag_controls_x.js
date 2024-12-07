@@ -87,10 +87,7 @@ class DragControlsX extends EventDispatcher {
 
     // API
 
-    this.enabled = true;
-    this.recursive = true;
-    this.transformGroup = false;
-
+    this.enabled = false;
     this.activate = activate;
     this.deactivate = deactivate;
     this.dispose = dispose;
