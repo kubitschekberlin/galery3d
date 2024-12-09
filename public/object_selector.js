@@ -5,7 +5,6 @@ import { DragControlsX } from './drag_controls_x.js';
 export class ObjectSelector {
 
   constructor(renderer, scene, camera) {
-    this.selectedObject = null;
     const _raycaster = new THREE.Raycaster();
     const _scene = scene;
     const scope = this;
@@ -36,19 +35,17 @@ export class ObjectSelector {
         return;
       }
       let intersects = _raycaster.intersectObjects(children);
-      let found = 'none';
-      let object = null;
+      let selected = camera;
       intersects.some(element => {
-        object = element.object;
+        let object = element.object;
         if (object.canSelect) {
-          found = `${object.type}: ${object.name}`;
-          onSelectObject(object);
+          selected = object;
           return true;
         }
         return false;
       });
-      scope.selectedObject = object ? object : camera;
-      console.log('Selected:', found);
+      onSelectObject(selected);
+      console.log('Selected:', `${selected.type}: ${selected.name}`);
     }
     
     const onSelectObject = (selectedObject) => {

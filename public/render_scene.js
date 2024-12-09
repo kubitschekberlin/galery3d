@@ -22,13 +22,7 @@ export default class RenderScene {
     const canvas = $parent.append(renderer.domElement)[0];
 
     scene.background = new THREE.Color(0x0a5acc);
-
-    // put the camera on a pole (parent it to an object)
-    // so we can spin the pole to move the camera around the scene
-    const cameraPole = new THREE.Object3D();
-    cameraPole.name = 'Camera Pole';
-    scene.add(cameraPole);
-    cameraPole.add(camera);
+    scene.add(camera);
 
     const light = new THREE.AmbientLight(0xaaaaaa, 1); // soft white light
     camera.add(light);

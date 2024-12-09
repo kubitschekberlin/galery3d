@@ -22,6 +22,10 @@ export class ObjectNavigator {
     window.addEventListener('pointerup', onPointerUp);
   }
 
+  rotateWithShift = (shift) => {
+    return shift;
+  }
+
   navigate = (selected, camera, diff, event) => {
     const scope = this;
     // Cursor steuern.
@@ -39,7 +43,7 @@ export class ObjectNavigator {
 
     // das passiert in dieser Funktion:
     this.#domElement = domElement;
-    if (event.shiftKey) {
+    if (this.rotateWithShift(event.shiftKey)) {
       this.applyRotation(selected, camera, diff);
       setRotationCursor();
     } else {

@@ -5,7 +5,11 @@ import {
 import { ObjectNavigator } from './object_navigator.js';
 
 export class CameraNavigator extends ObjectNavigator {
-
+  
+  rotateWithShift = (shift) => {
+    return !shift;
+  }
+  
   applyRotation = (selected, camera, diff) => {
     const abs = Math.abs;
     if (!this._rotation) {
@@ -24,20 +28,14 @@ export class CameraNavigator extends ObjectNavigator {
     }
 
     const angle = this._rotation.vertical ? diff.y : diff.x;
-    const object = camera.parent;
-    const position = new Vector3(), 
-      lookAt = new Vector3();
-    object.getWorldDirection(lookAt);
-    object.getWorldPosition(position);
+    const object = camera;
+    const position = new Vector3();
     const quaternion = new Quaternion();
-    const length = position.length();
-    lookAt.multiplyScalar(length);
+    object.getWorldPosition(position);
     quaternion.setFromAxisAngle(this._rotation.axis, angle);
     position.applyQuaternion(quaternion);
-    lookAt.applyQuaternion(quaternion);
-    object.lookAt(lookAt);
     object.position.copy(position);
-    object._rotation
+    object.lookAt(0, 0, 0);
   }
 
   applyTranslation = (selected, camera, diff) => {
@@ -57,7 +55,7 @@ export class CameraNavigator extends ObjectNavigator {
       this._translation = { axis: axis, vertical: vertical };
     }
     const dist = this._translation.vertical ? diff.y : diff.x;
-    const object = camera.parent;
+    const object = camera;
     let trans = this._translation.axis.clone().multiplyScalar(-dist);
     object.position.add(trans);
   }
