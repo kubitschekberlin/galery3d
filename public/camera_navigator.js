@@ -9,7 +9,7 @@ export class CameraNavigator extends ObjectNavigator {
   rotateWithShift = (shift) => {
     return !shift;
   }
-  
+
   applyRotation = (selected, camera, diff) => {
     const abs = Math.abs;
     if (!this._rotation) {
@@ -30,10 +30,11 @@ export class CameraNavigator extends ObjectNavigator {
     const angle = this._rotation.vertical ? diff.y : diff.x;
     const object = camera;
     const position = new Vector3();
-    const quaternion = new Quaternion();
     object.getWorldPosition(position);
-    quaternion.setFromAxisAngle(this._rotation.axis, angle);
+    console.log('Before:' , position);
+    const quaternion =  new Quaternion().setFromAxisAngle(this._rotation.axis, angle);
     position.applyQuaternion(quaternion);
+    console.log('Axis:', this._rotation.axis, this._rotation.vertical, 'After:' , position);
     object.position.copy(position);
     object.lookAt(0, 0, 0);
   }
