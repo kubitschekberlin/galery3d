@@ -1,11 +1,16 @@
 import $ from 'jquery'
 import { RenderMesh } from './render_object.js'
 
+var _delay = null,
+  _camera = null,
+  _objectProperties = null;
+
 class Events3D {
   constructor(camera, scene, animate, objectProperties) {
-    this.camera = camera;
+   _camera = camera;
     this.scene = scene;
-    this.objectProperties = objectProperties;
+    _objectProperties = objectProperties;
+    _delay = 0;
 
     $('#wireframe').on('click', function () {
       camera.wireframe = !camera.wireframe;
@@ -26,7 +31,7 @@ class Events3D {
 
     $('#object_properties_button').on('click', function(event) {
       const $boxes = $('.object-properties');
-      const fn = this.objectProperties;
+      const fn = _objectProperties;
       if($boxes.length > 0) {
         fn.removeAll();
       } else {
@@ -36,5 +41,9 @@ class Events3D {
     }.bind(this));
   }
 
+  static numberChanged() {
+    clearTimeout(_delay);
+    _delay = setTimeout(() => _objectProperties.updateDialogs(_camera), 500);
+  };
 }
 export { Events3D };

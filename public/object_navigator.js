@@ -3,12 +3,12 @@ import {
   Matrix4,
   Matrix3
 } from 'three';
+import { Events3D } from './events_3d.js';
 
 export class ObjectNavigator {
   #domElement;
 
   constructor() {
-
     // Wir merken uns die Bewegungsrichtungen während der Navigation. Hier setzten wir sie 
     // initial zurück:
     const onPointerUp = (_event) => {
@@ -50,6 +50,9 @@ export class ObjectNavigator {
       this.applyTranslation(selected, camera, diff);
       setTranslationCursor();
     }
+
+    // sync dislogs
+    Events3D.numberChanged();
   }
 
   viewMatrix(camera){
