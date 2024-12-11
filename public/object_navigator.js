@@ -52,11 +52,16 @@ export class ObjectNavigator {
     }
   }
 
+  viewMatrix(camera){
+    const viewMatrix = new Matrix4();
+    viewMatrix.copy(camera.matrixWorldInverse);
+    return viewMatrix;
+  }
+
   // Projektion der Objectachsen auf den View  
   globalProjections(camera, object) {
     // View-Matrix (inverse Weltmatrix der Kamera)
-    const viewMatrix = new Matrix4();
-    viewMatrix.copy(camera.matrixWorldInverse);
+    const viewMatrix = this.viewMatrix(camera);
 
     // Projektionsmatrix der Kamera
     const projectionMatrix = camera.projectionMatrix;
