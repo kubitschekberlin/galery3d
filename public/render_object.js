@@ -16,7 +16,7 @@ import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 
 export class CoordinateArrows {
-  constructor(parent, position) {
+  constructor(parent, position, length = 1.5) {
     this.arrows = [];
 
     const directions = [
@@ -26,7 +26,7 @@ export class CoordinateArrows {
     ];
     const origin = position ? position.negate() : new Vector3(0, 0, 0);
     directions.forEach((dir, index) => {
-      this.arrows[index] = new ArrowHelper(dir.dir, origin, 1.5, dir.color, 0.05, 0.05);
+      this.arrows[index] = new ArrowHelper(dir.dir, origin, length, dir.color, 0.05, 0.05);
       if (parent) {
         parent.add(this.arrows[index]);
       }
