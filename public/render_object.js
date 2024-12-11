@@ -106,7 +106,6 @@ export class RenderMesh extends RenderObject {
     }
 
     const onLoad = (geometry) => {
-      geometry.scale(0.01, 0.01, 0.01);
       mesh = new Mesh(geometry, this.material);
       parent.add(mesh);
       if (success) {

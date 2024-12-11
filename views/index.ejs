@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title><%= title %></title>
+  <title>
+    <%= title %>
+  </title>
   <link rel="stylesheet" href="galery_3d.css">
   <link rel="stylesheet" href="./css/bootstrap.css">
   <link rel="stylesheet" href="./css/jquery-ui.css">
 </head>
+
 <body>
   <div id="top_area" class="container-fluid top-area">
     <div class="row top-area">
       <div class="col-auto">
-        <h2><%= title %></h2>
+        <h2>
+          <%= title %>
+        </h2>
         <form class="mt-3">
           <input class="form-control" type="file" id="formFile" accept=".stl, .obj, .ply">
         </form>
@@ -20,17 +26,32 @@
             <label class="form-check-label" for="object_properties_button">
               Show Properties
             </label>
-          </div>  
+          </div>
           <div id="object_properties">
-          </div>     
+          </div>
         </div>
         <div>
           <input class="btn btn-secondary js-reset mt-2" type="button" value="Reset Object/Camera" />
         </div>
+        <div class="row">
+          <div class="col first-col">
+            Bildwinkel
+          </div>
+          <div class="col-auto ml-1 mt-1">
+            <input type="text" class="form-control js-bildwinkel value-text value-number" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col first-col">
+            Kameraabstand
+          </div>
+          <div class="col-auto ml-1 mt-1">
+            <input type="text" class="form-control js-kameraabstand value-text value-number" />
+        </div>
+        <div class="col" id="canvas_parent"></div>
       </div>
-      <div class="col" id="canvas_parent"></div>
     </div>
-  </div>
-  <script src="./dist/client.bundle.js"></script>
+    <script src="./dist/client.bundle.js"></script>
 </body>
+
 </html>

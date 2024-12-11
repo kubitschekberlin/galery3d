@@ -12,13 +12,8 @@ export default class RenderScene {
     //const pickHelper = new PickHelper();
     const scene = new THREE.Scene();
     let ratio = $parent.innerWidth() / $parent.innerHeight();
-    let camera = new THREE.PerspectiveCamera(75, ratio, 0.1, 1000);
-    camera.name = 'Camera';
-    camera.navigator = new CameraNavigator();
-    camera.resetPosition = () => {
-        camera.position.set(0, 0, 5);
-        camera.quaternion.set(0, 0, 0, 0);
-    };
+    let camera = new THREE.PerspectiveCamera(30 /*fov*/, ratio, 0.1, 1000);
+    camera.navigator = new CameraNavigator(camera);
     new CoordinateArrows(scene, null, 0.5);
     
     const renderer = new THREE.WebGLRenderer();
@@ -47,7 +42,7 @@ export default class RenderScene {
       renderer.render(scene, camera);
       let dialogs = this.objectProps;
       if (dialogs) {
-        dialogs.updateDialogs();
+        dialogs.updateDialogs(camera);
       }
     }
 

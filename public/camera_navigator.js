@@ -8,11 +8,48 @@ import { ObjectNavigator } from './object_navigator.js';
 
 export class CameraNavigator extends ObjectNavigator {
 
+  constructor(camera) {
+    super();
+
+    camera.name = 'Camera';
+
+    camera.resetPosition = () => {
+      camera.position.set(0, 0, 5);
+      camera.quaternion.set(0, 0, 0, 0);
+    };
+
+    // Füge einen Event Listener für das Mausrad-Ereignis hinzu
+    window.addEventListener('wheel', function (event) {
+      if (event.deltaY > 0) {
+        camera.zoom += 1; // Zoom heraus
+      } else {
+        camera.zoom -= 1; // Zoom hinein
+      }
+    });
+
+    const onChange = (event) => {
+      const $el = $(event.target),
+        object = $el.data('object'),
+        name = $el.data('name');
+      object[name] = $el.val();
+    };
+
+    $('.js-bildwinkel').on('change', onChange)
+      .data('object', camera)
+      .data('name', 'fov')
+      .spinner({ step: 0.1, spin: onChange });
+    $('.js-kameraabstand').on('change', onChange)
+      .data('object', camera.position)
+      .data('name', 'z')
+      .spinner({ step: 0.1, spin: onChange });
+
+  }
+
   rotateWithShift = (shift) => {
     return !shift;
   }
 
-  
+
   viewMatrix(camera) {
     const viewMatrix = new Matrix4();
     viewMatrix.copy(camera.matrixWorld);

@@ -165,7 +165,10 @@ export class ObjectProperties {
     });
   };
 
-  updateDialogs = () => {
+  updateDialogs = (camera) => {
+    $('.js-bildwinkel').val(camera.fov);
+    $('.js-kameraabstand').val(camera.position.z);
+
     $('.object-item-properties').each((_index, dialog) => {
       let id = $(dialog).attr('id'),
         object = ObjectProperties.objects[id];
