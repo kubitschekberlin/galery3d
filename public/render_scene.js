@@ -15,6 +15,10 @@ export default class RenderScene {
     let camera = new THREE.PerspectiveCamera(75, ratio, 0.1, 1000);
     camera.name = 'Camera';
     camera.navigator = new CameraNavigator();
+    camera.resetPosition = () => {
+        camera.position.set(0, 0, 5);
+        camera.quaternion.set(0, 0, 0, 0);
+    };
     new CoordinateArrows(scene, null, 0.5);
     
     const renderer = new THREE.WebGLRenderer();

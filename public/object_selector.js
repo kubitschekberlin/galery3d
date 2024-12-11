@@ -52,8 +52,23 @@ export class ObjectSelector {
       controls.setSelectedObjects([selectedObject]);
     };
     
+    const onReset = () => {
+      let object = controls.selectedObject();
+      if(object){
+        if(object.resetPosition) {
+          object.resetPosition();
+        } else {
+          object.position.set(0, 0, 0);
+          object.quaternion.set(0, 0, 0, 0);
+        }
+      }
+    }
+
     controls.addEventListener('ds-down', onPointerDown);
     onSelectObject(camera);
+
+    $('.js-reset').on('click', onReset);
+
   }
   
 }

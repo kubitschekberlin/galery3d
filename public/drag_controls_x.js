@@ -83,6 +83,10 @@ class DragControlsX extends EventDispatcher {
 
     }
 
+    const selectedObject = () => {
+      return selectedObjects ? selectedObjects[0] : null;
+    }
+
     activate();
 
     // API
@@ -92,6 +96,7 @@ class DragControlsX extends EventDispatcher {
     this.deactivate = deactivate;
     this.dispose = dispose;
     this.setSelectedObjects = setSelectedObjects;
+    this.selectedObject = selectedObject;
   }
 
 }
