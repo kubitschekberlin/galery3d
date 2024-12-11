@@ -21,13 +21,14 @@ export class CameraNavigator extends ObjectNavigator {
     // Füge einen Event Listener für das Mausrad-Ereignis hinzu
     window.addEventListener('wheel', function (event) {
       if (event.deltaY > 0) {
-        camera.zoom += 1; // Zoom heraus
+        camera.zoom += 0.1; // Zoom heraus
       } else {
-        camera.zoom -= 1; // Zoom hinein
+        camera.zoom -= 0.1; // Zoom hinein
       }
     });
 
     const onChange = (event) => {
+      console.log(event);
       const $el = $(event.target),
         object = $el.data('object'),
         name = $el.data('name');

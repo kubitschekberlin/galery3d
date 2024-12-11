@@ -40,9 +40,11 @@ export default class RenderScene {
       camera.aspect = canvas.clientWidth / canvas.clientHeight;
       camera.updateProjectionMatrix();
       renderer.render(scene, camera);
+      
+      das geht nicht:
       let dialogs = this.objectProps;
-      if (dialogs) {
-        dialogs.updateDialogs(camera);
+      if(dialogs){
+        dialogDelay = setTimeout(() => dialogs.updateDialogs(camera), 500);
       }
     }
 

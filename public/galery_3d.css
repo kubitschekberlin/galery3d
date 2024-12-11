@@ -18,6 +18,8 @@ html, body{
 }
 .value-text.value-number {
   width: 5.2ex;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 .value-text, .ui-spinner-button{
   height: 20px;
