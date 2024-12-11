@@ -39,6 +39,8 @@ class Events3D {
       }
       $(event.target).attr('checked', $boxes.length);
     }.bind(this));
+
+    _objectProperties.updateDialogs(camera);
   }
 
   static numberChanged() {

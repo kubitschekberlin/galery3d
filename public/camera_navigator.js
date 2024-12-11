@@ -25,6 +25,8 @@ export class CameraNavigator extends ObjectNavigator {
       } else {
         camera.zoom -= 0.1; // Zoom hinein
       }
+      camera.updateProjectionMatrix();
+      Events3D.numberChanged();
     });
 
     const onChange = (event) => {

@@ -28,34 +28,36 @@
             <input class="form-check-input properties-value value-boolean" type="checkbox" value=""
               id="object_properties_button">
           </div>
-          <div id="object_properties">
+        </div>
+        <div id="object_properties">
+        </div>
+        <div class="row mt-1">
+          <div class="col first-col">
+            <input class=" btn btn-secondary js-reset" type="button" value="Reset Object/Camera" />
+          </div>
+          <div class="col-auto">
           </div>
         </div>
-        <div class="row">
-          <div class="col first-col>
-            <input class=" btn btn-secondary js-reset mt-2" type="button" value="Reset Object/Camera" />
+        <div class="row mt-1">
+          <div class="col first-col">
+            Bildwinkel
+          </div>
+          <div class="col-auto ml-1 mt-1">
+            <input type="text" class="form-control js-bildwinkel value-text value-number" />
+          </div>
+        </div>
+        <div class="row mt-1">
+          <div class="col first-col">
+            Kameraabstand
+          </div>
+          <div class="col-auto ml-1 mt-1">
+            <input type="text" class="form-control js-kameraabstand value-text value-number" />
+          </div>
         </div>
       </div>
-      <div class="row mt-1">
-        <div class="col first-col">
-          Bildwinkel
-        </div>
-        <div class="col-auto ml-1 mt-1">
-          <input type="text" class="form-control js-bildwinkel value-text value-number" />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col first-col">
-          Kameraabstand
-        </div>
-        <div class="col-auto ml-1 mt-1">
-          <input type="text" class="form-control js-kameraabstand value-text value-number" />
-        </div>
-      </div>
+      <div class="col" id="canvas_parent"></div>
     </div>
-    <div class="col" id="canvas_parent"></div>
-  </div>
-  <script src="./dist/client.bundle.js"></script>
+    <script src="./dist/client.bundle.js"></script>
 </body>
 
 </html>

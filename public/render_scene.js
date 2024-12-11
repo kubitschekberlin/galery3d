@@ -53,6 +53,7 @@ export default class RenderScene {
 
     // rendern
     animate();
+
   }
 
   objectProperties = (op) => {
