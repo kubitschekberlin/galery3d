@@ -7,7 +7,8 @@ import {
   Mesh,
   BoxGeometry,
   TextureLoader,
-  SphereGeometry
+  SphereGeometry,
+  DoubleSide
 
 } from 'three';
 
@@ -56,9 +57,7 @@ export class CoordinateArrows {
 
 export class RenderObject {
   constructor(parent) {
-    this.texture = undefined;
     this.parent = parent;
-    this.material = this.create_material();
   }
 
   getArrows() {
@@ -81,10 +80,6 @@ export class RenderObject {
     this.parent.remove(object);
   };
 
-  create_material() {
-    return new MeshLambertMaterial({ color: 0xffffff/*, wireframe: true*/ });
-  }
-
   createArrows(object) {
     new CoordinateArrows(object);
   }
@@ -106,7 +101,8 @@ export class RenderMesh extends RenderObject {
     }
 
     const onLoad = (geometry) => {
-      mesh = new Mesh(geometry, this.material);
+      const material = new MeshBasicMaterial({ color: 0xFF0000 })
+      mesh = new Mesh(geometry, material);
       parent.add(mesh);
       if (success) {
         success();
@@ -114,7 +110,7 @@ export class RenderMesh extends RenderObject {
     }
     const onProgress = () => console.log('Lade', file);
     const onError = () => console.log('Fehler beim Laden von', file);
-
+ 
     var mesh;
     try {
       if (typeof (file) === 'string') {
@@ -134,18 +130,15 @@ export class RenderHorizonSphere extends RenderObject {
   constructor(parent, image) {
     super(parent);
     const loader = new TextureLoader();
-    this.texture = loader.load(image);
-    const geometry = new SphereGeometry(10, 10, 10);
-    const sphere = new Mesh(geometry, this.material);
+    const texture = loader.load(image);
+    const geometry = new SphereGeometry(2, 2, 2);
+    const material = new MeshBasicMaterial({ map: texture, side: DoubleSide})
+    const sphere = new Mesh(geometry, material);
     sphere.name = image;
     sphere.name = 'Sphere';
     parent.add(sphere);
     super.createArrows(sphere);
     sphere.canSelect = true;
-  }
-
-  create_material = () => {
-    return new MeshLambertMaterial({ map: this.texture });
   }
 }
 
