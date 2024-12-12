@@ -1,4 +1,11 @@
-import * as THREE from 'three';
+import {
+  WebGLRenderer,
+  Scene,
+  PerspectiveCamera,
+  DirectionalLight,
+  AmbientLight,
+  Color
+} from 'three';
 import { ObjectSelector } from './object_selector.js';
 import { CameraNavigator } from './camera_navigator.js'
 import { CoordinateArrows} from './render_object.js'
@@ -8,25 +15,28 @@ import $ from 'jquery'
 export default class RenderScene {
 
   constructor(parent_selector) {
+
+    PerspectiveCamera.default_fov = 30;
+
     const $parent = $(parent_selector);
     //const pickHelper = new PickHelper();
-    const scene = new THREE.Scene();
+    const scene = new Scene();
     let ratio = $parent.innerWidth() / $parent.innerHeight();
-    let camera = new THREE.PerspectiveCamera(30 /*fov*/, ratio, 0.1, 1000);
+    let camera = new PerspectiveCamera(PerspectiveCamera.fov, ratio, 0.1, 1000);
     camera.navigator = new CameraNavigator(camera);
     new CoordinateArrows(scene, null, 0.5);
     
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new WebGLRenderer();
     renderer.setSize($parent.innerWidth(), $parent.innerHeight());
     const canvas = $parent.append(renderer.domElement)[0];
 
-    scene.background = new THREE.Color(0x0a5acc);
+    scene.background = new Color(0x0a5acc);
     scene.add(camera);
 
-    const light = new THREE.AmbientLight(0xaaaaaa, 1); // soft white light
+    const light = new AmbientLight(0xaaaaaa, 1); // soft white light
     camera.add(light);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    const directionalLight = new DirectionalLight(0xffffff, 1);
     directionalLight.name = 'Directional Light';
     scene.add(directionalLight);
 

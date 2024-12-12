@@ -45,7 +45,7 @@ class Events3D {
 
   static numberChanged() {
     clearTimeout(_delay);
-    _delay = setTimeout(() => _objectProperties.updateDialogs(_camera), 500);
+    _delay = setTimeout(() => _objectProperties.updateDialogs(_camera), 250);
   };
 }
 export { Events3D };

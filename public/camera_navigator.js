@@ -2,7 +2,8 @@ import {
   Vector3,
   Matrix3,
   Matrix4,
-  Quaternion
+  Quaternion,
+  PerspectiveCamera
 } from 'three';
 import { ObjectNavigator } from './object_navigator.js';
 import { Events3D } from './events_3d.js';
@@ -17,6 +18,10 @@ export class CameraNavigator extends ObjectNavigator {
     camera.resetPosition = () => {
       camera.position.set(0, 0, 5);
       camera.quaternion.set(0, 0, 0, 0);
+      camera.zoom = 1;
+      camera.fov = PerspectiveCamera.default_fov;
+      camera.updateProjectionMatrix();
+      Events3D.numberChanged();
     };
 
     // Füge einen Event Listener für das Mausrad-Ereignis hinzu
@@ -25,6 +30,9 @@ export class CameraNavigator extends ObjectNavigator {
         camera.zoom += 0.1; // Zoom heraus
       } else {
         camera.zoom -= 0.1; // Zoom hinein
+      }
+      if(camera.zoom < 0.1){
+        camera.zoom = 0.1;
       }
       camera.updateProjectionMatrix();
       Events3D.numberChanged();
@@ -55,6 +63,7 @@ export class CameraNavigator extends ObjectNavigator {
       };
       let object = nestedObject();
       object[name] = $field.val();
+      camera.updateProjectionMatrix();
       Events3D.numberChanged();
     };
 
