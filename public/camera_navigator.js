@@ -78,11 +78,11 @@ export class CameraNavigator extends ObjectNavigator {
   }
 
 
-  viewMatrix(camera) {
-    const viewMatrix = new Matrix4();
-    viewMatrix.copy(camera.matrixWorld);
-    return viewMatrix;
-  }
+  // viewMatrix(camera) {
+  //   const viewMatrix = new Matrix4();
+  //   viewMatrix.copy(camera.matrixWorld);
+  //   return viewMatrix;
+  // }
 
   applyRotation = (selected, camera, diff) => {
     const abs = Math.abs;
@@ -102,7 +102,7 @@ export class CameraNavigator extends ObjectNavigator {
     }
     //console.log('Before:', selected.position);
     const angle = this._rotation.vertical ? diff.y : diff.x;
-    const global = new Matrix4().makeRotationAxis(this._rotation.axis, angle);
+    const global = new Matrix4().makeRotationAxis(this._rotation.axis, -angle);
     const matrix = selected.matrix.clone();
     const newMatrix = new Matrix4().multiplyMatrices(global, matrix);
     let v = new Vector3(), q = new Quaternion(), d = new Vector3();
