@@ -31,29 +31,10 @@
         </div>
         <div id="object_properties">
         </div>
-        <div class="row mt-1">
-          <div class="col first-col">
-            <input class=" btn btn-secondary js-reset" type="button" value="Reset Object/Camera" />
-          </div>
-          <div class="col-auto">
-          </div>
-        </div>
-        <div class="row mt-1">
-          <div class="col first-col">
-            Bildwinkel
-          </div>
-          <div class="col-auto ml-1 mt-1">
-            <input type="text" class="form-control js-bildwinkel value-text value-number" />
-          </div>
-        </div>
-        <div class="row mt-1">
-          <div class="col first-col">
-            Kameraabstand
-          </div>
-          <div class="col-auto ml-1 mt-1">
-            <input type="text" class="form-control js-kameraabstand value-text value-number" />
-          </div>
-        </div>
+        <%- include ('partials/_button_field.ejs', {key: 'reset', name: 'Reset Object/Camera'}); %>
+        <%- include ('partials/_numeric_field.ejs', {object: 'camera', keys: ['fov'], name: 'Bildwinkel'}); %>
+        <%- include ('partials/_numeric_field.ejs', {object: 'camera', keys: ['zoom'], name: 'Zoom'}); %>
+        <%- include ('partials/_numeric_field.ejs', {object: 'camera', keys: ['position', 'z'], name: 'Kameraabstand'}); %>
       </div>
       <div class="col" id="canvas_parent"></div>
     </div>

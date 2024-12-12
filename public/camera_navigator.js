@@ -5,6 +5,7 @@ import {
   Quaternion
 } from 'three';
 import { ObjectNavigator } from './object_navigator.js';
+import { Events3D } from './events_3d.js';
 
 export class CameraNavigator extends ObjectNavigator {
 
@@ -30,21 +31,26 @@ export class CameraNavigator extends ObjectNavigator {
     });
 
     const onChange = (event) => {
-      console.log(event);
-      const $el = $(event.target),
-        object = $el.data('object'),
-        name = $el.data('name');
-      object[name] = $el.val();
+      const $field = $(event.target);
+      const keys = [ 
+        $field.data('key0'), 
+        $field.data('key1'), 
+        $field.data('key2'),
+        $field.data('key3')
+      ];
+      let object = camera;
+      keys.forEach((key) => {
+        if(key) {
+          object = object[key];
+        }
+      });
+      object = $field.val();
+      Events3D.numberChanged();
     };
 
-    $('.js-bildwinkel').on('change', onChange)
-      .data('object', camera)
-      .data('name', 'fov')
-      .spinner({ step: 0.1, spin: onChange });
-    $('.js-kameraabstand').on('change', onChange)
-      .data('object', camera.position)
-      .data('name', 'z')
-      .spinner({ step: 0.1, spin: onChange });
+    $('.js-numeric-field .value-number[data-object-name="camera"]').each((_index, field) => {
+      $(field).on('change', onChange).spinner({ step: 0.1, spin: onChange });
+    });
 
   }
 

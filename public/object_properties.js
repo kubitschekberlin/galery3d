@@ -166,8 +166,22 @@ export class ObjectProperties {
   };
 
   updateDialogs = (camera) => {
-    $('.js-bildwinkel').val(camera.fov);
-    $('.js-kameraabstand').val(camera.position.z);
+    $('.js-numeric-field .value-number[data-object-name="camera"]').each((_index, field) => {
+      const $field = $(field);
+      const keys = [ 
+        $field.data('key0'), 
+        $field.data('key1'), 
+        $field.data('key2'),
+        $field.data('key3')
+      ];
+      let object = camera;
+      keys.forEach((key) => {
+        if(key) {
+          object = object[key];
+        }
+      });
+      $field.val(object);
+    });
 
     $('.object-item-properties').each((_index, dialog) => {
       let id = $(dialog).attr('id'),
