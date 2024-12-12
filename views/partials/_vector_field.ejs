@@ -1,19 +1,23 @@
-<div class="row mt-1 js-numeric-field">
+<div class="row mt-1 vector-field js-numeric-field">
   <div class="col">
     <%= name %>
-    <div class="ml-1 mt-1 js-vector-data">
-      <% 
-      const header = ['x', 'y', 'z'],
-        lastIndex = keys.lenght;
-      for(let h in header) { %>}
-        <input type="text" 
-          class="form-control value-text value-number" 
-          data-object-name="<%= object %>"
-           <% keys.forEach((element, index) => { %>
-            data-key<%= index %>="<%= keys[index] %>"
-           <% }); %> 
-           data-key<%= lastIndex %>="<%= h %>"
-        />
-    </div>
   </div>
+    <% 
+    const header = ['x', 'y', 'z'],
+      lastIndex = keys.length;
+    for(let h = 0; h < 3; h++) {
+      %>
+      <div class="col">
+        <input type="text" 
+        class="form-control value-text value-number" 
+        data-object-name="<%= object %>"
+        <% keys.forEach((element, index) => { %>
+          data-key<%= index %>="<%= keys[index] %>"
+        <% }); %> 
+        data-key<%= lastIndex %>="<%= header[h] %>"
+        />
+      </div>
+      <%
+    }
+    %>
 </div>

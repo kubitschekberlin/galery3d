@@ -31,10 +31,10 @@
         </div>
         <div id="object_properties">
         </div>
-        <%- include ('partials/_button_field.ejs', {key: 'reset', name: 'Reset Object/Camera'}); %>
-        <%- include ('partials/_numeric_field.ejs', {object: 'camera', keys: ['fov'], name: 'Bildwinkel'}); %>
+        <%- include ('partials/_button_field.ejs', {key: 'reset', name: 'Reset Objekt/Kamera'}); %>
+        <%- include ('partials/_numeric_field.ejs', {object: 'camera', keys: ['fov'], name: 'Kamera FOV'}); %>
         <%- include ('partials/_numeric_field.ejs', {object: 'camera', keys: ['zoom'], name: 'Zoom'}); %>
-        <%- include ('partials/_vector_field.ejs', {object: 'camera', keys: ['position'], name: 'Kameraposition'}); %>
+        <%- include ('partials/_vector_field.ejs', {object: 'camera', keys: ['position'], name: 'Position'}); %>
       </div>
       <div class="col" id="canvas_parent"></div>
     </div>

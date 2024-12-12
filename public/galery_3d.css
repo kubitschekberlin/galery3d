@@ -7,6 +7,9 @@ html, body{
     height: 100%;
     width:  100%;
 }
+.row.top-area > div {
+  padding-right: 0.1em;
+}
 #formFile {
   width: 250px;
 }
@@ -37,6 +40,15 @@ html, body{
 }
 .first-col{
   overflow: hidden;
-  padding-top: 4px;
+  padding-top: 2px;
 }
-
+.vector-field .col:not(:first-child):not(:last-child) {
+  padding-left: 1px;
+  padding-right: 1px;
+}
+.vector-field .col:first-child {
+  padding-right: 1px;
+}
+.vector-field .col:last-child {
+  padding-left: 1px;
+}
