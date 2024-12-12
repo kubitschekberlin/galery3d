@@ -37,7 +37,7 @@ export class CameraNavigator extends ObjectNavigator {
         let acc = camera;
         for(let i = 0; i < 4; i++) {
           const key = $field.data(`key${i}`);
-          if(key) {
+          if(key != undefined) {
             if(!acc[key]){
               console.error(`${acc}[${key}] does not exist`);
             }
