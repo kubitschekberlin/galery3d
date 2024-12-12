@@ -31,7 +31,8 @@
         </div>
         <div id="object_properties">
         </div>
-        <%- include ('partials/_button_field.ejs', {key: 'reset', name: 'Reset Objekt/Kamera'}); %>
+        <%- include ('partials/_button_field.ejs', {key: 'reset-object', name: 'Reset Object'}); %>
+        <%- include ('partials/_button_field.ejs', {key: 'reset-camera', name: 'Reset Camera'}); %>
         <%- include ('partials/_numeric_field.ejs', {object: 'camera', keys: ['fov'], name: 'Kamera FOV'}); %>
         <%- include ('partials/_numeric_field.ejs', {object: 'camera', keys: ['zoom'], name: 'Zoom'}); %>
         <%- include ('partials/_vector_field.ejs', {object: 'camera', keys: ['position'], name: 'Position'}); %>

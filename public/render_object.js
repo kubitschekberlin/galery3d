@@ -130,7 +130,7 @@ export class RenderHorizonSphere extends RenderObject {
     super(parent);
     const loader = new TextureLoader();
     const texture = loader.load(image);
-    const geometry = new SphereGeometry(2, 2, 2);
+    const geometry = new SphereGeometry(2, 30, 30);
     const material = new MeshBasicMaterial({ map: texture, side: DoubleSide})
     const sphere = new Mesh(geometry, material);
     sphere.name = image;

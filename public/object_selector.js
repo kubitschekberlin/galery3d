@@ -55,19 +55,15 @@ export class ObjectSelector {
     const onReset = () => {
       let object = controls.selectedObject();
       if(object){
-        if(object.resetPosition) {
-          object.resetPosition();
-        } else {
-          object.position.set(0, 0, 0);
-          object.quaternion.set(0, 0, 0, 0);
-        }
+        object.position.set(0, 0, 0);
+        object.quaternion.set(0, 0, 0, 0);
       }
     }
 
     controls.addEventListener('ds-down', onPointerDown);
     onSelectObject(camera);
 
-    $('.js-button-reset').on('click', onReset);
+    $('.js-button-reset-object').on('click', onReset);
 
   }
   
