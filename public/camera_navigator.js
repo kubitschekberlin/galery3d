@@ -130,7 +130,7 @@ export class CameraNavigator extends ObjectNavigator {
     }
     const dist = this._translation.vertical ? diff.y : diff.x;
     const object = camera;
-    let trans = this._translation.axis.clone().multiplyScalar(dist);
+    let trans = this._translation.axis.clone().multiplyScalar(-dist);
     object.position.add(trans);
   }
 }
