@@ -156,8 +156,15 @@ export class RenderCube extends RenderObject {
     const texture = textureLoader.load(image);
     // Geometrie und Material mit Textur erstellen 
     const geometry = new BoxGeometry();
-    const material = new MeshBasicMaterial({ map: texture });
-    const cube = new Mesh(geometry, material);
+    const materials = [
+      new MeshBasicMaterial({ color: 0xff0000 }), // Material für Seite 0 (rot)
+      new MeshBasicMaterial({ color: 0x00ff00 }), // Material für Seite 1 (grün)
+      new MeshBasicMaterial({ color: 0x0000ff }), // Material für Seite 2 (blau)
+      new MeshBasicMaterial({ color: 0x00ffff }), // Material für Seite 3 
+      new MeshBasicMaterial({ map: texture }),
+      new MeshBasicMaterial({ color: 0xffff00 }), // Material für Seite 5 (gelb)
+    ];
+    const cube = new Mesh(geometry, materials);
     cube.name = 'Zebra';
     parent.add(cube);
     super.createArrows(cube);
