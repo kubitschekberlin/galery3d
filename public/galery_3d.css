@@ -7,12 +7,15 @@ html, body{
     height: 100%;
     width:  100%;
 }
+#formFile {
+  width: 250px;
+}
 #canvas_parent{
     overflow: hidden;
     height: 100%;
 }
 .value-text:not(.value-number), .object-property-button{
-  width: 10ex;
+  width: 8ex;
   padding-block-start: 0px !important;
   padding-block-end: 0px !important;
 }
@@ -20,6 +23,8 @@ html, body{
   width: 5.2ex;
   padding-left: 2px;
   padding-right: 2px;
+  margin-left: 0.1em;
+  margin-right: 1.1em;
 }
 .value-text, .ui-spinner-button{
   height: 20px;
@@ -28,7 +33,7 @@ html, body{
   width: 16px !important;
 }
 .object-property-button{
-  width: 10ex;
+  width: 8ex;
 }
 .first-col{
   overflow: hidden;

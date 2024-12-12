@@ -34,7 +34,7 @@
         <%- include ('partials/_button_field.ejs', {key: 'reset', name: 'Reset Object/Camera'}); %>
         <%- include ('partials/_numeric_field.ejs', {object: 'camera', keys: ['fov'], name: 'Bildwinkel'}); %>
         <%- include ('partials/_numeric_field.ejs', {object: 'camera', keys: ['zoom'], name: 'Zoom'}); %>
-        <%- include ('partials/_numeric_field.ejs', {object: 'camera', keys: ['position', 'z'], name: 'Kameraabstand'}); %>
+        <%- include ('partials/_vector_field.ejs', {object: 'camera', keys: ['position'], name: 'Kameraposition'}); %>
       </div>
       <div class="col" id="canvas_parent"></div>
     </div>
