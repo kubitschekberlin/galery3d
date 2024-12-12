@@ -67,7 +67,7 @@ export class ObjectSelector {
     controls.addEventListener('ds-down', onPointerDown);
     onSelectObject(camera);
 
-    $('.js-reset').on('click', onReset);
+    $('.js-button-reset').on('click', onReset);
 
   }
   
