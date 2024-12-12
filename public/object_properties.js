@@ -168,19 +168,18 @@ export class ObjectProperties {
   updateDialogs = (camera) => {
     $('.js-numeric-field .value-number[data-object-name="camera"]').each((_index, field) => {
       const $field = $(field);
-      const keys = [ 
-        $field.data('key0'), 
-        $field.data('key1'), 
-        $field.data('key2'),
-        $field.data('key3')
-      ];
-      let object = camera;
-      keys.forEach((key) => {
-        if(key) {
-          object = object[key];
+      const nestedProperty = () => {
+        let acc = camera;
+        for(let i = 0; i < 4; i++) {
+          const key = $field.data(`key${i}`);
+          if(key) {
+            acc = acc[key];
+          }
         }
-      });
-      $field.val(object);
+        return acc;
+      };
+      const x = nestedProperty();
+      $field.val(x);
     });
 
     $('.object-item-properties').each((_index, dialog) => {

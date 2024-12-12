@@ -32,19 +32,29 @@ export class CameraNavigator extends ObjectNavigator {
 
     const onChange = (event) => {
       const $field = $(event.target);
-      const keys = [ 
-        $field.data('key0'), 
-        $field.data('key1'), 
-        $field.data('key2'),
-        $field.data('key3')
-      ];
-      let object = camera;
-      keys.forEach((key) => {
-        if(key) {
-          object = object[key];
+      let name = null;
+      const nestedObject = () => {
+        let acc = camera;
+        for(let i = 0; i < 4; i++) {
+          const key = $field.data(`key${i}`);
+          if(key) {
+            if(!acc[key]){
+              console.error(`${acc}[${key}] does not exist`);
+            }
+            if(typeof acc[key] === 'object') {
+              // Weiter mit verschachteltem objekt
+              acc = acc[key];
+            } else {
+              // Stop, wenn Wert gefunden
+              name = key;
+              break;
+            }
+          }
         }
-      });
-      object = $field.val();
+        return acc;
+      };
+      let object = nestedObject();
+      object[name] = $field.val();
       Events3D.numberChanged();
     };
 
