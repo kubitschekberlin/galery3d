@@ -52,3 +52,16 @@ html, body{
 .vector-field .col:last-child {
   padding-left: 1px;
 }
+.collapse-arrow {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid black;
+    display: inline-block;
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+  }
+  .collapsed {
+    transform: rotate(-90deg);
+  }
