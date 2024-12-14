@@ -71,3 +71,6 @@ html, body{
 .collapsed .collapse-arrow {
   transform: rotate(-90deg); 
 }
+.hide-overflow {
+  overflow: hidden;
+}

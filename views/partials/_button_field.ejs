@@ -1,9 +1,8 @@
-<div class="row mt-1">
-  <div class="col first-col">
-    <input class=" btn btn-secondary btn-sm js-button-<%= key %>" 
-    type="button" 
-    value="<%= name %>" />
-  </div>
-  <div class="col-auto">
-  </div>
+<div class="row mt-2">
+  <% for (let button of buttons) { %>
+    <div class="col">
+      <button type="button" data-object="<%= button.object %>" data-function="<%= button.function %>" 
+        class="btn btn-primary hide-overflow"><%= button.name %></button>
+    </div>
+  <% } %>
 </div>

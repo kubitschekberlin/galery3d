@@ -6,4 +6,8 @@
   </div>
 </div>
 <div id="object_properties"></div>
-<%- include ('_button_field.ejs', {key: 'reset-object' , name: 'Reset' }); %>
+<%- include ('_button_field.ejs', { buttons: [
+    { object: 'selected', key: 'reset_object' , name: 'Reset' },
+    { object: 'selected', key: 'delete_object' , name: 'Delete'},
+    { object: 'selected', key: 'reset-object' , name: 'Reset *'}
+  ]}); %>
