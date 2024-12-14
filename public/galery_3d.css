@@ -73,4 +73,5 @@ html, body{
 }
 .hide-overflow {
   overflow: hidden;
+  text-wrap: nowrap;
 }
