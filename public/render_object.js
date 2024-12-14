@@ -100,7 +100,7 @@ export class RenderMesh extends RenderObject {
     }
 
     const onLoad = (geometry) => {
-      const material = new MeshBasicMaterial({ color: 0xFF0000 })
+      const material =  new MeshLambertMaterial({ color: 0xffffff/*, wireframe: true*/ });
       mesh = new Mesh(geometry, material);
       parent.add(mesh);
       if (success) {
@@ -131,7 +131,7 @@ export class RenderHorizonSphere extends RenderObject {
     const loader = new TextureLoader();
     const texture = loader.load(image);
     const geometry = new SphereGeometry(20, 30, 30);
-    const material = new MeshBasicMaterial({ map: texture, side: DoubleSide})
+    const material = new MeshLambertMaterial({ map: texture, side: DoubleSide})
     const sphere = new Mesh(geometry, material);
     sphere.name = image;
     sphere.name = 'Sphere';

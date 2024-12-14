@@ -16,7 +16,7 @@ export class CameraNavigator extends ObjectNavigator {
     camera.name = 'Camera';
 
     const onReset = () => {
-      camera.position.set(0, 0, 5);
+      camera.position.set(0, 0, 100);
       camera.quaternion.set(0, 0, 0, 0);
       camera.zoom = 1;
       camera.fov = PerspectiveCamera.default_fov;

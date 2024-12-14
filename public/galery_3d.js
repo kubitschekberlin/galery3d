@@ -16,6 +16,6 @@ $(function () {
   let objectProperties = new ObjectProperties();
   renderer.objectProperties(objectProperties);
   new Events3D(renderer.camera, renderer.scene, renderer.animate, objectProperties);
-  new RenderCube(renderer.scene, renderer, './dist/zebra.jpg');
-  new RenderHorizonSphere(renderer.scene, './dist/zebra.jpg');
+  // new RenderCube(renderer.scene, renderer, './dist/zebra.jpg');
+  // new RenderHorizonSphere(renderer.scene, './dist/zebra.jpg');
 });
