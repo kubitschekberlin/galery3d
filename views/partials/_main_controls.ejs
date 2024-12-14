@@ -1,20 +1,5 @@
 <div>
-  <form class="mt-3">
-    <input class="form-control" type="file" id="formFile" accept=".stl, .obj, .ply">
-  </form>
-  <div class="row mt-2">
-    <div class="col first-col">
-      Show Properties
-    </div>
-    <div class="col-auto">
-      <input class="form-check-input properties-value value-boolean" type="checkbox" value=""
-        id="object_properties_button">
-    </div>
-  </div>
-  <div id="object_properties"></div>
-  <%- include ('_button_field.ejs', {key: 'reset-object' , name: 'Reset Object' }); %>
-  <%- include ('_button_field.ejs', {key: 'reset-camera' , name: 'Reset Camera' }); %>
-  <%- include ('_numeric_field.ejs', {object: 'camera' , keys: ['fov'], name: 'Kamera FOV' }); %>
-  <%- include ('_numeric_field.ejs', {object: 'camera' , keys: ['zoom'], name: 'Zoom' }); %>
-  <%- include ('_vector_field.ejs', {object: 'camera' , keys: ['position'], name: 'Position' }); %>
+  <%- include('_collapse_controls.ejs', { title:'Files', name: 'file' }); %>
+  <%- include('_collapse_controls.ejs', { title: 'Camera Properties', name: 'camera' }); %>
+  <%- include('_collapse_controls.ejs', { title: 'Object Properties', name: 'object' }); %>
 </div>

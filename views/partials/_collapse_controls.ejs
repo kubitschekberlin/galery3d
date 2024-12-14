@@ -1,0 +1,10 @@
+<div data-bs-toggle="collapse" href="#<%= name %>_controls" role="button" 
+  class="collapsed arrow-parent" aria-expanded="false"
+  aria-controls="<%= name %>_controls">
+  <span><%= title %></span>
+  <span class="collapse-arrow"></span>
+</div>
+<div class="collapse" id="<%= name %>_controls">
+  <%- include(`_${name}_controls.ejs`); %>
+  <hr>
+</div>
