@@ -3,7 +3,8 @@
     <% for(let button of buttons) { %>
       <% const id = `__checkbox_${button.object}_${button.function}`; %>
       <input type="checkbox" class="btn-check" id="<%= id %>" 
-        data-object="<%= button.object %>" data-function="<%= button.function %>" />
+        data-object="<%= button.object %>" data-function="<%= button.function %>" 
+        <% if (button.checked) { %>checked<% } %> />
       <label class="btn btn-outline-primary" for="<%= id %>"><%= button.name %></label>
     <% } %>
   </div>

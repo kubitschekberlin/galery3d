@@ -1,0 +1,12 @@
+<div class="row mt-2">
+  <% for(let button of buttons) { %>
+    <% const id = `__radio_${button.object}_${button.function}`; %>
+    <div clas="form-check">
+      <input type="radio" class="form-check-input" id="<%= id %>" 
+        data-function="<%= button.function %>" 
+        name="<%= name %>"
+        <% if (button.checked) { %>checked<% } %> />
+      <label class="form-check-label" for="<%= id %>"><%= button.name %></label>
+    </div>
+  <% } %>
+</div>
