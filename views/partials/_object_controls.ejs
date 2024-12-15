@@ -1,13 +1,8 @@
-<div class="row mt-2">
-  <div class="btn-group" role="group" aria-label="Object Properties Group">
-    <input type="checkbox" class="btn-check" 
-      id="object_properties_button" autocomplete="off">
-    <label class="btn btn-outline-primary" for="object_properties_button">Show Properties</label>
-  </div>
-</div>
+<%- include('_checkbox_field.ejs', { buttons: [
+   { object: 'scene', function: 'object_properties', name: 'Scene Properties' } 
+]}); %>
 <div id="object_properties"></div>
-<%- include ('_button_field.ejs', { buttons: [
-    { object: 'selected', key: 'reset_object' , name: 'Reset' },
-    { object: 'selected', key: 'delete_object' , name: 'Delete'},
-    { object: 'selected', key: 'reset-object' , name: 'Reset *'}
-  ]}); %>
+<%- include ('_button_field.ejs', { buttons: [ 
+  { object: 'selected' , function: 'reset_object', name: 'Reset' }, 
+  { object: 'selected' , function: 'delete_object', name: 'Delete' }
+]}); %>
