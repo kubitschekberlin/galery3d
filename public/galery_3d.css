@@ -75,3 +75,6 @@ html, body{
   overflow: hidden;
   text-wrap: nowrap;
 }
+.row > .col:last-child { 
+  text-align: right;
+}

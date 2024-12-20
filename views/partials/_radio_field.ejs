@@ -2,7 +2,7 @@
   <% for(let button of buttons) { %>
     <% const id = `__radio_${button.object}_${button.function}`; %>
     <div clas="form-check">
-      <input type="radio" class="form-check-input" id="<%= id %>" 
+      <input type="radio" class="form-check-input js-radio" id="<%= id %>" 
         data-function="<%= button.function %>" 
         name="<%= name %>"
         <% if (button.checked) { %>checked<% } %> />

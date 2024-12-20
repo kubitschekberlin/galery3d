@@ -2,8 +2,7 @@ import {
   Vector3,
   ArrowHelper,
   Object3D,
-  MeshLambertMaterial,
-  MeshBasicMaterial,
+  MeshPhysicalMaterial,
   Mesh,
   BoxGeometry,
   TextureLoader,
@@ -100,7 +99,7 @@ export class RenderMesh extends RenderObject {
     }
 
     const onLoad = (geometry) => {
-      const material =  new MeshLambertMaterial({ color: 0xffffff/*, wireframe: true*/ });
+      const material =  new MeshPhysicalMaterial({ color: 0xffffff/*, wireframe: true*/ });
       mesh = new Mesh(geometry, material);
       parent.add(mesh);
       if (success) {
@@ -131,7 +130,7 @@ export class RenderHorizonSphere extends RenderObject {
     const loader = new TextureLoader();
     const texture = loader.load(image);
     const geometry = new SphereGeometry(20, 30, 30);
-    const material = new MeshLambertMaterial({ map: texture, side: DoubleSide})
+    const material = new MeshPhysicalMaterial({ map: texture, side: DoubleSide})
     const sphere = new Mesh(geometry, material);
     sphere.name = image;
     sphere.name = 'Sphere';
@@ -149,12 +148,12 @@ export class RenderCube extends RenderObject {
     // Geometrie und Material mit Textur erstellen 
     const geometry = new BoxGeometry();
     const materials = [
-      new MeshBasicMaterial({ color: 0xff0000 }), // Material für Seite 0 (rot)
-      new MeshBasicMaterial({ color: 0x00ff00 }), // Material für Seite 1 (grün)
-      new MeshBasicMaterial({ color: 0x0000ff }), // Material für Seite 2 (blau)
-      new MeshBasicMaterial({ color: 0x00ffff }), // Material für Seite 3 
-      new MeshBasicMaterial({ map: texture }),
-      new MeshBasicMaterial({ color: 0xffff00 }), // Material für Seite 5 (gelb)
+      new MeshPhysicalMaterial({ color: 0xff0000 }), // Material für Seite 0 (rot)
+      new MeshPhysicalMaterial({ color: 0x00ff00 }), // Material für Seite 1 (grün)
+      new MeshPhysicalMaterial({ color: 0x0000ff }), // Material für Seite 2 (blau)
+      new MeshPhysicalMaterial({ color: 0x00ffff }), // Material für Seite 3 
+      new MeshPhysicalMaterial({ map: texture }),
+      new MeshPhysicalMaterial({ color: 0xffff00 }), // Material für Seite 5 (gelb)
     ];
     const cube = new Mesh(geometry, materials);
     cube.name = 'Zebra';

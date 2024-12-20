@@ -7,8 +7,7 @@ var _delay = null,
 
 class Events3D {
   constructor(camera, scene, animate, objectProperties) {
-   _camera = camera;
-    this.scene = scene;
+    _camera = camera;  
     _objectProperties = objectProperties;
     _delay = 0;
 
@@ -25,20 +24,27 @@ class Events3D {
       const reader = new FileReader();
       reader.readAsArrayBuffer(file);
       reader.onload = (e) => { 
-        new RenderMesh(this.scene, extension, reader.result, animate); 
+        new RenderMesh(scene, extension, reader.result, animate); 
       };
     });
 
-    $('#object_properties_button').on('click', function(event) {
-      const $boxes = $('.object-properties');
-      const fn = _objectProperties;
+    $('.js-checkbox[data-object="scene"]').on('click', (event) => {
+      const $box = $(event.target),
+        fn = $box.data('function'),
+        checked = scene[fn]();
+      $box.setAttr('checked', checked);
+    });
+
+    scene.object_properties = () => {
+      const $boxes = $('.object-properties'),
+        op = _objectProperties;
       if($boxes.length > 0) {
-        fn.removeAll();
-      } else {
-        fn.show('Scene', scene);
-      }
-      $(event.target).attr('checked', $boxes.length);
-    }.bind(this));
+        op.removeAll();
+        return false;
+      } 
+      op.show('Scene', scene);
+      return true;
+    };
 
     _objectProperties.updateDialogs(camera);
   }

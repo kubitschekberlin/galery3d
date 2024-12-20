@@ -18,6 +18,7 @@ export class ObjectProperties {
   static dialogs = [];
   constructor() {
   }
+  
   show = (name, object) => {
     console.log(object);
 
@@ -148,6 +149,7 @@ export class ObjectProperties {
     }
 
     // Dialog zeigen
+
     openDialog(name, object);
   }
 
@@ -170,9 +172,9 @@ export class ObjectProperties {
       const $field = $(field);
       const nestedProperty = () => {
         let acc = camera;
-        for(let i = 0; i < 4; i++) {
+        for (let i = 0; i < 4; i++) {
           const key = $field.data(`key${i}`);
-          if(key !== undefined) {
+          if (key !== undefined) {
             acc = acc[key];
           }
         }
