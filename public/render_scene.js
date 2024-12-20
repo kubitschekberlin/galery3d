@@ -4,7 +4,8 @@ import {
   PerspectiveCamera,
   DirectionalLight,
   AmbientLight,
-  Color
+  Color,
+  Vector3
 } from 'three';
 import { ObjectSelector } from './object_selector.js';
 import { CameraNavigator } from './camera_navigator.js'
@@ -12,19 +13,26 @@ import { CoordinateArrows} from './render_object.js'
 import './object_properties.js';
 import $ from 'jquery'
 
+const __defaults = {
+  fov: 30,
+  position: new Vector3(0, -10_000, 0),
+  far: 100_000
+};
+PerspectiveCamera.defaults = __defaults;
+
 export default class RenderScene {
 
   constructor(parent_selector) {
-
-    PerspectiveCamera.default_fov = 30;
 
     const $parent = $(parent_selector);
     //const pickHelper = new PickHelper();
     const scene = new Scene();
     let ratio = $parent.innerWidth() / $parent.innerHeight();
-    let camera = new PerspectiveCamera(PerspectiveCamera.fov, ratio, 0.1, 1000);
+    let camera = new PerspectiveCamera(PerspectiveCamera.defaults.fov, ratio, 0.1, 
+      PerspectiveCamera.defaults.far);
+    camera.position.copy(PerspectiveCamera.defaults.position);
     camera.navigator = new CameraNavigator(camera);
-    new CoordinateArrows(scene, null, 0.5);
+    new CoordinateArrows(scene, null, 5);
     
     const renderer = new WebGLRenderer();
     renderer.setSize($parent.innerWidth(), $parent.innerHeight());
@@ -40,7 +48,6 @@ export default class RenderScene {
     directionalLight.name = 'Directional Light';
     scene.add(directionalLight);
 
-    camera.position.z = 5;
     camera.wireframe = true;
 
     const animate = () => {

@@ -6,5 +6,6 @@
 <%- include ('_numeric_field.ejs', {object: 'camera' , keys: ['fov'], name: 'FOV' }); %>
 <%- include ('_numeric_field.ejs', {object: 'camera' , keys: ['zoom'], name: 'Zoom' }); %>
 <%- include ('_vector_field.ejs', {object: 'camera' , keys: ['position'], name: 'Pos.' }); %>
-<%- include ('_vector_field.ejs', {object: 'camera' , keys: ['axis'], name: 'Axis' }); %>
-<%- include ('_numeric_field.ejs', {object: 'camera' , keys: ['angle'], name: 'Angle' }); %>
+<%- include ('_vector_field.ejs', {object: 'camera' , keys: ['quaternion'], name: 'Axis' }); %>
+<%- include ('_numeric_field.ejs', {object: 'camera' , keys: ['quaternion', 'w'], name: 'Angle' }); %>
+<%- include ('_vector_field.ejs', {object: 'camera' , keys: ['up'], name: 'up' }); %>

@@ -16,10 +16,10 @@ export class CameraNavigator extends ObjectNavigator {
     camera.name = 'Camera';
 
     const onReset = () => {
-      camera.position.set(0, 0, 100);
+      camera.position.copy(PerspectiveCamera.defaults.position);
       camera.quaternion.set(0, 0, 0, 0);
       camera.zoom = 1;
-      camera.fov = PerspectiveCamera.default_fov;
+      camera.fov = PerspectiveCamera.defaults.fov;
       camera.updateProjectionMatrix();
       Events3D.numberChanged();
     };
@@ -29,12 +29,12 @@ export class CameraNavigator extends ObjectNavigator {
     // Füge einen Event Listener für das Mausrad-Ereignis hinzu
     window.addEventListener('wheel', function (event) {
       if (event.deltaY > 0) {
-        camera.zoom += 0.1; // Zoom heraus
+        camera.zoom += 0.01; // Zoom heraus
       } else {
-        camera.zoom -= 0.1; // Zoom hinein
+        camera.zoom -= 0.01; // Zoom hinein
       }
-      if(camera.zoom < 0.1){
-        camera.zoom = 0.1;
+      if(camera.zoom < 0.01){
+        camera.zoom = 0.01;
       }
       camera.updateProjectionMatrix();
       Events3D.numberChanged();
@@ -44,22 +44,30 @@ export class CameraNavigator extends ObjectNavigator {
       const $field = $(event.target);
       let name = null;
       const nestedObject = () => {
-        let acc = camera;
-        for(let i = 0; i < 4; i++) {
-          const key = $field.data(`key${i}`);
-          if(key != undefined) {
-            if(!acc[key]){
-              console.error(`${acc}[${key}] does not exist`);
-            }
-            if(typeof acc[key] === 'object') {
-              // Weiter mit verschachteltem objekt
-              acc = acc[key];
-            } else {
-              // Stop, wenn Wert gefunden
-              name = key;
-              break;
+        let dbg = 'camera', 
+          acc = camera,
+          key = '';
+        try {
+          for(let i = 0; i < 4; i++) {
+            key = $field.data(`key${i}`);
+            if(key != undefined) {
+              dbg += `[${key}]`;
+              if(acc[key] === undefined){
+                throw `${acc}[${key}] does not exist`;
+              }
+              if(typeof acc[key] === 'object') {
+                // Weiter mit verschachteltem objekt
+                acc = acc[key];
+              } else {
+                // Stop, wenn Wert gefunden
+                name = key;
+                break;
+              }
             }
           }
+        }
+        catch(err) {
+          console.error(JSON.stringify(err), key, JSON.stringify(acc), dbg);
         }
         return acc;
       };
