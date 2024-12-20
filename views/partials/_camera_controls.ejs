@@ -2,7 +2,7 @@
   { function: 'perspective', name: 'Perpective', checked: true },
   { function: 'parallel', name: 'Parallel' }
 ]}); %>
-<%- include ('_button_field.ejs', {buttons: [{ object: 'selected', function: 'reset-camera' , name: 'Reset' }]}); %>
+<%- include ('_button_field.ejs', {buttons: [{ object: 'camera', function: 'reset_camera' , name: 'Reset' }]}); %>
 <%- include ('_numeric_field.ejs', {object: 'camera' , keys: ['fov'], name: 'FOV' }); %>
 <%- include ('_numeric_field.ejs', {object: 'camera' , keys: ['zoom'], name: 'Zoom' }); %>
 <%- include ('_vector_field.ejs', {object: 'camera' , keys: ['position'], name: 'Pos.' }); %>

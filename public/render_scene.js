@@ -14,9 +14,9 @@ import './object_properties.js';
 import $ from 'jquery'
 
 const __defaults = {
-  fov: 30,
+  fov: 3,
   position: new Vector3(0, -10_000, 0),
-  far: 100_000
+  far: 200_000
 };
 PerspectiveCamera.defaults = __defaults;
 
@@ -31,8 +31,9 @@ export default class RenderScene {
     let camera = new PerspectiveCamera(PerspectiveCamera.defaults.fov, ratio, 0.1, 
       PerspectiveCamera.defaults.far);
     camera.position.copy(PerspectiveCamera.defaults.position);
+    camera.lookAt(0, 0, 0);
     camera.navigator = new CameraNavigator(camera);
-    new CoordinateArrows(scene, null, 5);
+    new CoordinateArrows(scene, null, 50);
     
     const renderer = new WebGLRenderer();
     renderer.setSize($parent.innerWidth(), $parent.innerHeight());

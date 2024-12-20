@@ -15,16 +15,20 @@ export class CameraNavigator extends ObjectNavigator {
 
     camera.name = 'Camera';
 
-    const onReset = () => {
+    camera.reset_camera = () => {
       camera.position.copy(PerspectiveCamera.defaults.position);
-      camera.quaternion.set(0, 0, 0, 0);
       camera.zoom = 1;
       camera.fov = PerspectiveCamera.defaults.fov;
-      camera.updateProjectionMatrix();
+      camera.lookAt(0, 0, 0);
       Events3D.numberChanged();
     };
     
-    $('.js-button-reset-camera').on('click', onReset);
+    $('.js-action-button[data-object="camera"]').on('click', (event) => {
+      const $button = $(event.target),
+        service = $button.data('function');
+      camera[service]();
+      Events3D.numberChanged();
+    });
 
     // Füge einen Event Listener für das Mausrad-Ereignis hinzu
     window.addEventListener('wheel', function (event) {

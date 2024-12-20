@@ -16,7 +16,7 @@ import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 
 export class CoordinateArrows {
-  constructor(parent, position, length = 150) {
+  constructor(parent, position, length = 300) {
     this.arrows = [];
 
     const directions = [
