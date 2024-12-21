@@ -2,7 +2,7 @@
   <div class="btn-group" role="group" aria-label="Object Properties Group">
     <% for(let button of buttons) { %>
       <% const id = `__checkbox_${button.object}_${button.function}`; %>
-      <input type="checkbox" class="btn-check js-checkkboc" id="<%= id %>" 
+      <input type="checkbox" class="btn-check js-checkbox" id="<%= id %>" 
         data-object="<%= button.object %>" data-function="<%= button.function %>" 
         <% if (button.checked) { %>checked<% } %> />
       <label class="btn btn-outline-primary" for="<%= id %>"><%= button.name %></label>

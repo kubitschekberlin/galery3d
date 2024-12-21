@@ -32,7 +32,7 @@ class Events3D {
       const $box = $(event.target),
         fn = $box.data('function'),
         checked = scene[fn]();
-      $box.setAttr('checked', checked);
+      $box.prop('checked', checked);
     });
 
     scene.object_properties = () => {
