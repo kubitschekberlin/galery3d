@@ -7,9 +7,9 @@ export class ObjectSelector {
   constructor(renderer, scene, camera) {
     const _raycaster = new THREE.Raycaster();
     const _scene = scene;
-    const scope = this;
     const controls = new DragControlsX(camera, renderer.domElement);
-    
+    let selectedObject = 0;
+
     const onPointerDown = (dc_event) => {
       // Umrechnen der Mausposition in normalisierte Gerätekoordinaten (NDC)
       const rect = renderer.domElement.getBoundingClientRect();
@@ -48,23 +48,41 @@ export class ObjectSelector {
       console.log('Selected:', `${selected.type}: ${selected.name}`);
     }
     
-    const onSelectObject = (selectedObject) => {
+    const onSelectObject = (selected) => {
+      selectedObject = selected;
       controls.setSelectedObjects([selectedObject]);
     };
     
-    const onReset = () => {
-      let object = controls.selectedObject();
-      if(object){
-        object.position.set(0, 0, 0);
-        object.quaternion.set(0, 0, 0, 0);
+    const functions = {
+      reset_object: (object) => {
+        if(object){
+          object.position.set(0, 0, 0);
+          object.quaternion.set(0, 0, 0, 0);
+        }
+      },
+      
+      delete_object: (object) => {
+        if (object && object.parent) {
+          object.parent.remove(object);
+          controls.setSelectedObjects([]); // Clear the selected objects
+        }
       }
-    }
-
+    };
+    
     controls.addEventListener('ds-down', onPointerDown);
     onSelectObject(camera);
+    
+    const onButtonClicked = (event) => {
+      if(selectedObject) {
+        const $button = $(event.target),
+          service = $button.data('function');
+        functions[service](selectedObject);
+      } else {
+        console.error('No object selected');
+      }
+    };
 
-    $('.js-button-reset-object').on('click', onReset);
-
+    $('.js-action-button[data-object="selected"]').on('click', onButtonClicked);
   }
   
 }
