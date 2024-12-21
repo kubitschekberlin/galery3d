@@ -25,7 +25,6 @@ export default class RenderScene {
   constructor(parent_selector) {
 
     const $parent = $(parent_selector);
-    //const pickHelper = new PickHelper();
     const scene = new Scene();
     let ratio = $parent.innerWidth() / $parent.innerHeight();
     let camera = new PerspectiveCamera(PerspectiveCamera.defaults.fov, ratio, 0.1, 
@@ -47,13 +46,15 @@ export default class RenderScene {
 
     const directionalLight = new DirectionalLight(0xffffff, 1);
     directionalLight.name = 'Directional Light';
+    directionalLight.position.set(1, 1, 1); // Position of the light
+    directionalLight.target.position.set(0, 0, 0); // Direction the light is pointing at
+    scene.add(directionalLight.target); // Add the target to the scene
     camera.add(directionalLight);
 
     camera.wireframe = true;
 
     const animate = () => {
       requestAnimationFrame(animate);
-      //pickHelper.pick(pickPosition, scene, camera);
       renderer.setSize($parent.innerWidth(), $parent.innerHeight());
       camera.aspect = canvas.clientWidth / canvas.clientHeight;
       camera.updateProjectionMatrix();
@@ -78,4 +79,3 @@ export default class RenderScene {
     this.objectProps = op;
   }
 }
-
