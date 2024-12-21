@@ -47,7 +47,7 @@ export default class RenderScene {
 
     const directionalLight = new DirectionalLight(0xffffff, 1);
     directionalLight.name = 'Directional Light';
-    scene.add(directionalLight);
+    camera.add(directionalLight);
 
     camera.wireframe = true;
 
