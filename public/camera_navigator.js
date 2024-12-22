@@ -43,60 +43,11 @@ export class CameraNavigator extends ObjectNavigator {
       camera.updateProjectionMatrix();
       Events3D.numberChanged();
     });
-
-    const onChange = (event) => {
-      const $field = $(event.target);
-      let name = null;
-      const nestedObject = () => {
-        let dbg = 'camera', 
-          acc = camera,
-          key = '';
-        try {
-          for(let i = 0; i < 4; i++) {
-            key = $field.data(`key${i}`);
-            if(key != undefined) {
-              dbg += `[${key}]`;
-              if(acc[key] === undefined){
-                throw `${acc}[${key}] does not exist`;
-              }
-              if(typeof acc[key] === 'object') {
-                // Weiter mit verschachteltem objekt
-                acc = acc[key];
-              } else {
-                // Stop, wenn Wert gefunden
-                name = key;
-                break;
-              }
-            }
-          }
-        }
-        catch(err) {
-          console.error(JSON.stringify(err), key, JSON.stringify(acc), dbg);
-        }
-        return acc;
-      };
-      let object = nestedObject();
-      object[name] = $field.val();
-      camera.updateProjectionMatrix();
-      Events3D.numberChanged();
-    };
-
-    $('.js-numeric-field .value-number[data-object-name="camera"]').each((_index, field) => {
-      $(field).on('change', onChange).spinner({ step: 0.1, spin: onChange });
-    });
-
   }
 
   rotateWithShift = (shift) => {
     return !shift;
   }
-
-
-  // viewMatrix(camera) {
-  //   const viewMatrix = new Matrix4();
-  //   viewMatrix.copy(camera.matrixWorld);
-  //   return viewMatrix;
-  // }
 
   applyRotation = (selected, camera, diff) => {
     const abs = Math.abs;

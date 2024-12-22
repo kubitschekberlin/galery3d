@@ -6,3 +6,6 @@
   { object: 'selected' , function: 'reset_object', name: 'Reset' }, 
   { object: 'selected' , function: 'delete_object', name: 'Delete' }
 ]}); %>
+<%- include ('_vector_field.ejs', {object: 'selected' , keys: ['position'], name: 'Pos.' }); %>
+<%- include ('_vector_field.ejs', {object: 'selected' , keys: ['quaternion'], name: 'Axis' }); %>
+<%- include ('_numeric_field.ejs', {object: 'selected' , keys: ['quaternion', 'w'], name: 'Angle' }); %>

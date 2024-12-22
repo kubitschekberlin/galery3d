@@ -27,6 +27,10 @@ export class ObjectNavigator {
   }
 
   navigate = (selected, camera, diff, event) => {
+    if(Math.abs(diff.x) < 1e-3 && Math.abs(diff.y) < 1e-3){
+      return;
+    }
+
     const scope = this;
     // Cursor steuern.
     let domElement = event.target;
@@ -233,7 +237,7 @@ export class ObjectNavigator {
 
     //console.log('Translation', dist, this._translation.axis, 'Vertical:', this._translation.vertical );
     const mat = new Matrix3().setFromMatrix4(selected.matrixWorld);
-    let trans = this._translation.axis.clone().multiplyScalar(dist);
+    let trans = this._translation.axis.clone().multiplyScalar(dist * 100);
     trans.applyMatrix3(mat);
     selected.position.add(trans);
   }
