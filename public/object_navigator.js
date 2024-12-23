@@ -107,7 +107,7 @@ export class ObjectNavigator {
     } else if (xy >= xx && xy >= xz) {
       axis = 1;
     }
-    console.log('Vertical', axis, a);
+    console.log('Vertical', 'x:', dir.x, 'y:', dir.y, 'z:', dir.z, 'Result:', axis, a);
     return { axis: axis, projections: a };
   }
 
@@ -122,7 +122,7 @@ export class ObjectNavigator {
     } else if (yx >= yy && yx >= yz) {
       axis = 0;
     }
-    console.log('Horizontal', axis, a);
+    console.log('Horizontal', 'x:', dir.x, 'y:', dir.y, 'z:', dir.z, 'Result:', axis, a);
     return { axis: axis, projections: a };
   }
 
@@ -137,7 +137,7 @@ export class ObjectNavigator {
       const signed = a.y >= 0 ? -1 : 1;
       axis = new Vector3(0, signed, 0);
     } else {
-      const signed = a.z >= 0 ? -1 : 1;
+      const signed = a.z >= 0 ? 1 : -1;
       axis = new Vector3(0, 0, signed);
     }
     return axis;
@@ -164,15 +164,12 @@ export class ObjectNavigator {
   verticalTranslationAxis(dir) {
     const d = this.verticalMainAxis(dir, true),
       a = d.projections;
-    let axis = null;
+    let axis = null,
+      signed = 1;
     if (d.axis === 0) {
-      const signed = a.x >= 0 ? -1 : 1;
-      axis = new Vector3(signed, 0, 0);
     } else if (d.axis === 1) {
-      const signed = a.y >= 0 ? 1 : -1;
       axis = new Vector3(0, signed, 0);
     } else {
-      const signed = a.z >= 0 ? -1 : 1;
       axis = new Vector3(0, 0, signed);
     }
     return axis;
@@ -181,15 +178,13 @@ export class ObjectNavigator {
   horizontalTranslationAxis(dir) {
     const d = this.horizontalMainAxis(dir, true),
       a = d.projections;
-    let axis = null;
+    let axis = null,  
+      signed = 1;
     if (d.axis === 0) {
-      const signed = a.y >= 0 ? 1 : -1;
       axis = new Vector3(signed, 0, 0);
     } else if (d.axis == 1) {
-      const signed = a.x >= 0 ? 1 : -1;
       axis = new Vector3(0, signed, 0);
     } else {
-      const signed = a.z >= 0 ? 1 : -1;
       axis = new Vector3(0, 0, signed);
     }
     return axis;

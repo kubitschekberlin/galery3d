@@ -61,13 +61,15 @@ export class ObjectSelector {
           object.position.set(0, 0, 0);
           object.quaternion.set(0, 0, 0, 0);
         }
+        Events3D.numberChanged();
       },
-
+      
       delete_object: (object) => {
         if (object && object.parent) {
           object.parent.remove(object);
           controls.setSelectedObjects([]); // Clear the selected objects
         }
+        Events3D.numberChanged();
       }
     };
 
