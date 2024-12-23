@@ -9,6 +9,7 @@ export class ObjectSelector {
     const _scene = scene;
     const controls = new DragControlsX(camera, renderer.domElement);
     let selectedObject = 0;
+    this.selectedObject = undefined;
 
     const onPointerDown = (dc_event) => {
       // Umrechnen der Mausposition in normalisierte Gerätekoordinaten (NDC)
@@ -51,6 +52,7 @@ export class ObjectSelector {
     const onSelectObject = (selected) => {
       selectedObject = selected;
       controls.setSelectedObjects([selectedObject]);
+      this.selectedObject = selectedObject;
     };
 
     const functions = {
@@ -70,7 +72,6 @@ export class ObjectSelector {
     };
 
     controls.addEventListener('ds-down', onPointerDown);
-    onSelectObject(camera);
 
     const onButtonClicked = (event) => {
       if (selectedObject) {

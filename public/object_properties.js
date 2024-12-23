@@ -167,11 +167,19 @@ export class ObjectProperties {
     });
   };
 
+  selectedObject = () => {
+    return this.objectSelector.selectedObject;
+  };
+
   updateDialogs = (camera) => {
-    $('.js-numeric-field .value-number[data-object-name="camera"]').each((_index, field) => {
-      const $field = $(field);
-      const nestedProperty = () => {
-        let acc = camera;
+    $('.js-numeric-field .value-number').each((_index, field) => {
+      const $field = $(field),
+      objectName = $field.data('object-name');
+      const nestedProperty = function() {
+        let acc = objectName == 'camera' ? camera : this.selectedObject();
+        if(!acc){
+          return undefined;
+        }
         for (let i = 0; i < 4; i++) {
           const key = $field.data(`key${i}`);
           if (key !== undefined) {
@@ -179,18 +187,18 @@ export class ObjectProperties {
           }
         }
         return acc;
-      };
+      }.bind(this);
       const x = nestedProperty();
       $field.val(x);
     });
 
-    $('.object-item-properties').each((_index, dialog) => {
+    $('.object-item-properties').each(function(_index, dialog) {
       let id = $(dialog).attr('id'),
         object = ObjectProperties.objects[id];
       if (object) {
         this.updateObjectDialog(dialog, object);
       }
-    });
+    }.bind(this));
   }
   removeAll = () => {
     ObjectProperties.dialogs.forEach(function (dlg) {

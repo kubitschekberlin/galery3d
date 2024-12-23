@@ -11,10 +11,9 @@ import './extend_js.js';
 import { ObjectProperties } from './object_properties.js';
 
 $(function () {
-  const renderer = new RenderScene('#canvas_parent');
+  const  objectProperties = new ObjectProperties(),
+    renderer = new RenderScene('#canvas_parent', objectProperties);
   $('#top_area').data('scene', renderer);
-  let objectProperties = new ObjectProperties();
-  renderer.objectProperties(objectProperties);
   new Events3D(renderer.camera, renderer.scene, renderer.animate, objectProperties);
   // new RenderCube(renderer.scene, renderer, './dist/zebra.jpg');
   // new RenderHorizonSphere(renderer.scene, './dist/zebra.jpg');

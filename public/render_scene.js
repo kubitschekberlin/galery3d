@@ -22,7 +22,7 @@ PerspectiveCamera.defaults = __defaults;
 
 export default class RenderScene {
 
-  constructor(parent_selector) {
+  constructor(parent_selector, objectProperties) {
 
     const $parent = $(parent_selector);
     const scene = new Scene();
@@ -66,9 +66,8 @@ export default class RenderScene {
     this.camera = camera;
     this.animate = animate;
     this.domElement = renderer.domElement;
-    this.objectProps = null;
-    
-    new ObjectSelector(renderer, scene, camera);
+    this.objectProps = objectProperties;
+    objectProperties.objectSelector = new ObjectSelector(renderer, scene, camera);
 
     // rendern
     animate();
