@@ -21,7 +21,7 @@ export class ObjectNavigator {
       }
       this._translation = null;
       this._rotation = null;
-      //console.log('Objet Navigator Neustart')
+      //console.log('Object Navigator Neustart')
     }
     window.addEventListener('pointerup', onPointerUp);
   }
@@ -88,10 +88,15 @@ export class ObjectNavigator {
     const finalMatrix = new Matrix4();
     finalMatrix.multiplyMatrices(viewProjectionMatrix, worldMatrix);
 
-    const x = new Vector3,
-      y = new Vector3,
-      z = new Vector3;
+    const x = new Vector3(),
+      y = new Vector3(),
+      z = new Vector3();
     finalMatrix.extractBasis(x, y, z);
+
+    // Normalisiere die Vektoren, um Einheitsvektoren zu erhalten
+    x.normalize();
+    y.normalize();
+    z.normalize();
 
     return { x: x, y: y, z: z };
   }
@@ -111,7 +116,7 @@ export class ObjectNavigator {
     } else if (by >= bx && by >= bz) {
       axis = 1;
     }
-    console.log('Vertical', 'x:', dir.x, 'y:', dir.y, 'z:', dir.z, 'Result:', axis, a);
+    //console.log('Vertical', 'x:', dir.x, 'y:', dir.y, 'z:', dir.z, 'Result:', axis, a);
     return { axis: axis, projections: a };
   }
 
@@ -126,7 +131,7 @@ export class ObjectNavigator {
     } else if (bx >= by && bx >= bz) {
       axis = 0;
     }
-    console.log('Horizontal', 'x:', dir.x, 'y:', dir.y, 'z:', dir.z, 'Result:', axis, a);
+    //console.log('Horizontal', 'x:', dir.x, 'y:', dir.y, 'z:', dir.z, 'Result:', axis, a);
     return { axis: axis, projections: a };
   }
 
@@ -135,11 +140,11 @@ export class ObjectNavigator {
       a = d.projections;
     let axis = null;
     if (d.axis === 0) {
-      axis = new Vector3(signed(a.x), 0, 0);
+      axis = new Vector3(-signed(a.x), 0, 0);
     } else if (d.axis === 1) {
-      axis = new Vector3(0, signed(a.y), 0);
+      axis = new Vector3(0, -signed(a.y), 0);
     } else {
-      axis = new Vector3(0, 0, signed(a.z));
+      axis = new Vector3(0, 0, -signed(a.z));
     }
     return axis;
   }
@@ -150,7 +155,7 @@ export class ObjectNavigator {
     let axis = null;
     if (d.axis === 0) {
       axis = new Vector3(signed(a.x), 0, 0);
-    } else if (d.axis == 0) {
+    } else if (d.axis == 1) {
       axis = new Vector3(0, signed(a.y), 0);
     } else {
       axis = new Vector3(0, 0, signed(a.z));
@@ -201,6 +206,7 @@ export class ObjectNavigator {
         axis = this.horizontalRotationAxis(dir);
       }
       this._rotation = { axis: axis, vertical: vertical };
+      console.log('Neustart Rotation - vertical=', vertical, diff.x, diff.y)
     }
     let angle = this._rotation.vertical ? diff.y : diff.x;
 
@@ -223,6 +229,7 @@ export class ObjectNavigator {
         axis = this.horizontalTranslationAxis(dir);
       }
       this._translation = { axis: axis, vertical: vertical };
+      console.log('Neustart Translation - vertical=', vertical, diff.x, diff.y);
     }
     const dist = this._translation.vertical ? diff.y : diff.x;
 
