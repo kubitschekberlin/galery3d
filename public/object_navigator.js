@@ -5,7 +5,7 @@ import {
 } from 'three';
 import { Events3D } from './events_3d.js';
 
-function signed (a) {
+function signed(a) {
   return a >= 0 ? 1 : -1;
 }
 
@@ -30,8 +30,12 @@ export class ObjectNavigator {
     return shift;
   }
 
+  rotateWithCtrl = (_ctrl) => {
+    return false;
+  }
+
   navigate = (selected, camera, diff, event) => {
-    if(Math.abs(diff.x) < 1e-3 && Math.abs(diff.y) < 1e-3){
+    if (Math.abs(diff.x) < 1e-3 && Math.abs(diff.y) < 1e-3) {
       return;
     }
 
@@ -48,10 +52,18 @@ export class ObjectNavigator {
         domElement.style.cursor = scope._rotation.vertical ? 'ns-resize' : 'ew-resize';
       }
     }
+    const setZRotationCursor = () => {
+      if (domElement) {
+        domElement.style.cursor = 'crosshair';
+      }
+    }
 
     // das passiert in dieser Funktion:
     this.#domElement = domElement;
-    if (this.rotateWithShift(event.shiftKey)) {
+    if (this.rotateWithCtrl(event.ctrlKey)) {
+      this.applyZRotation(selected, camera, diff, event);
+      setZRotationCursor();
+    } else if (this.rotateWithShift(event.shiftKey)) {
       this.applyRotation(selected, camera, diff);
       setRotationCursor();
     } else {
@@ -63,7 +75,7 @@ export class ObjectNavigator {
     Events3D.numberChanged();
   }
 
-  viewMatrix(camera){
+  viewMatrix(camera) {
     const viewMatrix = new Matrix4();
     viewMatrix.copy(camera.matrixWorldInverse);
     return viewMatrix;
@@ -191,6 +203,9 @@ export class ObjectNavigator {
     return axis;
   }
 
+  applyZRotation = (_selected, _camera, _diff) => {
+  }
+
   applyRotation = (selected, camera, diff) => {
     if (!this._rotation) {
       console.log('Object Rotation');
@@ -211,7 +226,7 @@ export class ObjectNavigator {
     let angle = this._rotation.vertical ? diff.y : diff.x;
 
     //console.log('Rotation', angle, this._rotatio.axis, 'Vertical:', this._rotation.vertical);
-    selected.rotateOnAxis(this._rotation.axis, angle * 10); // * Math.PI / 180);
+    selected.rotateOnAxis(this._rotation.axis, angle * Math.PI / 180);
   }
 
   applyTranslation = (selected, camera, diff) => {
@@ -235,7 +250,7 @@ export class ObjectNavigator {
 
     //console.log('Translation', dist, this._translation.axis, 'Vertical:', this._translation.vertical );
     const mat = new Matrix3().setFromMatrix4(selected.matrixWorld);
-    let trans = this._translation.axis.clone().multiplyScalar(dist * 100);
+    let trans = this._translation.axis.clone().multiplyScalar(dist * 10);
     trans.applyMatrix3(mat);
     selected.position.add(trans);
   }

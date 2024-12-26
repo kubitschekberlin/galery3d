@@ -49,6 +49,27 @@ export class CameraNavigator extends ObjectNavigator {
     return !shift;
   }
 
+  rotateWithCtrl = (ctrl) => {
+    return ctrl;
+  }
+
+  applyZRotation = (selected, camera, diff, event) => {
+    const abs = Math.abs;
+    console.log('Camera Z Rotation');
+    const dir = this.globalProjections(camera, selected);
+    const v = new Vector3(0, 0, 1);
+    const a = this.directionProjections(v, dir),
+      bx = abs(a.x), by = abs(a.y), bz = abs(a.z);
+    let axis = new Vector3(0, 0, 1)
+    if (bx >= by && bx >= bz) {
+      axis.set(1, 0, 0);
+    } else if (by >= bx && by >= bz) {
+      axis.set(0, 1, 0);
+    }
+    this.rotate(selected, axis, 0.1); //-angle);
+    console.log('applyZRotation', angle);
+  }
+
   applyRotation = (selected, camera, diff) => {
     const abs = Math.abs;
     if (!this._rotation) {
@@ -66,9 +87,14 @@ export class CameraNavigator extends ObjectNavigator {
       this._rotation = { axis: axis, vertical: vertical };
     }
     //console.log('Before:', selected.position);
-    const angle = this._rotation.vertical ? diff.y : diff.x;
-    const global = new Matrix4().makeRotationAxis(this._rotation.axis, -angle);
-    const matrix = selected.matrix.clone();
+    let angle = this._rotation.vertical ? diff.y : diff.x;
+    angle = angle * Math.PI / 180;
+    this.rotate(camera, this._rotation.axis, -angle);
+  }
+
+  rotate = (camera, axis, angle) => {
+    const global = new Matrix4().makeRotationAxis(axis, -angle);
+    const matrix = camera.matrix.clone();
     const newMatrix = new Matrix4().multiplyMatrices(global, matrix);
     let v = new Vector3(), q = new Quaternion(), d = new Vector3();
     newMatrix.decompose(v, q, d);

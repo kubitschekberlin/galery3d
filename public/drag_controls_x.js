@@ -75,12 +75,8 @@ class DragControlsX extends EventDispatcher {
     }
 
     function updatePointer(event) {
-
-      const rect = _domElement.getBoundingClientRect();
-
-      _pointer.x = (event.clientX - rect.left) / rect.width * 2 - 1;
-      _pointer.y = - (event.clientY - rect.top) / rect.height * 2 + 1;
-
+      _pointer.x = event.clientX;
+      _pointer.y = -event.clientY;
     }
 
     const selectedObject = () => {
