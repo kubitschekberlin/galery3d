@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import * as THREE from 'three';
 import { DragControlsX } from './drag_controls_x.js';
+import { Events3D } from './events_3d.js';
 
 export class ObjectSelector {
 
@@ -59,7 +60,7 @@ export class ObjectSelector {
       reset_object: (object) => {
         if (object) {
           object.position.set(0, 0, 0);
-          object.quaternion.set(0, 0, 0, 0);
+          object.quaternion.set(0, 0, 0, 1);
         }
         Events3D.numberChanged();
       },

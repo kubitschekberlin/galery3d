@@ -14,7 +14,7 @@ import './object_properties.js';
 import $ from 'jquery'
 
 const __defaults = {
-  fov: 3,
+  fov: 30,
   position: new Vector3(0, -10_000, 0),
   far: 200_000
 };
