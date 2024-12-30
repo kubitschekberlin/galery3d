@@ -45,12 +45,8 @@ export class CameraNavigator extends ObjectNavigator {
     });
   }
 
-  rotateWithShift = (shift) => {
-    return !shift;
-  }
-
-  rotateWithCtrl = (ctrl) => {
-    return ctrl;
+  rotateWithShift = (shiftKey) => {
+    return !shiftKey;
   }
 
   applyZRotation = (selected, camera, diff, event) => {
@@ -66,7 +62,8 @@ export class CameraNavigator extends ObjectNavigator {
     } else if (by >= bx && by >= bz) {
       axis.set(0, 1, 0);
     }
-    this.rotate(selected, axis, 0.1); //-angle);
+    const angle = zAngleFromMouse(diff, event);
+    this.rotate(selected, axis, angle);
     console.log('applyZRotation', angle);
   }
 

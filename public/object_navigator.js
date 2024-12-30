@@ -26,12 +26,12 @@ export class ObjectNavigator {
     window.addEventListener('pointerup', onPointerUp);
   }
 
-  rotateWithShift = (shift) => {
-    return shift;
-  }
+  rotateWithShift = (shiftKey) => {
+    return shiftKe;
+  }y
 
-  rotateWithCtrl = (_ctrl) => {
-    return false;
+  rotateWithCtrl = (ctrlKey) => {
+    return ctrlKey;
   }
 
   navigate = (selected, camera, diff, event) => {
@@ -253,6 +253,37 @@ export class ObjectNavigator {
     let trans = this._translation.axis.clone().multiplyScalar(dist * 10);
     trans.applyMatrix3(mat);
     selected.position.add(trans);
+  }
+
+  zAngleFromMouse = (diff, event) => {
+    // Umrechnen der Mausposition in normalisierte Gerätekoordinaten (NDC)
+    const rect = #domElement.getBoundingClientRect();
+    const event = dc_event.event;
+    let mouse = {
+      x: ((event.clientX - rect.left) / rect.width) * 2 - 1,
+      y: -((event.clientY - rect.top) / rect.height) * 2 + 1
+    };
+    const abs = Math.abs;
+    const angle = abs(diff.x) > abs(diff.y) ? diff.x : diff.y;
+    return angle;
+  }
+
+  applyZRotation = (selected, camera, diff, event) => {
+    const abs = Math.abs;
+    console.log('Camera Z Rotation');
+    const dir = this.globalProjections(camera, selected);
+    const v = new Vector3(0, 0, 1);
+    const a = this.directionProjections(v, dir),
+      bx = abs(a.x), by = abs(a.y), bz = abs(a.z);
+    let axis = new Vector3(0, 0, 1)
+    if (bx >= by && bx >= bz) {
+      axis.set(1, 0, 0);
+    } else if (by >= bx && by >= bz) {
+      axis.set(0, 1, 0);
+    }
+    const angle = zAngleFromMouse(diff, event);
+    this.rotate(selected, axis, angle);
+    console.log('applyZRotation', angle);
   }
 
 }
