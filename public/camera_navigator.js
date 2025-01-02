@@ -1,9 +1,9 @@
 import {
   Vector3,
-  Matrix3,
+  PerspectiveCamera,
   Matrix4,
+  Matrix3,
   Quaternion,
-  PerspectiveCamera
 } from 'three';
 import { ObjectNavigator } from './object_navigator.js';
 import { Events3D } from './events_3d.js';
@@ -22,7 +22,7 @@ export class CameraNavigator extends ObjectNavigator {
       camera.lookAt(0, 0, 0);
       Events3D.numberChanged();
     };
-    
+
     $('.js-action-button[data-object="camera"]').on('click', (event) => {
       const $button = $(event.target),
         service = $button.data('function');
@@ -37,7 +37,7 @@ export class CameraNavigator extends ObjectNavigator {
       } else {
         camera.zoom -= 0.01; // Zoom hinein
       }
-      if(camera.zoom < 0.01){
+      if (camera.zoom < 0.01) {
         camera.zoom = 0.01;
       }
       camera.updateProjectionMatrix();
@@ -49,22 +49,22 @@ export class CameraNavigator extends ObjectNavigator {
     return !shiftKey;
   }
 
-  applyZRotation = (selected, camera, diff, event) => {
-    const abs = Math.abs;
-    console.log('Camera Z Rotation');
-    const dir = this.globalProjections(camera, selected);
-    const v = new Vector3(0, 0, 1);
-    const a = this.directionProjections(v, dir),
-      bx = abs(a.x), by = abs(a.y), bz = abs(a.z);
-    let axis = new Vector3(0, 0, 1)
-    if (bx >= by && bx >= bz) {
-      axis.set(1, 0, 0);
-    } else if (by >= bx && by >= bz) {
-      axis.set(0, 1, 0);
-    }
-    const angle = zAngleFromMouse(diff, event);
-    this.rotate(selected, axis, angle);
-    console.log('applyZRotation', angle);
+  // Projektion der Objectachsen auf den View  
+  globalProjections(camera, _object) {
+    // View-Matrix (inverse Weltmatrix der Kamera)
+    const viewMatrix = camera.matrixWorldInverse.clone();
+
+    const x = new Vector3(),
+      y = new Vector3(),
+      z = new Vector3();
+    viewMatrix.extractBasis(x, y, z);
+
+    // Normalisiere die Vektoren, um Einheitsvektoren zu erhalten
+    x.normalize();
+    y.normalize();
+    z.normalize();
+
+    return { x: x, y: y, z: z };
   }
 
   applyRotation = (selected, camera, diff) => {
@@ -86,18 +86,7 @@ export class CameraNavigator extends ObjectNavigator {
     //console.log('Before:', selected.position);
     let angle = this._rotation.vertical ? diff.y : diff.x;
     angle = angle * Math.PI / 180;
-    this.rotate(camera, this._rotation.axis, -angle);
-  }
-
-  rotate = (camera, axis, angle) => {
-    const global = new Matrix4().makeRotationAxis(axis, -angle);
-    const matrix = camera.matrix.clone();
-    const newMatrix = new Matrix4().multiplyMatrices(global, matrix);
-    let v = new Vector3(), q = new Quaternion(), d = new Vector3();
-    newMatrix.decompose(v, q, d);
-    camera.position.copy(v);
-    camera.quaternion.copy(q);
-    //console.log('Axis:', this._rotation.axis, 'Angle:', angle, this._rotation.vertical, 'After:', selected.position);
+    this.rotate(camera, this._rotation.axis, angle);
   }
 
   applyTranslation = (selected, camera, diff) => {
@@ -121,4 +110,16 @@ export class CameraNavigator extends ObjectNavigator {
     let trans = this._translation.axis.clone().multiplyScalar(-dist);
     object.position.add(trans);
   }
+
+  rotate = (object, axis, angle) => {
+    const global = new Matrix4().makeRotationAxis(axis, -angle);
+    const matrix = object.matrix.clone();
+    const newMatrix = new Matrix4().multiplyMatrices(global, matrix);
+    let v = new Vector3(), q = new Quaternion(), d = new Vector3();
+    newMatrix.decompose(v, q, d);
+    object.position.copy(v);
+    object.quaternion.copy(q);
+    //console.log('Axis:', this._rotation.axis, 'Angle:', angle, this._rotation.vertical, 'After:', selected.position);
+  }
+
 }

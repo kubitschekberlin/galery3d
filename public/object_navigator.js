@@ -1,7 +1,9 @@
 import {
+  Vector2,
   Vector3,
   Matrix4,
-  Matrix3
+  Matrix3,
+  Quaternion,
 } from 'three';
 import { Events3D } from './events_3d.js';
 
@@ -27,8 +29,8 @@ export class ObjectNavigator {
   }
 
   rotateWithShift = (shiftKey) => {
-    return shiftKe;
-  }y
+    return shiftKey;
+  }
 
   rotateWithCtrl = (ctrlKey) => {
     return ctrlKey;
@@ -203,7 +205,8 @@ export class ObjectNavigator {
     return axis;
   }
 
-  applyZRotation = (_selected, _camera, _diff) => {
+  rotate = (object, axis, angle) => {
+    object.rotateOnAxis(axis, angle);
   }
 
   applyRotation = (selected, camera, diff) => {
@@ -257,15 +260,33 @@ export class ObjectNavigator {
 
   zAngleFromMouse = (diff, event) => {
     // Umrechnen der Mausposition in normalisierte Gerätekoordinaten (NDC)
-    const rect = #domElement.getBoundingClientRect();
-    const event = dc_event.event;
-    let mouse = {
-      x: ((event.clientX - rect.left) / rect.width) * 2 - 1,
-      y: -((event.clientY - rect.top) / rect.height) * 2 + 1
-    };
-    const abs = Math.abs;
-    const angle = abs(diff.x) > abs(diff.y) ? diff.x : diff.y;
-    return angle;
+    const rect = this.#domElement.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    // Aktuelle Mausposition (invertiere die Y-Koordinate)
+    const currentMouse = new Vector2(
+      event.clientX - centerX,
+      -(event.clientY - centerY)
+    ).normalize();
+
+    // Vorherige Mausposition (invertiere die Y-Koordinate)
+    const previousMouse = new Vector2(
+      event.clientX - diff.x - centerX,
+      -(event.clientY + diff.y - centerY)
+    ).normalize();
+
+    // Berechne den Kosinus des Winkels zwischen den beiden Vektoren
+    const cosTheta = currentMouse.dot(previousMouse);
+
+    // Berechne den Winkel in Radiant
+    const angleInRadians = Math.acos(cosTheta);
+
+    // Berechne das Kreuzprodukt, um das Vorzeichen zu bestimmen
+    const crossProduct = currentMouse.x * previousMouse.y - currentMouse.y * previousMouse.x;
+    const signedAngle = crossProduct < 0 ? -angleInRadians : angleInRadians;
+    console.log('Z Rotation', signedAngle, 'sign', crossProduct, angleInRadians);
+    return signedAngle;
   }
 
   applyZRotation = (selected, camera, diff, event) => {
@@ -281,7 +302,7 @@ export class ObjectNavigator {
     } else if (by >= bx && by >= bz) {
       axis.set(0, 1, 0);
     }
-    const angle = zAngleFromMouse(diff, event);
+    const angle = this.zAngleFromMouse(diff, event);
     this.rotate(selected, axis, angle);
     console.log('applyZRotation', angle);
   }
