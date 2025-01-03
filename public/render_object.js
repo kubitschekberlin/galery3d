@@ -58,9 +58,15 @@ export class RenderMesh extends RenderObject {
     } else {
       throw 'Invalid 3D format;'
     }
+    //const normalMap = textureLoader.load('path/to/normal_map.jpg'); // Pfad zur Normal Map Textur
 
     const onLoad = (geometry) => {
-      const material =  new MeshPhysicalMaterial({ color: 0xffffff/*, wireframe: true*/ });
+      const material =  new MeshPhysicalMaterial({ 
+        color: 0xffffff/*, wireframe: true*/,
+        roughness: 1, 
+        metalness: 0.2,
+        //normalMap: normalMap      
+      });
       mesh = new Mesh(geometry, material);
       parent.add(mesh);
       if (success) {
