@@ -45,10 +45,6 @@ export class CameraNavigator extends ObjectNavigator {
     });
   }
 
-  rotateWithShift = (shiftKey) => {
-    return !shiftKey;
-  }
-
   // Projektion der Objectachsen auf den View  
   globalProjections(camera, _object) {
     // View-Matrix (inverse Weltmatrix der Kamera)

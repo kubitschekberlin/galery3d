@@ -28,14 +28,6 @@ export class ObjectNavigator {
     window.addEventListener('pointerup', onPointerUp);
   }
 
-  rotateWithShift = (shiftKey) => {
-    return shiftKey;
-  }
-
-  rotateWithCtrl = (ctrlKey) => {
-    return ctrlKey;
-  }
-
   navigate = (selected, camera, diff, event) => {
     if (Math.abs(diff.x) < 1e-3 && Math.abs(diff.y) < 1e-3) {
       return;
@@ -44,16 +36,19 @@ export class ObjectNavigator {
     const scope = this;
     // Cursor steuern.
     let domElement = event.target;
+
     const setTranslationCursor = () => {
       if (domElement) {
         domElement.style.cursor = 'move';
       }
     }
+
     const setRotationCursor = () => {
       if (domElement) {
         domElement.style.cursor = scope._rotation.vertical ? 'ns-resize' : 'ew-resize';
       }
     }
+
     const setZRotationCursor = () => {
       if (domElement) {
         domElement.style.cursor = 'crosshair';
@@ -62,10 +57,11 @@ export class ObjectNavigator {
 
     // das passiert in dieser Funktion:
     this.#domElement = domElement;
-    if (this.rotateWithCtrl(event.ctrlKey)) {
+
+    if (event.ctrlKey) {
       this.applyZRotation(selected, camera, diff, event);
       setZRotationCursor();
-    } else if (this.rotateWithShift(event.shiftKey)) {
+    } else if (!event.shiftKey) {
       this.applyRotation(selected, camera, diff);
       setRotationCursor();
     } else {
@@ -73,7 +69,7 @@ export class ObjectNavigator {
       setTranslationCursor();
     }
 
-    // sync dislogs
+    // sync dialogs
     Events3D.numberChanged();
   }
 
