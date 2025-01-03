@@ -1,57 +1,18 @@
 import {
   Vector3,
-  ArrowHelper,
   Object3D,
   MeshPhysicalMaterial,
   Mesh,
   BoxGeometry,
   TextureLoader,
   SphereGeometry,
-  DoubleSide
+  DoubleSide,
+  AxesHelper
 } from 'three';
 
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-
-export class CoordinateArrows {
-  constructor(parent, position, length = 300) {
-    this.arrows = [];
-
-    const directions = [
-      { dir: new Vector3(1, 0, 0), color: 0xFF0000 },
-      { dir: new Vector3(0, 1, 0), color: 0x00FF00 },
-      { dir: new Vector3(0, 0, 1), color: 0x0000FF }
-    ];
-    const origin = position ? position.negate() : new Vector3(0, 0, 0);
-    directions.forEach((dir, index) => {
-      this.arrows[index] = new ArrowHelper(dir.dir, origin, length, dir.color, 0.05, 0.05);
-      if (parent) {
-        parent.add(this.arrows[index]);
-      }
-    });
-
-  }
-
-  add = (parent) => {
-    const initArrow = (arrow, parent) => {
-      const a = [arrow, ...arrow.children];
-      a.forEach((object, index) => {
-        object.name = `Arrow ${index}`;
-      });
-    }
-    this.arrows.forEach((arrow) => {
-      parent.add(arrow);
-      initArrow(arrow, parent);
-    });
-  }
-
-  remove = () => {
-    this.arrows.forEach((arrow) => {
-      arrow.dispose();
-    });
-  }
-}
 
 export class RenderObject {
   constructor(parent) {
@@ -79,7 +40,7 @@ export class RenderObject {
   };
 
   createArrows(object) {
-    new CoordinateArrows(object);
+    object.add(new AxesHelper(500));
   }
 }
 

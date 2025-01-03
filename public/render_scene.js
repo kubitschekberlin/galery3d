@@ -5,11 +5,11 @@ import {
   DirectionalLight,
   AmbientLight,
   Color,
-  Vector3
+  Vector3,
+  AxesHelper
 } from 'three';
 import { ObjectSelector } from './object_selector.js';
 import { CameraNavigator } from './camera_navigator.js'
-import { CoordinateArrows} from './render_object.js'
 import './object_properties.js';
 import $ from 'jquery'
 
@@ -32,14 +32,15 @@ export default class RenderScene {
     camera.position.copy(PerspectiveCamera.defaults.position);
     camera.lookAt(0, 0, 0);
     camera.navigator = new CameraNavigator(camera);
-    new CoordinateArrows(scene, null, 50);
     
     const renderer = new WebGLRenderer();
     renderer.setSize($parent.innerWidth(), $parent.innerHeight());
     const canvas = $parent.append(renderer.domElement)[0];
-
+    
     scene.background = new Color(0x0a5acc);
     scene.add(camera);
+    
+    scene.add(new AxesHelper(1000));
 
     const light = new AmbientLight(0xaaaaaa, 1); // soft white light
     camera.add(light);
