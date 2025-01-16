@@ -14,6 +14,11 @@ import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 
+function arrayBufferToString(buffer) {
+  const decoder = new TextDecoder('utf-8');
+  return decoder.decode(buffer);
+}
+
 export class RenderObject {
   constructor(parent) {
     this.parent = parent;
@@ -60,19 +65,36 @@ export class RenderMesh extends RenderObject {
     }
     //const normalMap = textureLoader.load('path/to/normal_map.jpg'); // Pfad zur Normal Map Textur
 
-    const onLoad = (geometry) => {
-      const material =  new MeshPhysicalMaterial({ 
-        color: 0xffffff/*, wireframe: true*/,
-        roughness: 1, 
-        metalness: 0.2,
-        //normalMap: normalMap      
-      });
-      mesh = new Mesh(geometry, material);
-      parent.add(mesh);
+    const addToScene = (object) => {
+      if(object.isObject3D) {
+        object.traverse((child) => {
+          if (child instanceof Mesh) {
+            child.material = new MeshPhysicalMaterial({
+              color: 0xffffff,
+              roughness: 1,
+              metalness: 0.2,
+              //normalMap: normalMap // Wende die Normal Map an
+            });
+          }
+        });
+        parent.add(object);
+      } else {
+        const material =  new MeshPhysicalMaterial({ 
+          color: 0xffffff/*, wireframe: true*/,
+          roughness: 1, 
+          metalness: 0.2,
+          //normalMap: normalMap      
+        });
+        const geometry = object
+        object = new Mesh(geometry, material);
+        parent.add(object);
+      }
       if (success) {
         success();
       }
+      return object;
     }
+
     const onProgress = () => console.log('Lade', file);
     const onError = () => console.log('Fehler beim Laden von', file);
  
@@ -81,13 +103,17 @@ export class RenderMesh extends RenderObject {
       if (typeof (file) === 'string') {
         loader.load(file, onLoad, onProgress, onError);
       } else {
-        onLoad(loader.parse(file));
+        if(type === 'OBJ'){
+          file = arrayBufferToString(file);
+        }
+        const object = loader.parse(file);
+        mesh = addToScene(object);
       }
+      super.createArrows(mesh);
+      mesh.canSelect = true;
     } catch (error) {
       console.log(error);
     }
-    super.createArrows(mesh);
-    mesh.canSelect = true;
   }
 }
 
