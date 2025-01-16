@@ -13,6 +13,9 @@ import {
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+
+var _materials = {}
 
 function arrayBufferToString(buffer) {
   const decoder = new TextDecoder('utf-8');
@@ -22,6 +25,19 @@ function arrayBufferToString(buffer) {
 export class RenderObject {
   constructor(parent) {
     this.parent = parent;
+  }
+
+  materials(name) {
+    if(name && _materials && _materials[name]){
+      _materials[name].side = DoubleSide;
+      return _materials[name];
+    }
+    return new MeshPhysicalMaterial({
+      color: 0xffffff,
+      roughness: 1,
+      metalness: 0.2,
+      side: DoubleSide
+    });
   }
 
   getArrows() {
@@ -54,7 +70,12 @@ export class RenderMesh extends RenderObject {
     super(parent);
     var loader;
 
-    if (type === 'STL') {
+    if(type === 'MTL'){
+      const materials = new MTLLoader().parse(arrayBufferToString(file));
+      materials.preload();
+      Object.assign(_materials, materials.materials); 
+      return;
+    } else if (type === 'STL') {
       loader = new STLLoader();
     } else if (type == 'OBJ') {
       loader = new OBJLoader();
@@ -63,30 +84,20 @@ export class RenderMesh extends RenderObject {
     } else {
       throw 'Invalid 3D format;'
     }
-    //const normalMap = textureLoader.load('path/to/normal_map.jpg'); // Pfad zur Normal Map Textur
+    
+    const onProgress = () => console.log('Lade', file);
+    const onError = () => console.log('Fehler beim Laden von', file);
 
     const addToScene = (object) => {
       if(object.isObject3D) {
         object.traverse((child) => {
           if (child instanceof Mesh) {
-            child.material = new MeshPhysicalMaterial({
-              color: 0xffffff,
-              roughness: 1,
-              metalness: 0.2,
-              side: DoubleSide
-              //normalMap: normalMap // Wende die Normal Map an
-            });
+            child.material = this.materials(child.material.name);
           }
         });
         parent.add(object);
       } else {
-        const material =  new MeshPhysicalMaterial({ 
-          color: 0xffffff/*, wireframe: true*/,
-          roughness: 1, 
-          metalness: 0.2,
-          side: DoubleSide
-          //normalMap: normalMap      
-        });
+        const material =  this.materials();
         const geometry = object
         object = new Mesh(geometry, material);
         parent.add(object);
@@ -96,10 +107,6 @@ export class RenderMesh extends RenderObject {
       }
       return object;
     }
-
-    const onProgress = () => console.log('Lade', file);
-    const onError = () => console.log('Fehler beim Laden von', file);
- 
     var mesh;
     try {
       if (typeof (file) === 'string') {
