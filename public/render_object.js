@@ -73,6 +73,7 @@ export class RenderMesh extends RenderObject {
               color: 0xffffff,
               roughness: 1,
               metalness: 0.2,
+              side: DoubleSide
               //normalMap: normalMap // Wende die Normal Map an
             });
           }
@@ -83,6 +84,7 @@ export class RenderMesh extends RenderObject {
           color: 0xffffff/*, wireframe: true*/,
           roughness: 1, 
           metalness: 0.2,
+          side: DoubleSide
           //normalMap: normalMap      
         });
         const geometry = object
