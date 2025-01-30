@@ -61,7 +61,9 @@ export class RenderObject {
   };
 
   createArrows(object) {
-    object.add(new AxesHelper(500));
+    const arrows = new AxesHelper(500);
+    arrows.name = 'Axes Helper';
+    object.add(arrows);
   }
 }
 
@@ -94,12 +96,19 @@ export class RenderMesh extends RenderObject {
           if (child instanceof Mesh) {
             child.material = this.materials(child.material.name);
           }
+          if(!child.name){
+            child.name = 'Child Object';
+          }
         });
+        if(!object.name){
+          object.name = type;
+        }
         parent.add(object);
       } else {
         const material =  this.materials();
         const geometry = object
         object = new Mesh(geometry, material);
+        object.name = type;
         parent.add(object);
       }
       if (success) {
