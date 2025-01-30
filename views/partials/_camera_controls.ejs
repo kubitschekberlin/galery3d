@@ -5,7 +5,6 @@
 <%- include ('_button_field.ejs', {buttons: [{ object: 'camera', function: 'reset_camera' , name: 'Reset' }]}); %>
 <%- include ('_numeric_field.ejs', {object: 'camera' , keys: ['fov'], name: 'FOV' }); %>
 <%- include ('_numeric_field.ejs', {object: 'camera' , keys: ['zoom'], name: 'Zoom' }); %>
-<%- include ('_vector_field.ejs', {object: 'camera' , keys: ['position'], name: 'Pos.' }); %>
-<%- include ('_vector_field.ejs', {object: 'camera' , keys: ['quaternion'], name: 'Axis' }); %>
-<%- include ('_numeric_field.ejs', {object: 'camera' , keys: ['quaternion', 'w'], name: 'Angle' }); %>
-<%- include ('_vector_field.ejs', {object: 'camera' , keys: ['up'], name: 'up' }); %>
+<%- include ('_vector_field.ejs', {dim: 3, object: 'camera' , keys: ['position'], name: 'Pos.' }); %>
+<%- include ('_vector_field.ejs', {dim: 4, object: 'camera' , keys: ['quaternion'], name: 'Rot.' }); %>
+<%- include ('_vector_field.ejs', {dim: 3, object: 'camera' , keys: ['up'], name: 'up' }); %>
